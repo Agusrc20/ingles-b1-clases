@@ -80,12 +80,17 @@ button:disabled { opacity: .5; cursor: default; }
 .opt-btn.selected { border-color: var(--accent, #5b3fd6); background: var(--accent-bg, #f1eefe); }
 .error-text { font-size: 13px; color: #d64d6b; margin: 0 0 12px; display: none; font-weight: 600; }
 
-.review-item { border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; }
-.review-item.correct { background: #eefaf1; }
-.review-item.incorrect { background: #fdeef1; }
-.review-q { font-size: 14px; font-weight: 700; margin: 0 0 6px; color: #2c2b33; }
-.review-a { font-size: 13px; color: #55535f; margin: 0 0 4px; }
-.review-exp { font-size: 13px; color: #7a7886; margin: 0; }
+.review-item { border-radius: 14px; padding: 14px 16px 16px; margin-bottom: 12px; border-left: 5px solid transparent; }
+.review-item.correct { background: #eefaf1; border-left-color: #1e9e5a; }
+.review-item.incorrect { background: #fdeef1; border-left-color: #d64d6b; }
+.review-q { font-size: 14px; font-weight: 700; margin: 0 0 8px; color: #2c2b33; display: flex; gap: 8px; align-items: flex-start; }
+.review-icon { flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #fff; font-weight: 800; margin-top: 1px; }
+.review-icon.ok-bg { background: #1e9e5a; }
+.review-icon.bad-bg { background: #d64d6b; }
+.review-a { font-size: 13px; color: #55535f; margin: 0 0 10px; }
+.review-exp-box { background: rgba(255,255,255,0.75); border: 1.5px dashed #c9c5db; border-radius: 10px; padding: 10px 12px; display: flex; gap: 8px; }
+.review-exp-label { font-weight: 700; color: #5b3fd6; flex-shrink: 0; font-size: 13px; }
+.review-exp-text { font-size: 13px; color: #4a4854; margin: 0; }
 .ok { color: #1e9e5a; font-weight: 700; }
 .bad { color: #d64d6b; font-weight: 700; }
 
@@ -233,7 +238,14 @@ const CLASSES = [
       { text: "I don't like the film ___ we watched last night.", options: ["who", "which", "where"], correct: 1, explanation: "\"which\" se usa para cosas." },
       { text: "The school ___ I study is very big.", options: ["who", "which", "where"], correct: 2, explanation: "\"where\" se usa para lugares." },
       { text: "The people ___ live in that house are very friendly.", options: ["who", "which", "where"], correct: 0, explanation: "\"who\" se usa para personas." },
-      { text: "Is this the shop ___ you bought your shoes?", options: ["who", "which", "where"], correct: 2, explanation: "\"where\" se usa para lugares." }
+      { text: "Is this the shop ___ you bought your shoes?", options: ["who", "which", "where"], correct: 2, explanation: "\"where\" se usa para lugares." },
+      { text: "The man ___ helped us yesterday works at the bank.", options: ["who", "which", "where"], correct: 0, explanation: "\"who\" se usa para personas." },
+      { text: "This is the restaurant ___ we had dinner last month.", options: ["who", "which", "where"], correct: 2, explanation: "\"where\" se usa para lugares." },
+      { text: "The car ___ broke down is very old.", options: ["who", "which", "where"], correct: 1, explanation: "\"which\" se usa para cosas." },
+      { text: "I have a friend ___ speaks four languages.", options: ["who", "which", "where"], correct: 0, explanation: "\"who\" se usa para personas." },
+      { text: "That's the shop ___ I bought this jacket.", options: ["who", "which", "where"], correct: 2, explanation: "\"where\" se usa para lugares." },
+      { text: "She gave me a present ___ I really liked.", options: ["who", "which", "where"], correct: 1, explanation: "\"which\" se usa para cosas." },
+      { text: "The photo ___ is on the wall was taken in Paris.", options: ["who", "which", "where"], correct: 1, explanation: "\"which\" se usa para cosas." }
     ]
   },
   {
@@ -255,7 +267,14 @@ const CLASSES = [
       { text: "___ is a great singer.", options: ["He", "Him", "His"], correct: 0, explanation: "\"He\" es sujeto de la oración." },
       { text: "I saw ___ at the party last night.", options: ["they", "them", "their"], correct: 1, explanation: "\"them\" es objeto: recibe la acción de ver." },
       { text: "___ has a new phone.", options: ["She", "Her", "Hers"], correct: 0, explanation: "\"She\" es sujeto de la oración." },
-      { text: "Please give the book to ___.", options: ["he", "him", "his"], correct: 1, explanation: "Después de \"to\" usamos el pronombre de objeto: \"him\"." }
+      { text: "Please give the book to ___.", options: ["he", "him", "his"], correct: 1, explanation: "Después de \"to\" usamos el pronombre de objeto: \"him\"." },
+      { text: "___ enjoy playing tennis on weekends.", options: ["They", "Them", "Their"], correct: 0, explanation: "\"They\" es sujeto de la oración." },
+      { text: "Please call ___ when you arrive.", options: ["I", "me", "myself"], correct: 1, explanation: "\"me\" es objeto: recibe la llamada." },
+      { text: "___ is my neighbour's dog.", options: ["It", "Its", "Itself"], correct: 0, explanation: "\"It\" es sujeto de la oración." },
+      { text: "The coach picked ___ for the team.", options: ["he", "him", "his"], correct: 1, explanation: "\"him\" es objeto: recibe la acción de elegir." },
+      { text: "___ was very kind to us during the trip.", options: ["She", "Her", "Herself"], correct: 0, explanation: "\"She\" es sujeto de la oración." },
+      { text: "Can you send the file to ___?", options: ["we", "us", "ourselves"], correct: 1, explanation: "\"us\" es objeto: recibe el archivo." },
+      { text: "My parents love ___ very much.", options: ["I", "me", "myself"], correct: 1, explanation: "\"me\" es objeto: recibe el cariño." }
     ]
   },
   {
@@ -278,7 +297,14 @@ const CLASSES = [
       { text: "He is ___ best student in the class.", options: ["a", "an", "the"], correct: 2, explanation: "Los superlativos siempre llevan \"the\"." },
       { text: "I need ___ hour to finish this.", options: ["a", "an", "the"], correct: 1, explanation: "\"hour\" suena como si empezara con vocal (la \"h\" es muda) → \"an\"." },
       { text: "We watched ___ interesting movie last night.", options: ["a", "an", "the"], correct: 1, explanation: "\"interesting\" empieza con sonido de vocal → \"an\"." },
-      { text: "___ information is very useful.", options: ["A", "An", "-"], correct: 2, explanation: "\"information\" es incontable y aquí es general → sin artículo." }
+      { text: "___ information is very useful.", options: ["A", "An", "-"], correct: 2, explanation: "\"information\" es incontable y aquí es general → sin artículo." },
+      { text: "I bought ___ new bike last week.", options: ["a", "an", "the"], correct: 0, explanation: "\"new\" empieza con sonido de consonante → \"a\"." },
+      { text: "___ sun rises in the east.", options: ["A", "An", "The"], correct: 2, explanation: "Es un objeto único y específico → \"the\"." },
+      { text: "She wants to be ___ engineer.", options: ["a", "an", "the"], correct: 1, explanation: "\"engineer\" empieza con sonido de vocal → \"an\"." },
+      { text: "___ dogs need a lot of exercise.", options: ["A", "The", "-"], correct: 2, explanation: "Afirmación general sobre los perros → sin artículo." },
+      { text: "He is reading ___ book you recommended.", options: ["a", "an", "the"], correct: 2, explanation: "Es un libro específico y conocido → \"the\"." },
+      { text: "We need ___ hour to get there.", options: ["a", "an", "the"], correct: 1, explanation: "\"hour\" suena como si empezara con vocal (la \"h\" es muda) → \"an\"." },
+      { text: "___ Moon orbits the Earth.", options: ["A", "An", "The"], correct: 2, explanation: "Es un objeto único y específico → \"the\"." }
     ]
   },
   {
@@ -300,7 +326,14 @@ const CLASSES = [
       { text: "We love ___ new house.", options: ["our", "ours", "us"], correct: 0, explanation: "Va antes de un sustantivo (\"house\") → adjetivo posesivo \"our\"." },
       { text: "This backpack is ___, not yours.", options: ["my", "mine", "I"], correct: 1, explanation: "Reemplaza al sustantivo → pronombre posesivo \"mine\"." },
       { text: "They finished ___ project early.", options: ["their", "theirs", "them"], correct: 0, explanation: "Va antes de un sustantivo (\"project\") → adjetivo posesivo \"their\"." },
-      { text: "Is that phone ___?", options: ["your", "yours", "you"], correct: 1, explanation: "Reemplaza al sustantivo → pronombre posesivo \"yours\"." }
+      { text: "Is that phone ___?", options: ["your", "yours", "you"], correct: 1, explanation: "Reemplaza al sustantivo → pronombre posesivo \"yours\"." },
+      { text: "Is this jacket ___?", options: ["your", "yours", "you"], correct: 1, explanation: "Reemplaza al sustantivo → pronombre posesivo \"yours\"." },
+      { text: "They love ___ grandparents.", options: ["their", "theirs", "them"], correct: 0, explanation: "Va antes de un sustantivo (\"grandparents\") → adjetivo posesivo \"their\"." },
+      { text: "This isn't our car, it's ___.", options: ["their", "theirs", "them"], correct: 1, explanation: "Reemplaza al sustantivo → pronombre posesivo \"theirs\"." },
+      { text: "I forgot ___ keys at home.", options: ["my", "mine", "I"], correct: 0, explanation: "Va antes de un sustantivo (\"keys\") → adjetivo posesivo \"my\"." },
+      { text: "The blue bag is ___, not yours.", options: ["my", "mine", "I"], correct: 1, explanation: "Reemplaza al sustantivo → pronombre posesivo \"mine\"." },
+      { text: "___ brother lives in Mendoza.", options: ["My", "Mine", "Me"], correct: 0, explanation: "Va antes de un sustantivo (\"brother\") → adjetivo posesivo \"my\"." },
+      { text: "Whose pencil is this? It's ___.", options: ["her", "hers", "she"], correct: 1, explanation: "Reemplaza al sustantivo → pronombre posesivo \"hers\"." }
     ]
   },
   {
@@ -322,7 +355,14 @@ const CLASSES = [
       { text: "They ___ just finished their homework.", options: ["have", "has", "did"], correct: 0, explanation: "\"they\" va con \"have\" en present perfect." },
       { text: "My parents ___ married in 1995.", options: ["got", "have got", "has got"], correct: 0, explanation: "Fecha concreta (1995) → pasado simple." },
       { text: "I ___ that film before.", options: ["watched", "have watched", "has watched"], correct: 1, explanation: "\"before\" sin fecha concreta → present perfect." },
-      { text: "Yesterday, we ___ pizza for dinner.", options: ["have eaten", "ate", "eat"], correct: 1, explanation: "\"Yesterday\" es un momento concreto → pasado simple." }
+      { text: "Yesterday, we ___ pizza for dinner.", options: ["have eaten", "ate", "eat"], correct: 1, explanation: "\"Yesterday\" es un momento concreto → pasado simple." },
+      { text: "I ___ my homework two hours ago.", options: ["did", "have done", "have did"], correct: 0, explanation: "\"two hours ago\" es un momento concreto → pasado simple." },
+      { text: "She ___ never eaten sushi.", options: ["has", "have", "did"], correct: 0, explanation: "\"she\" va con \"has\" en present perfect." },
+      { text: "We ___ that restaurant last Friday.", options: ["visited", "have visited", "has visited"], correct: 0, explanation: "\"last Friday\" es un momento concreto → pasado simple." },
+      { text: "He ___ his key, so he can't get in.", options: ["lost", "has lost", "have lost"], correct: 1, explanation: "Resultado importante ahora, sin momento exacto → present perfect." },
+      { text: "They ___ to the beach in 2019.", options: ["went", "have been", "has been"], correct: 0, explanation: "Fecha concreta (2019) → pasado simple." },
+      { text: "I ___ this song before.", options: ["heard", "have heard", "has heard"], correct: 1, explanation: "\"before\" sin fecha concreta → present perfect." },
+      { text: "My brother ___ his car yesterday.", options: ["sold", "has sold", "have sold"], correct: 0, explanation: "\"yesterday\" es un momento concreto → pasado simple." }
     ]
   },
   {
@@ -345,7 +385,14 @@ const CLASSES = [
       { text: "He ___ to Spain last summer.", options: ["is going", "has gone", "went"], correct: 2, explanation: "\"last summer\" es un momento concreto → pasado simple." },
       { text: "Right now, they ___ a new project at school.", options: ["are starting", "have started", "started"], correct: 0, explanation: "\"right now\" indica presente continuo." },
       { text: "___ you ever tried sushi?", options: ["Do", "Have", "Did"], correct: 1, explanation: "\"Have you ever...?\" pregunta por experiencia." },
-      { text: "I can't talk now, I ___ dinner.", options: ["cook", "am cooking", "have cooked"], correct: 1, explanation: "Algo que está pasando en este momento → presente continuo." }
+      { text: "I can't talk now, I ___ dinner.", options: ["cook", "am cooking", "have cooked"], correct: 1, explanation: "Algo que está pasando en este momento → presente continuo." },
+      { text: "She ___ a letter right now.", options: ["writes", "is writing", "wrote"], correct: 1, explanation: "Algo que está pasando en este momento → presente continuo." },
+      { text: "We ___ that film twice already.", options: ["watched", "have watched", "are watching"], correct: 1, explanation: "\"already\" y relevancia en el presente → present perfect." },
+      { text: "He ___ to the gym yesterday.", options: ["goes", "has gone", "went"], correct: 2, explanation: "\"yesterday\" es un momento concreto → pasado simple." },
+      { text: "Listen! Someone ___ at the door.", options: ["knocks", "is knocking", "has knocked"], correct: 1, explanation: "Algo que está pasando en este momento → presente continuo." },
+      { text: "I ___ my keys, I can't find them anywhere.", options: ["lost", "have lost", "am losing"], correct: 1, explanation: "Resultado importante ahora, sin momento exacto → present perfect." },
+      { text: "Right now, she ___ her homework.", options: ["does", "is doing", "has done"], correct: 1, explanation: "\"right now\" indica presente continuo." },
+      { text: "He ___ home before it started raining.", options: ["goes", "is going", "went"], correct: 2, explanation: "Acción terminada en un momento concreto del pasado → pasado simple." }
     ]
   },
   {
@@ -368,7 +415,14 @@ const CLASSES = [
       { text: "I'm looking forward ___ the holidays.", options: ["to", "for", "at"], correct: 0, explanation: "\"looking forward to\" es una expresión fija." },
       { text: "He's good ___ maths.", options: ["in", "at", "on"], correct: 1, explanation: "\"good at\" es una expresión fija." },
       { text: "The present is ___ you.", options: ["for", "to", "at"], correct: 0, explanation: "\"for\" indica el destinatario." },
-      { text: "My birthday is ___ August.", options: ["in", "on", "at"], correct: 0, explanation: "\"in\" se usa con meses." }
+      { text: "My birthday is ___ August.", options: ["in", "on", "at"], correct: 0, explanation: "\"in\" se usa con meses." },
+      { text: "We usually travel ___ car when we go on holiday.", options: ["by", "in", "on"], correct: 0, explanation: "\"by car\" para medios de transporte." },
+      { text: "The picture is hanging ___ the wall.", options: ["in", "on", "at"], correct: 1, explanation: "\"on\" para superficies." },
+      { text: "I'll meet you ___ the cinema at 8.", options: ["at", "in", "on"], correct: 0, explanation: "\"at\" para lugares puntuales." },
+      { text: "She's very good ___ drawing.", options: ["in", "at", "on"], correct: 1, explanation: "\"good at\" es una expresión fija." },
+      { text: "He's afraid ___ spiders.", options: ["of", "in", "at"], correct: 0, explanation: "\"afraid of\" es una expresión fija." },
+      { text: "The meeting starts ___ 9 o'clock.", options: ["in", "on", "at"], correct: 2, explanation: "\"at\" se usa con horas." },
+      { text: "We're going on holiday ___ July.", options: ["in", "on", "at"], correct: 0, explanation: "\"in\" se usa con meses." }
     ]
   },
   {
@@ -391,7 +445,14 @@ const CLASSES = [
       { text: "I've known her ___ we were in primary school.", options: ["when", "since", "until"], correct: 1, explanation: "\"since\" indica desde cuándo la conoce." },
       { text: "Wait here ___ I come back.", options: ["since", "when", "until"], correct: 2, explanation: "\"until\" indica hasta qué momento hay que esperar." },
       { text: "I like tea, ___ I don't like coffee.", options: ["but", "so", "because"], correct: 0, explanation: "\"but\" marca un contraste entre dos gustos." },
-      { text: "She was hungry, ___ she made a sandwich.", options: ["although", "so", "but"], correct: 1, explanation: "\"so\" une causa (tener hambre) con consecuencia (hacerse un sándwich)." }
+      { text: "She was hungry, ___ she made a sandwich.", options: ["although", "so", "but"], correct: 1, explanation: "\"so\" une causa (tener hambre) con consecuencia (hacerse un sándwich)." },
+      { text: "I didn't go out ___ it was raining.", options: ["because", "so", "although"], correct: 0, explanation: "\"because\" da la razón por la que no salió." },
+      { text: "She studied hard, ___ she passed the exam.", options: ["because", "so", "but"], correct: 1, explanation: "\"so\" une causa (estudiar) con consecuencia (aprobar)." },
+      { text: "He's very shy, ___ he loves performing on stage.", options: ["because", "so", "although"], correct: 2, explanation: "\"although\" marca un contraste inesperado." },
+      { text: "I'll call you ___ I get home.", options: ["when", "until", "since"], correct: 0, explanation: "\"when\" indica el momento en que va a llamar." },
+      { text: "They've been friends ___ they were kids.", options: ["when", "since", "until"], correct: 1, explanation: "\"since\" indica desde cuándo son amigos." },
+      { text: "Stay in the car ___ I come back.", options: ["since", "when", "until"], correct: 2, explanation: "\"until\" indica hasta qué momento hay que esperar." },
+      { text: "The film was boring, ___ we left early.", options: ["although", "so", "because"], correct: 1, explanation: "\"so\" une causa (aburrimiento) con consecuencia (irse temprano)." }
     ]
   },
   {
@@ -414,7 +475,14 @@ const CLASSES = [
       { text: "___ a musical instrument takes patience.", options: ["Learn", "To learn", "Learning"], correct: 2, explanation: "El gerundio funciona como sujeto de la oración." },
       { text: "They study every day ___ good grades.", options: ["to get", "for getting", "getting"], correct: 0, explanation: "\"to get\" expresa el propósito de estudiar." },
       { text: "She enjoys ___ new recipes.", options: ["to try", "trying", "for try"], correct: 1, explanation: "Después de \"enjoy\" va el gerundio." },
-      { text: "He called his friend ___ about the trip.", options: ["to talk", "talking", "for talk"], correct: 0, explanation: "\"to talk\" expresa el propósito de la llamada." }
+      { text: "He called his friend ___ about the trip.", options: ["to talk", "talking", "for talk"], correct: 0, explanation: "\"to talk\" expresa el propósito de la llamada." },
+      { text: "She went to the library ___ some books.", options: ["to borrow", "borrowing", "for borrow"], correct: 0, explanation: "\"to borrow\" expresa el propósito de ir a la biblioteca." },
+      { text: "He avoids ___ junk food.", options: ["to eat", "eating", "for eat"], correct: 1, explanation: "Después de \"avoid\" va el gerundio." },
+      { text: "___ a new language opens many doors.", options: ["Learn", "To learn", "Learning"], correct: 2, explanation: "El gerundio funciona como sujeto de la oración." },
+      { text: "They saved money ___ a trip to Brazil.", options: ["to take", "taking", "for taking"], correct: 0, explanation: "\"to take\" expresa el propósito de ahorrar." },
+      { text: "She finished ___ her essay before dinner.", options: ["to write", "writing", "for write"], correct: 1, explanation: "Después de \"finish\" va el gerundio." },
+      { text: "We called the restaurant ___ a table.", options: ["to book", "booking", "for book"], correct: 0, explanation: "\"to book\" expresa el propósito de la llamada." },
+      { text: "He practises every day ___ better at football.", options: ["to get", "getting", "for get"], correct: 0, explanation: "\"to get\" expresa el propósito de practicar." }
     ]
   },
   {
@@ -437,7 +505,14 @@ const CLASSES = [
       { text: "I wonder ___ she lives.", options: ["where", "what", "how"], correct: 0, explanation: "\"where\" pregunta por el lugar." },
       { text: "Do you know ___ the museum opens?", options: ["when", "how", "what"], correct: 0, explanation: "\"when\" pregunta por el momento." },
       { text: "She asked me ___ I wanted to go.", options: ["where", "how", "why"], correct: 0, explanation: "\"where\" pregunta por el destino." },
-      { text: "Nobody understands ___ he did that.", options: ["why", "what", "who"], correct: 0, explanation: "\"why\" pregunta por la razón." }
+      { text: "Nobody understands ___ he did that.", options: ["why", "what", "who"], correct: 0, explanation: "\"why\" pregunta por la razón." },
+      { text: "I'm not sure ___ she said that.", options: ["what", "why", "who"], correct: 1, explanation: "\"why\" pregunta por la razón." },
+      { text: "Do you know ___ time the shop closes?", options: ["how", "what", "why"], correct: 1, explanation: "\"what time\" pregunta por la hora." },
+      { text: "She wants to know ___ you're coming to the party.", options: ["what", "if", "who"], correct: 1, explanation: "\"if\" se usa para preguntas de sí/no dentro de la oración." },
+      { text: "Can you tell me ___ this word means?", options: ["why", "how", "what"], correct: 2, explanation: "\"what\" pregunta por el significado." },
+      { text: "I don't remember ___ I put my keys.", options: ["what", "why", "where"], correct: 2, explanation: "\"where\" pregunta por el lugar." },
+      { text: "He asked me ___ I could help him.", options: ["what", "why", "if"], correct: 2, explanation: "\"if\" se usa para preguntas de sí/no dentro de la oración." },
+      { text: "Nobody knows ___ the new teacher is.", options: ["what", "who", "why"], correct: 1, explanation: "\"who\" pregunta por la identidad de la persona." }
     ]
   },
   {
@@ -462,7 +537,14 @@ const CLASSES = [
       { text: "You ___ finish it today, you have until Friday.", options: ["mustn't", "don't have to", "shouldn't"], correct: 1, explanation: "\"don't have to\" indica que no hay obligación." },
       { text: "It ___ rain later, take an umbrella just in case.", options: ["might", "must", "should"], correct: 0, explanation: "\"might\" expresa posibilidad." },
       { text: "___ you swim when you were five?", options: ["Could", "Should", "Must"], correct: 0, explanation: "\"Could\" se usa para habilidad en el pasado." },
-      { text: "You ___ eat so much candy, it's bad for your teeth.", options: ["shouldn't", "mustn't", "couldn't"], correct: 0, explanation: "Es un consejo, no una prohibición estricta → \"shouldn't\"." }
+      { text: "You ___ eat so much candy, it's bad for your teeth.", options: ["shouldn't", "mustn't", "couldn't"], correct: 0, explanation: "Es un consejo, no una prohibición estricta → \"shouldn't\"." },
+      { text: "You ___ wear a helmet when you ride a bike. It's the law.", options: ["must", "might", "could"], correct: 0, explanation: "\"must\" expresa obligación." },
+      { text: "___ you pass me the salt, please?", options: ["Must", "Could", "Should"], correct: 1, explanation: "\"Could\" se usa para pedir algo con cortesía." },
+      { text: "We ___ hurry, the train leaves in five minutes.", options: ["must", "might", "mustn't"], correct: 0, explanation: "\"must\" expresa obligación fuerte." },
+      { text: "You ___ smoke inside the building.", options: ["must", "mustn't", "don't have to"], correct: 1, explanation: "\"mustn't\" expresa prohibición." },
+      { text: "She ___ be at home, her car isn't there.", options: ["must", "mustn't", "might not"], correct: 2, explanation: "\"might not\" expresa posibilidad de que no esté." },
+      { text: "You ___ apologise, it wasn't your fault.", options: ["must", "don't have to", "mustn't"], correct: 1, explanation: "\"don't have to\" indica que no hay obligación." },
+      { text: "___ I borrow your pen for a second?", options: ["Should", "Can", "Must"], correct: 1, explanation: "\"Can\" se usa para pedir permiso." }
     ]
   },
   {
@@ -485,7 +567,14 @@ const CLASSES = [
       { text: "I ___ not understand this exercise.", options: ["do", "does", "did"], correct: 0, explanation: "\"I\" en presente → \"do\"." },
       { text: "You ___ to practise more if you want to improve.", options: ["need", "needs", "needed"], correct: 0, explanation: "\"You\" en presente → \"need\"." },
       { text: "___ she finish her homework yesterday?", options: ["Do", "Does", "Did"], correct: 2, explanation: "\"yesterday\" es pasado → \"Did\"." },
-      { text: "We ___ to leave now, or we'll be late.", options: ["need", "needs", "needed"], correct: 0, explanation: "\"We\" en presente → \"need\"." }
+      { text: "We ___ to leave now, or we'll be late.", options: ["need", "needs", "needed"], correct: 0, explanation: "\"We\" en presente → \"need\"." },
+      { text: "___ your sister like chocolate?", options: ["Do", "Does", "Did"], correct: 1, explanation: "\"your sister\" es tercera persona singular en presente → \"Does\"." },
+      { text: "They ___ not go to school yesterday, it was a holiday.", options: ["do", "does", "did"], correct: 2, explanation: "\"yesterday\" es pasado → \"did\"." },
+      { text: "___ you understand the instructions?", options: ["Do", "Does", "Did"], correct: 0, explanation: "\"you\" en presente → \"Do\"." },
+      { text: "He ___ not need any help with his homework.", options: ["do", "does", "did"], correct: 1, explanation: "\"He\" es tercera persona singular en presente → \"does\"." },
+      { text: "You ___ to bring your own lunch tomorrow.", options: ["need", "needs", "needed"], correct: 0, explanation: "\"You\" en presente → \"need\"." },
+      { text: "She ___ to finish the report by Friday.", options: ["need", "needs", "needed"], correct: 1, explanation: "\"She\" es tercera persona singular en presente → \"needs\"." },
+      { text: "___ they arrive on time yesterday?", options: ["Do", "Does", "Did"], correct: 2, explanation: "\"yesterday\" es pasado → \"Did\"." }
     ]
   },
   {
@@ -508,7 +597,14 @@ const CLASSES = [
       { text: "This is the ___ movie I've ever seen. (bad)", options: ["worse", "worst", "badder"], correct: 1, explanation: "\"bad\" es irregular: worse / worst (superlativo)." },
       { text: "He runs ___ than his brother. (fast)", options: ["faster", "fastest", "more fast"], correct: 0, explanation: "Adjetivos cortos → \"-er\" para comparar." },
       { text: "This is the ___ building in the city. (tall)", options: ["taller", "tallest", "more tall"], correct: 1, explanation: "Adjetivos cortos → \"-est\" para el superlativo." },
-      { text: "My sister is ___ than me. (young)", options: ["younger", "more young", "youngest"], correct: 0, explanation: "Adjetivos cortos → \"-er\" para comparar." }
+      { text: "My sister is ___ than me. (young)", options: ["younger", "more young", "youngest"], correct: 0, explanation: "Adjetivos cortos → \"-er\" para comparar." },
+      { text: "This book is ___ than the one I read last month. (interesting)", options: ["interestinger", "more interesting", "most interesting"], correct: 1, explanation: "Adjetivos largos → \"more\" + adjetivo para comparar." },
+      { text: "He is the ___ boy in the whole school. (funny)", options: ["funnier", "funniest", "most funny"], correct: 1, explanation: "Adjetivos cortos terminados en \"y\" → \"-iest\"." },
+      { text: "My backpack is ___ than yours. (heavy)", options: ["heavier", "more heavy", "heaviest"], correct: 0, explanation: "Adjetivos cortos terminados en \"y\" → \"-ier\"." },
+      { text: "This is the ___ day of my life. (bad)", options: ["worse", "worst", "baddest"], correct: 1, explanation: "\"bad\" es irregular: worse / worst (superlativo)." },
+      { text: "He speaks English ___ than I do. (well)", options: ["gooder", "better", "best"], correct: 1, explanation: "\"well\" es irregular: better / best." },
+      { text: "That was the ___ test I've ever taken. (easy)", options: ["easier", "easiest", "more easy"], correct: 1, explanation: "Adjetivos cortos terminados en \"y\" → \"-iest\" para el superlativo." },
+      { text: "This year's winter is ___ than last year's. (cold)", options: ["colder", "coldest", "more cold"], correct: 0, explanation: "Adjetivos cortos → \"-er\" para comparar." }
     ]
   },
   {
@@ -530,7 +626,14 @@ const CLASSES = [
       { text: "My brothers never talk to ___.", options: ["themselves", "each other", "itself"], correct: 1, explanation: "\"each other\" porque es algo mutuo entre ellos." },
       { text: "Be careful, don't cut ___ with the knife.", options: ["yourself", "each other", "themselves"], correct: 0, explanation: "\"yourself\" porque hablamos de una sola persona (you)." },
       { text: "The cat is cleaning ___.", options: ["itself", "themselves", "herself"], correct: 0, explanation: "\"itself\" porque \"the cat\" es singular y no es persona." },
-      { text: "Friends should support ___.", options: ["himself", "each other", "myself"], correct: 1, explanation: "\"each other\" porque es una acción mutua entre amigos." }
+      { text: "Friends should support ___.", options: ["himself", "each other", "myself"], correct: 1, explanation: "\"each other\" porque es una acción mutua entre amigos." },
+      { text: "Did you paint the house ___?", options: ["yourself", "each other", "himself"], correct: 0, explanation: "\"yourself\" porque hablamos de una sola persona (you)." },
+      { text: "The children are enjoying ___ at the party.", options: ["themselves", "each other", "itself"], correct: 0, explanation: "\"themselves\" porque la acción vuelve sobre \"the children\"." },
+      { text: "We should trust ___ more.", options: ["ourselves", "each other", "myself"], correct: 1, explanation: "\"each other\" porque es una acción mutua entre nosotros." },
+      { text: "He taught ___ how to play the guitar.", options: ["himself", "each other", "themselves"], correct: 0, explanation: "\"himself\" porque la acción vuelve sobre \"he\"." },
+      { text: "The two teams congratulated ___ after the match.", options: ["themselves", "each other", "itself"], correct: 1, explanation: "\"each other\" porque es una acción mutua entre los dos equipos." },
+      { text: "I made this cake ___, without any help.", options: ["myself", "each other", "herself"], correct: 0, explanation: "\"myself\" enfatiza que lo hice yo sola." },
+      { text: "The dog hurt ___ while playing in the garden.", options: ["itself", "himself", "each other"], correct: 0, explanation: "\"itself\" porque \"the dog\" es singular y no es persona." }
     ]
   },
   {
@@ -900,10 +1003,10 @@ function showResult() {
     const div = document.createElement('div');
     div.className = 'review-item ' + (isCorrect ? 'correct' : 'incorrect');
     div.innerHTML =
-      '<p class="review-q">' + (i + 1) + '. ' + q.text + '</p>' +
+      '<p class="review-q"><span class="review-icon ' + (isCorrect ? 'ok-bg' : 'bad-bg') + '">' + (isCorrect ? '&#10003;' : '&#10007;') + '</span>' + (i + 1) + '. ' + q.text + '</p>' +
       '<p class="review-a">Tu respuesta: <span class="' + (isCorrect ? 'ok' : 'bad') + '">' + userText + '</span>' +
       (isCorrect ? '' : ' · Correcta: <span class="ok">' + q.options[q.correct] + '</span>') + '</p>' +
-      '<p class="review-exp">' + q.explanation + '</p>';
+      '<div class="review-exp-box"><span class="review-exp-label">&#128161;</span><p class="review-exp-text">' + q.explanation + '</p></div>';
     reviewEl.appendChild(div);
   });
 
