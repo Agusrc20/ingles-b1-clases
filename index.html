@@ -102,13 +102,6 @@ button:disabled { opacity: .5; cursor: default; }
 .onboard input { font-size: 15px; padding: 12px 14px; border-radius: 12px; border: 2px solid #ece9f5; width: 100%; max-width: 260px; margin: 14px 0; font-family: inherit; }
 .onboard input:focus { outline: none; border-color: #5b3fd6; }
 
-.profile-switcher { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 12px; }
-.profile-chip { padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 700; background: #efeef8; border: 2px solid transparent; }
-.profile-chip.active { background: #5b3fd6; color: #fff; }
-.profile-chip.add { background: #fff; border: 2px dashed #d6d3e6; color: #5b3fd6; }
-#add-profile-form { display: flex; gap: 8px; justify-content: center; margin-top: 10px; align-items: center; }
-#add-profile-form input { font-size: 14px; padding: 8px 12px; border-radius: 10px; border: 2px solid #ece9f5; font-family: inherit; max-width: 160px; }
-
 .passage-box { max-height: 260px; overflow-y: auto; background: var(--accent-bg, #f1eefe); border-radius: 14px; padding: 16px 18px; margin-bottom: 16px; font-size: 14px; }
 .passage-box p { margin: 0 0 10px; }
 .audio-box { background: var(--accent-bg, #f1eefe); border-radius: 14px; padding: 16px 18px; margin-bottom: 16px; }
@@ -140,11 +133,6 @@ button:disabled { opacity: .5; cursor: default; }
     <h1>Inglés B1 · Mis clases</h1>
     <p class="subtitle">Práctica para el examen de ingreso a bilingües e intensificadas</p>
     <p class="greeting hidden" id="greeting"></p>
-    <div class="profile-switcher hidden" id="profile-switcher"></div>
-    <div class="hidden" id="add-profile-form">
-      <input type="text" id="new-profile-input" placeholder="Nombre" maxlength="30" onkeypress="if(event.key==='Enter') confirmAddProfile()">
-      <button onclick="confirmAddProfile()">Agregar</button>
-    </div>
   </header>
 
   <div id="view-onboard" class="hidden">
@@ -657,42 +645,6 @@ function saveName() {
   init();
 }
 
-function switchProfile(name) {
-  setCurrentName(name);
-  document.getElementById('add-profile-form').classList.add('hidden');
-  goHome();
-}
-
-function showAddProfile() {
-  document.getElementById('add-profile-form').classList.remove('hidden');
-  document.getElementById('new-profile-input').focus();
-}
-
-function confirmAddProfile() {
-  const input = document.getElementById('new-profile-input');
-  const val = input.value.trim();
-  if (!val) return;
-  addProfileIfNew(val);
-  setCurrentName(val);
-  input.value = '';
-  document.getElementById('add-profile-form').classList.add('hidden');
-  goHome();
-}
-
-function renderProfileSwitcher() {
-  const el = document.getElementById('profile-switcher');
-  el.classList.remove('hidden');
-  const profiles = getProfiles();
-  const current = getCurrentName();
-  let html = '';
-  profiles.forEach(p => {
-    const active = p === current;
-    html += '<button class="profile-chip' + (active ? ' active' : '') + '" onclick="switchProfile(' + JSON.stringify(p) + ')">' + p + '</button>';
-  });
-  html += '<button class="profile-chip add" onclick="showAddProfile()">+ Nueva persona</button>';
-  el.innerHTML = html;
-}
-
 function showView(id) {
   ['view-onboard', 'view-home', 'view-explain', 'view-exercise', 'view-result', 'view-writing'].forEach(v => {
     document.getElementById(v).classList.toggle('hidden', v !== id);
@@ -704,7 +656,6 @@ function renderHome() {
   const greetEl = document.getElementById('greeting');
   greetEl.classList.remove('hidden');
   greetEl.innerHTML = '¡Hola, ' + name + '!';
-  renderProfileSwitcher();
 
   const container = document.getElementById('class-container');
   container.innerHTML = '';
@@ -955,7 +906,6 @@ function init() {
   const profiles = getProfiles();
   if (profiles.length === 0) {
     document.getElementById('greeting').classList.add('hidden');
-    document.getElementById('profile-switcher').classList.add('hidden');
     showView('view-onboard');
   } else {
     if (!getCurrentName() || profiles.indexOf(getCurrentName()) === -1) {
