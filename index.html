@@ -138,11 +138,12 @@ button:disabled { opacity: .5; cursor: default; }
   <div id="view-onboard" class="hidden">
     <div class="card onboard">
       <p style="font-size:17px; font-weight:700; margin:0;">¿Cómo te llamás?</p>
-      <p style="font-size:13px; color:#7a7886;">Así puedo saludarte cada vez que entrás</p>
-      <input type="text" id="name-input" placeholder="Tu nombre" maxlength="30" onkeypress="if(event.key==='Enter') saveName()">
-      <p class="error-text" id="name-error">Escribí tu nombre para continuar.</p>
+      <p style="font-size:13px; color:#7a7886;">Así guardamos tu progreso y lo vemos en cualquier dispositivo</p>
+      <input type="text" id="name-input" placeholder="Tu nombre" maxlength="30" onkeypress="if(event.key==='Enter') document.getElementById('password-input').focus()">
+      <input type="password" id="password-input" placeholder="Contraseña" maxlength="30" onkeypress="if(event.key==='Enter') saveName()">
+      <p class="error-text" id="name-error">Escribí tu nombre y contraseña para continuar.</p>
       <div>
-        <button class="primary" onclick="saveName()">¡Empezar!</button>
+        <button class="primary" id="onboard-btn" onclick="saveName()">¡Empezar!</button>
       </div>
     </div>
   </div>
@@ -604,6 +605,9 @@ let activeClass = null;
 let curQ = 0;
 let userAnswers = [];
 
+const SUPABASE_URL = "https://wbrsewfcjhcgegjhbouv.supabase.co";
+const SUPABASE_KEY = "sb_publishable_2DQYa9lNPQ0LqBCCjHk2sg_oZ5Jwd8X";
+
 function slugify(name) {
   return encodeURIComponent(name.trim().toLowerCase());
 }
@@ -618,6 +622,48 @@ function addProfileIfNew(name) {
 }
 function getCurrentName() { return localStorage.getItem('b1_current_name') || ''; }
 function setCurrentName(name) { localStorage.setItem('b1_current_name', name); }
+function getCurrentPassword() { return localStorage.getItem('b1_current_password') || ''; }
+function setCurrentPassword(pass) { localStorage.setItem('b1_current_password', pass); }
+function cloudUserKey() { return slugify(getCurrentName()) + '__' + slugify(getCurrentPassword()); }
+
+async function pullCloudData() {
+  const name = getCurrentName(), pass = getCurrentPassword();
+  if (!name || !pass) return null;
+  try {
+    const res = await fetch(SUPABASE_URL + '/rest/v1/progress?key=eq.' + encodeURIComponent(cloudUserKey()) + '&select=data', {
+      headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY }
+    });
+    if (!res.ok) return null;
+    const rows = await res.json();
+    return rows.length ? rows[0].data : null;
+  } catch (e) { return null; }
+}
+
+async function syncFromCloud() {
+  const data = await pullCloudData();
+  if (!data) return false;
+  Object.keys(data).forEach(classId => {
+    localStorage.setItem(storageKey(classId), JSON.stringify(data[classId]));
+  });
+  return true;
+}
+
+async function pushToCloud() {
+  const name = getCurrentName(), pass = getCurrentPassword();
+  if (!name || !pass) return;
+  const data = {};
+  CLASSES.forEach(c => { data[c.id] = getAttempts(c.id); });
+  try {
+    await fetch(SUPABASE_URL + '/rest/v1/progress', {
+      method: 'POST',
+      headers: {
+        apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY,
+        'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates'
+      },
+      body: JSON.stringify({ key: cloudUserKey(), name: name, data: data })
+    });
+  } catch (e) { /* sin conexión: se sincroniza en el próximo intento */ }
+}
 
 function storageKey(classId) { return "b1_attempts_" + slugify(getCurrentName()) + "_" + classId; }
 function getAttempts(classId) {
@@ -627,6 +673,7 @@ function saveAttemptObj(classId, obj) {
   const attempts = getAttempts(classId);
   attempts.push(Object.assign({ date: new Date().toISOString() }, obj));
   localStorage.setItem(storageKey(classId), JSON.stringify(attempts));
+  pushToCloud();
 }
 function saveAttempt(classId, score, total) {
   saveAttemptObj(classId, { score: score, total: total });
@@ -634,15 +681,25 @@ function saveAttempt(classId, score, total) {
 
 function getName() { return getCurrentName(); }
 
-function saveName() {
+async function saveName() {
   const input = document.getElementById('name-input');
+  const passInput = document.getElementById('password-input');
   const err = document.getElementById('name-error');
   const val = input.value.trim();
-  if (!val) { err.style.display = 'block'; return; }
+  const pass = passInput.value.trim();
+  if (!val || !pass) { err.style.display = 'block'; return; }
   err.style.display = 'none';
   addProfileIfNew(val);
   setCurrentName(val);
-  init();
+  setCurrentPassword(pass);
+
+  const btn = document.getElementById('onboard-btn');
+  btn.disabled = true;
+  btn.textContent = 'Cargando...';
+  await syncFromCloud();
+  btn.disabled = false;
+  btn.textContent = '¡Empezar!';
+  goHome();
 }
 
 function showView(id) {
@@ -903,16 +960,13 @@ function saveWritingAttempt() {
 }
 
 function init() {
-  const profiles = getProfiles();
-  if (profiles.length === 0) {
+  if (!getCurrentName() || !getCurrentPassword()) {
     document.getElementById('greeting').classList.add('hidden');
     showView('view-onboard');
-  } else {
-    if (!getCurrentName() || profiles.indexOf(getCurrentName()) === -1) {
-      setCurrentName(profiles[profiles.length - 1]);
-    }
-    goHome();
+    return;
   }
+  goHome();
+  syncFromCloud().then(changed => { if (changed) goHome(); });
 }
 
 init();
