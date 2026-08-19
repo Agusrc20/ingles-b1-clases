@@ -153,12 +153,17 @@ button:disabled { opacity: .5; cursor: default; }
     </div>
   </div>
 
+  <div id="view-categories" class="hidden">
+    <div id="category-container"></div>
+  </div>
+
   <div id="view-home" class="hidden">
+    <div class="top-actions"><button class="link-btn" onclick="goToCategories()">&larr; Volver a categorías</button></div>
     <div id="class-container"></div>
   </div>
 
   <div id="view-explain" class="hidden">
-    <div class="top-actions"><button class="link-btn" onclick="goHome()">&larr; Volver a las clases</button></div>
+    <div class="top-actions"><button class="link-btn" onclick="goHome()">&larr; Volver a los temas</button></div>
     <div class="card">
       <p class="class-title" id="explain-title" style="font-size:19px;"></p>
       <div class="explain-box" id="explain-body"></div>
@@ -185,7 +190,7 @@ button:disabled { opacity: .5; cursor: default; }
   </div>
 
   <div id="view-result" class="hidden">
-    <div class="top-actions"><button class="link-btn" onclick="goHome()">&larr; Volver a las clases</button></div>
+    <div class="top-actions"><button class="link-btn" onclick="goHome()">&larr; Volver a los temas</button></div>
     <div class="result-score">
       <p class="label">Resultado — <span id="result-classname"></span></p>
       <p class="big" id="result-score"></p>
@@ -198,7 +203,7 @@ button:disabled { opacity: .5; cursor: default; }
   </div>
 
   <div id="view-writing" class="hidden">
-    <div class="top-actions"><button class="link-btn" onclick="goHome()">&larr; Volver a las clases</button></div>
+    <div class="top-actions"><button class="link-btn" onclick="goHome()">&larr; Volver a los temas</button></div>
     <div class="card">
       <p class="class-title" id="write-title" style="font-size:19px;"></p>
       <p style="font-size:14px; color:#55535f;" id="write-prompt"></p>
@@ -637,8 +642,8 @@ const CLASSES = [
     ]
   },
   {
-    id: "clase15_reading", section: "Reading", type: "reading",
-    title: "Clase 15 · Comprensión de lectura",
+    id: "reading1_shelter", section: "Reading", type: "reading",
+    title: "Reading 1 · Comprensión de lectura",
     color: "#3949ab", bg: "#e8eaf6",
     explanation: {
       intro: "Antes de leer, mirá las preguntas para saber qué buscar. No hace falta entender cada palabra del texto.",
@@ -659,8 +664,52 @@ const CLASSES = [
     ]
   },
   {
-    id: "clase16_listening", section: "Listening", type: "listening",
-    title: "Clase 16 · Comprensión auditiva",
+    id: "reading2_bracelets", section: "Reading", type: "reading",
+    title: "Reading 2 · Comprensión de lectura",
+    color: "#3949ab", bg: "#e8eaf6",
+    explanation: {
+      intro: "Antes de leer, mirá las preguntas para saber qué buscar. No hace falta entender cada palabra del texto.",
+      points: [
+        "Leé el texto completo una vez, sin traducir palabra por palabra.",
+        "Volvé a las preguntas y buscá la parte exacta del texto que las responde.",
+        "Si no conocés una palabra, tratá de entenderla por el contexto."
+      ]
+    },
+    passage: "Fourteen-year-old Julián started making bracelets out of coloured string two summers ago, just as a way to relax after school. He never planned to sell them until his cousin asked to buy one for her birthday.\n\nAfter that first sale, Julián's mother suggested he try selling a few more at the school fair. He was nervous, but he made twenty bracelets and brought them to the stall his mother helped him set up. To his surprise, he sold out in less than an hour.\n\nSince then, Julián has turned his hobby into a small business. He posts photos of his designs online, and customers can order the colours and patterns they want. He spends about an hour a day making bracelets, usually after finishing his homework, because he doesn't want his grades to suffer.\n\nJulián says the hardest part of running a business is dealing with orders that don't arrive on time, because customers sometimes get upset. His mother helps him answer messages and keep track of payments, since he's still too young to have his own bank account. Julián is saving the money he earns to buy a new bicycle, and he hopes that one day he might even open a small shop.",
+    questions: [
+      { text: "Julián started making bracelets...", options: ["to sell them at school.", "to relax after school.", "because his mother asked him to."], correct: 1, explanation: "El texto dice que empezó como una forma de relajarse, sin pensar en venderlas." },
+      { text: "Julián sold his first bracelet to...", options: ["a customer online.", "his cousin.", "his mother."], correct: 1, explanation: "Su prima le pidió comprar una para su cumpleaños." },
+      { text: "At the school fair, Julián...", options: ["sold all his bracelets quickly.", "didn't sell any bracelets.", "only sold a few bracelets."], correct: 0, explanation: "Vendió las veinte pulseras en menos de una hora." },
+      { text: "Julián makes bracelets...", options: ["before school.", "after finishing his homework.", "instead of doing homework."], correct: 1, explanation: "Dice que las hace después de terminar la tarea, para no descuidar las notas." },
+      { text: "According to Julián, the hardest part of the business is...", options: ["designing new patterns.", "late orders.", "posting photos online."], correct: 1, explanation: "Dice que lo más difícil son los pedidos que no llegan a tiempo." },
+      { text: "Julián's mother helps him with...", options: ["making the bracelets.", "answering messages and payments.", "posting on social media."], correct: 1, explanation: "La madre lo ayuda a responder mensajes y a llevar el control de los pagos." }
+    ]
+  },
+  {
+    id: "reading3_skate", section: "Reading", type: "reading",
+    title: "Reading 3 · Comprensión de lectura",
+    color: "#3949ab", bg: "#e8eaf6",
+    explanation: {
+      intro: "Antes de leer, mirá las preguntas para saber qué buscar. No hace falta entender cada palabra del texto.",
+      points: [
+        "Leé el texto completo una vez, sin traducir palabra por palabra.",
+        "Volvé a las preguntas y buscá la parte exacta del texto que las responde.",
+        "Si no conocés una palabra, tratá de entenderla por el contexto."
+      ]
+    },
+    passage: "Thirteen-year-old Bruno used to watch his older brother skateboard in the park every weekend, but he was always too scared to try it himself. He was sure he would fall and hurt himself in front of everyone.\n\nLast spring, his brother finally convinced him to borrow a skateboard and give it a try. Bruno's first attempts were not easy: he fell several times in the first ten minutes, and his knees were covered in small bruises by the end of the day. Still, something about the feeling of gliding, even for just a few seconds, made him want to keep trying.\n\nBruno started practising every afternoon in his driveway before moving to the park with his brother. He learned that watching skating videos online helped him understand how to keep his balance, but nothing worked as well as simply practising the same movement over and over.\n\nThree months later, Bruno can now skate confidently around the park, and he has even learned a couple of simple tricks. He says the most important lesson he learned wasn't really about skateboarding: it was that being bad at something at first doesn't mean you'll never be good at it. His brother is proud of him, and they now skate together every weekend.",
+    questions: [
+      { text: "Before he learned to skate, Bruno...", options: ["skated every weekend with his brother.", "was afraid of falling.", "didn't like skateboarding at all."], correct: 1, explanation: "Tenía miedo de caerse y lastimarse frente a los demás." },
+      { text: "Bruno's brother convinced him to...", options: ["buy his own skateboard.", "borrow a skateboard and try it.", "watch videos instead of skating."], correct: 1, explanation: "Su hermano lo convenció de pedir prestada una patineta y probar." },
+      { text: "On his first day, Bruno...", options: ["skated perfectly.", "didn't fall at all.", "fell several times."], correct: 2, explanation: "Se cayó varias veces en los primeros diez minutos." },
+      { text: "Bruno practised first...", options: ["in the park.", "in his driveway.", "at school."], correct: 1, explanation: "Empezó a practicar en la entrada de su casa antes de ir al parque." },
+      { text: "Watching videos online helped Bruno...", options: ["understand how to keep his balance.", "learn new tricks quickly.", "avoid falling completely."], correct: 0, explanation: "Los videos lo ayudaron a entender cómo mantener el equilibrio." },
+      { text: "The most important lesson Bruno learned was that...", options: ["skateboarding is dangerous.", "being bad at something at first doesn't mean you'll never improve.", "his brother is a better skater."], correct: 1, explanation: "Aprendió que no ser bueno al principio no significa que nunca vas a mejorar." }
+    ]
+  },
+  {
+    id: "listening1_camping", section: "Listening", type: "listening",
+    title: "Listening 1 · Comprensión auditiva",
     color: "#d81b60", bg: "#fce4ec",
     explanation: {
       intro: "Vas a escuchar un audio corto. Podés escucharlo las veces que quieras (en el examen real solo lo escuchás dos veces, así que después practicá escuchándolo solo dos veces para simularlo).",
@@ -681,8 +730,52 @@ const CLASSES = [
     ]
   },
   {
-    id: "clase17_writing", section: "Writing", type: "writing",
-    title: "Clase 17 · Writing: email",
+    id: "listening2_party", section: "Listening", type: "listening",
+    title: "Listening 2 · Comprensión auditiva",
+    color: "#d81b60", bg: "#fce4ec",
+    explanation: {
+      intro: "Vas a escuchar un audio corto. Podés escucharlo las veces que quieras (en el examen real solo lo escuchás dos veces, así que después practicá escuchándolo solo dos veces para simularlo).",
+      points: [
+        "Primero escuchá para entender la idea general.",
+        "Volvé a escuchar prestando atención a los detalles.",
+        "Si te perdés una palabra, seguí escuchando: no hace falta entender todo."
+      ]
+    },
+    script: "Hi, I'm Camila. Last month, my brother and I decided to organise a surprise party for our mum's birthday. We only had one week to plan everything, so we had to work fast. First, we made a list of all her friends and family and sent everyone a secret message with the time and place. We chose our aunt's house because it's close to ours but mum doesn't visit very often. On the day of the party, we told mum we were going out for a normal Saturday lunch, but instead we drove to our aunt's house. When she walked in and everyone shouted 'Surprise!', she was so shocked that she almost cried. The only problem was that the cake arrived twenty minutes late because the bakery made a mistake with the order. Luckily, nobody really minded waiting. In the end, mum said it was one of the best surprises she's ever had, and she still talks about it now.",
+    questions: [
+      { text: "How much time did Camila and her brother have to plan the party?", options: ["One week.", "One month.", "Two days."], correct: 0, explanation: "Dice que solo tuvieron una semana para organizar todo." },
+      { text: "Why did they choose their aunt's house?", options: ["It's far from their mum's usual places.", "It's close to them but their mum doesn't visit often.", "Their aunt offered to organise the party."], correct: 1, explanation: "Eligieron la casa de la tía porque está cerca pero la mamá no la visita seguido." },
+      { text: "What did they tell their mum they were doing on the day of the party?", options: ["Going out for a normal Saturday lunch.", "Visiting their aunt for her birthday.", "Going shopping together."], correct: 0, explanation: "Le dijeron que iban a salir a almorzar un sábado normal." },
+      { text: "How did the mum react when she walked in?", options: ["She wasn't surprised at all.", "She was so shocked she almost cried.", "She got angry at first."], correct: 1, explanation: "Quedó tan sorprendida que casi llora." },
+      { text: "What problem happened during the party?", options: ["Nobody came.", "The cake arrived late.", "The music didn't work."], correct: 1, explanation: "La torta llegó veinte minutos tarde por un error de la panadería." },
+      { text: "How did the mum feel about the party afterwards?", options: ["She said it was one of the best surprises ever.", "She said it was too stressful.", "She didn't mention it again."], correct: 0, explanation: "Dijo que fue una de las mejores sorpresas que tuvo y todavía lo comenta." }
+    ]
+  },
+  {
+    id: "listening3_babysitting", section: "Listening", type: "listening",
+    title: "Listening 3 · Comprensión auditiva",
+    color: "#d81b60", bg: "#fce4ec",
+    explanation: {
+      intro: "Vas a escuchar un audio corto. Podés escucharlo las veces que quieras (en el examen real solo lo escuchás dos veces, así que después practicá escuchándolo solo dos veces para simularlo).",
+      points: [
+        "Primero escuchá para entender la idea general.",
+        "Volvé a escuchar prestando atención a los detalles.",
+        "Si te perdés una palabra, seguí escuchando: no hace falta entender todo."
+      ]
+    },
+    script: "Hi, I'm Sofía. Last weekend, I had my first babysitting job. I was looking after my neighbour's two kids, a five-year-old boy and a seven-year-old girl, while their parents went out for the evening. At first, I was really nervous because I had never done this before. The kids wanted to watch a scary movie, but I told them it was too late and too scary for them, so we watched a cartoon instead. Around eight o'clock, I made them a snack and we played a board game before bedtime. The tricky part was getting the little boy to brush his teeth: he kept running around the house and hiding from me! Eventually, I offered to read him an extra story if he brushed his teeth quickly, and that worked perfectly. By the time their parents came home at eleven, both kids were fast asleep. The parents were really happy and asked me to babysit again next month, so I think it went well.",
+    questions: [
+      { text: "How many children did Sofía look after?", options: ["One.", "Two.", "Three."], correct: 1, explanation: "Cuidó a dos chicos, un nene de cinco y una nena de siete." },
+      { text: "Why didn't they watch the scary movie?", options: ["The TV wasn't working.", "Sofía thought it was too late and too scary.", "The kids didn't want to."], correct: 1, explanation: "Sofía dijo que era demasiado tarde y muy asustador para ellos." },
+      { text: "What did they do around eight o'clock?", options: ["They went to bed.", "Sofía made a snack and they played a game.", "They watched another movie."], correct: 1, explanation: "Sofía les preparó una merienda y jugaron a un juego de mesa." },
+      { text: "What was the tricky part of the evening?", options: ["Getting the boy to brush his teeth.", "Making dinner.", "Finding the TV remote."], correct: 0, explanation: "Lo difícil fue lograr que el nene se lavara los dientes." },
+      { text: "How did Sofía convince the boy to brush his teeth?", options: ["She let him stay up later.", "She offered to read him an extra story.", "She gave him a snack."], correct: 1, explanation: "Le ofreció leerle un cuento extra si se lavaba los dientes rápido." },
+      { text: "How did the evening end?", options: ["The kids were awake when their parents arrived.", "Both kids were asleep when their parents came home.", "Sofía had to call the parents early."], correct: 1, explanation: "Los dos chicos estaban dormidos cuando llegaron los padres a las once." }
+    ]
+  },
+  {
+    id: "writing1_email", section: "Writing", type: "writing",
+    title: "Writing 1 · Email",
     color: "#558b2f", bg: "#f1f8e9",
     explanation: {
       intro: "Vas a escribir un email corto en inglés, como en el examen real.",
@@ -700,6 +793,50 @@ const CLASSES = [
       "What did you do?",
       "How did you feel?",
       "Would you like to do it again? Why (not)?"
+    ]
+  },
+  {
+    id: "writing2_hobby", section: "Writing", type: "writing",
+    title: "Writing 2 · Email",
+    color: "#558b2f", bg: "#f1f8e9",
+    explanation: {
+      intro: "Vas a escribir otro email corto en inglés, esta vez sobre un hobby o actividad nueva.",
+      points: [
+        "Incluí un saludo y un cierre.",
+        "Usá al menos 5 de las ideas sugeridas.",
+        "Escribí alrededor de 100 palabras.",
+        "Cuando termines, revisá los tiempos verbales."
+      ]
+    },
+    prompt: "Write an email to your English friend telling him/her about a new hobby or activity you have started recently. Include a greeting, details about the hobby, and an ending. Write about 100 words.",
+    bulletIdeas: [
+      "What is it?",
+      "When and how did you start?",
+      "Why do you like it?",
+      "Is it difficult?",
+      "Would you recommend it to your friend? Why (not)?"
+    ]
+  },
+  {
+    id: "writing3_story", section: "Writing", type: "writing",
+    title: "Writing 3 · Historia",
+    color: "#558b2f", bg: "#f1f8e9",
+    explanation: {
+      intro: "En el examen real, a veces en vez de un email hay que escribir una historia corta a partir de una primera frase dada.",
+      points: [
+        "Tu historia tiene que empezar exactamente con la frase dada.",
+        "Usá al menos 5 de las ideas sugeridas para armar la trama.",
+        "Escribí alrededor de 100 palabras.",
+        "Cuando termines, revisá los tiempos verbales."
+      ]
+    },
+    prompt: "Write a short story. Your story must begin with this sentence: \"It was a rainy Saturday afternoon when the phone rang.\" Write about 100 words.",
+    bulletIdeas: [
+      "Who called and why?",
+      "What happened next?",
+      "Was there a problem?",
+      "How did the story end?",
+      "How did you feel?"
     ]
   }
 ];
@@ -802,77 +939,120 @@ async function saveName() {
   await syncFromCloud();
   btn.disabled = false;
   btn.textContent = '¡Empezar!';
-  goHome();
+  goToCategories();
 }
 
 function showView(id) {
-  ['view-onboard', 'view-home', 'view-explain', 'view-exercise', 'view-result', 'view-writing'].forEach(v => {
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+  ['view-categories', 'view-onboard', 'view-home', 'view-explain', 'view-exercise', 'view-result', 'view-writing'].forEach(v => {
     document.getElementById(v).classList.toggle('hidden', v !== id);
   });
 }
 
-function renderHome() {
+const CATEGORY_ICONS = { "Gramática": "📘", "Reading": "📖", "Listening": "🎧", "Writing": "✍️" };
+let activeSection = null;
+
+function getSections() {
+  const sections = [];
+  CLASSES.forEach(c => { if (sections.indexOf(c.section) === -1) sections.push(c.section); });
+  return sections;
+}
+
+function renderCategories() {
   const name = getCurrentName();
   const greetEl = document.getElementById('greeting');
   greetEl.classList.remove('hidden');
   greetEl.innerHTML = '¡Hola, ' + name + '!';
 
+  const container = document.getElementById('category-container');
+  container.innerHTML = '';
+  const grid = document.createElement('div');
+  grid.className = 'class-grid';
+
+  getSections().forEach(sectionName => {
+    const topics = CLASSES.filter(c => c.section === sectionName);
+    const first = topics[0];
+    const card = document.createElement('button');
+    card.className = 'class-card';
+    card.style.setProperty('--accent', first.color);
+    card.style.setProperty('--accent-bg', first.bg);
+    card.onclick = () => openCategory(sectionName);
+    card.innerHTML =
+      '<span class="class-badge" style="font-size:19px;">' + (CATEGORY_ICONS[sectionName] || '📚') + '</span>' +
+      '<span>' +
+      '<p class="class-title">' + sectionName + '</p>' +
+      '<p class="class-meta">' + topics.length + (topics.length === 1 ? ' tema' : ' temas') + '</p>' +
+      '</span>';
+    grid.appendChild(card);
+  });
+
+  container.appendChild(grid);
+}
+
+function openCategory(sectionName) {
+  activeSection = sectionName;
+  renderTopics();
+  showView('view-home');
+}
+
+function goToCategories() {
+  activeSection = null;
+  renderCategories();
+  showView('view-categories');
+}
+
+function renderTopics() {
   const container = document.getElementById('class-container');
   container.innerHTML = '';
 
-  const sections = [];
-  CLASSES.forEach(c => { if (sections.indexOf(c.section) === -1) sections.push(c.section); });
+  const header = document.createElement('p');
+  header.className = 'section-header';
+  header.textContent = activeSection;
+  container.appendChild(header);
 
-  sections.forEach(sectionName => {
-    const header = document.createElement('p');
-    header.className = 'section-header';
-    header.textContent = sectionName;
-    container.appendChild(header);
+  const grid = document.createElement('div');
+  grid.className = 'class-grid';
 
-    const grid = document.createElement('div');
-    grid.className = 'class-grid';
+  CLASSES.filter(c => c.section === activeSection).forEach(c => {
+    const attempts = getAttempts(c.id);
+    const card = document.createElement('button');
+    card.className = 'class-card';
+    card.style.setProperty('--accent', c.color);
+    card.style.setProperty('--accent-bg', c.bg);
+    card.onclick = () => openClass(c.id);
 
-    CLASSES.filter(c => c.section === sectionName).forEach(c => {
-      const attempts = getAttempts(c.id);
-      const card = document.createElement('button');
-      card.className = 'class-card';
-      card.style.setProperty('--accent', c.color);
-      card.style.setProperty('--accent-bg', c.bg);
-      card.onclick = () => openClass(c.id);
+    const num = c.title.match(/(\d+)/)[1];
+    const shortTitle = c.title.split('·')[1].trim();
+    const isWriting = c.type === 'writing';
+    const metaText = isWriting ? '1 consigna' : c.questions.length + ' ejercicios';
 
-      const num = c.title.match(/Clase (\d+)/)[1];
-      const shortTitle = c.title.split('·')[1].trim();
-      const isWriting = c.type === 'writing';
-      const metaText = isWriting ? '1 consigna' : c.questions.length + ' ejercicios';
-
-      let statsHtml = '<span class="class-stats">Sin intentos todavía</span>';
-      if (attempts.length > 0) {
-        const last = attempts[attempts.length - 1];
-        if (isWriting) {
-          statsHtml = '<span class="class-stats">Intentos: ' + attempts.length +
-            ' · Último: ' + last.wordCount + ' palabras · Ideas: ' + last.checked + '/' + last.total + '</span>';
-        } else {
-          const best = attempts.reduce((m, a) => a.score > m.score ? a : m, attempts[0]);
-          const pct = best.score / best.total;
-          const starCount = pct === 1 ? 3 : pct >= 0.75 ? 2 : pct >= 0.5 ? 1 : 0;
-          const stars = '★'.repeat(starCount) + '☆'.repeat(3 - starCount);
-          statsHtml = '<span class="stars">' + stars + '</span><br><span class="class-stats">Intentos: ' + attempts.length +
-            ' · Último: ' + last.score + '/' + last.total + '</span>';
-        }
+    let statsHtml = '<span class="class-stats">Sin intentos todavía</span>';
+    if (attempts.length > 0) {
+      const last = attempts[attempts.length - 1];
+      if (isWriting) {
+        statsHtml = '<span class="class-stats">Intentos: ' + attempts.length +
+          ' · Último: ' + last.wordCount + ' palabras · Ideas: ' + last.checked + '/' + last.total + '</span>';
+      } else {
+        const best = attempts.reduce((m, a) => a.score > m.score ? a : m, attempts[0]);
+        const pct = best.score / best.total;
+        const starCount = pct === 1 ? 3 : pct >= 0.75 ? 2 : pct >= 0.5 ? 1 : 0;
+        const stars = '★'.repeat(starCount) + '☆'.repeat(3 - starCount);
+        statsHtml = '<span class="stars">' + stars + '</span><br><span class="class-stats">Intentos: ' + attempts.length +
+          ' · Último: ' + last.score + '/' + last.total + '</span>';
       }
+    }
 
-      card.innerHTML =
-        '<span class="class-badge">' + num + '</span>' +
-        '<span>' +
-        '<p class="class-title">' + shortTitle + '</p>' +
-        '<p class="class-meta">' + metaText + '</p>' +
-        statsHtml +
-        '</span>';
-      grid.appendChild(card);
-    });
-
-    container.appendChild(grid);
+    card.innerHTML =
+      '<span class="class-badge">' + num + '</span>' +
+      '<span>' +
+      '<p class="class-title">' + shortTitle + '</p>' +
+      '<p class="class-meta">' + metaText + '</p>' +
+      statsHtml +
+      '</span>';
+    grid.appendChild(card);
   });
+
+  container.appendChild(grid);
 }
 
 function openClass(classId) {
@@ -888,7 +1068,7 @@ function openClass(classId) {
 }
 
 function goHome() {
-  renderHome();
+  renderTopics();
   showView('view-home');
 }
 
@@ -914,7 +1094,8 @@ function buildContext() {
     ctx.classList.remove('hidden');
     ctx.innerHTML =
       '<div class="audio-box">' +
-      '<div class="row"><button class="primary" onclick="playAudio()">&#9658; Reproducir audio</button>' +
+      '<div class="row"><span><button class="primary" onclick="playAudio()">&#9658; Reproducir audio</button> ' +
+      '<button onclick="stopAudio()">&#9632; Pausar</button></span>' +
       '<button class="link-btn" onclick="toggleTranscript()">Mostrar texto</button></div>' +
       '<div class="passage-box hidden" id="transcript-box"><p>' + activeClass.script + '</p></div>' +
       '</div>';
@@ -934,6 +1115,10 @@ function playAudio() {
   utter.lang = 'en-US';
   utter.rate = 0.92;
   window.speechSynthesis.speak(utter);
+}
+
+function stopAudio() {
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
 }
 
 function toggleTranscript(forceShow) {
@@ -1068,8 +1253,8 @@ function init() {
     showView('view-onboard');
     return;
   }
-  goHome();
-  syncFromCloud().then(changed => { if (changed) goHome(); });
+  goToCategories();
+  syncFromCloud().then(changed => { if (changed && !activeSection) renderCategories(); });
 }
 
 init();
