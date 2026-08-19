@@ -237,8 +237,75 @@ const CLASSES = [
     ]
   },
   {
-    id: "clase2_presentperfect", section: "Gramática",
-    title: "Clase 2 · Present perfect vs. pasado simple",
+    id: "clase2_pronombres", section: "Gramática",
+    title: "Clase 2 · Pronombres personales y de objeto",
+    color: "#5c6bc0", bg: "#eef0fb",
+    explanation: {
+      intro: "Los pronombres de sujeto (I, you, he, she, it, we, they) hacen la acción. Los de objeto (me, you, him, her, it, us, them) la reciben.",
+      points: [
+        "Sujeto: <span class=\"example\">She called him.</span>",
+        "Objeto: <span class=\"example\">They helped us.</span>"
+      ]
+    },
+    questions: [
+      { text: "___ is my best friend.", options: ["She", "Her", "Herself"], correct: 0, explanation: "\"She\" es sujeto de la oración." },
+      { text: "Can you help ___? I don't understand this exercise.", options: ["I", "me", "myself"], correct: 1, explanation: "\"me\" es objeto: recibe la ayuda." },
+      { text: "___ live in Buenos Aires.", options: ["We", "Us", "Ourselves"], correct: 0, explanation: "\"We\" es sujeto de la oración." },
+      { text: "The teacher gave ___ a lot of homework.", options: ["we", "us", "ourselves"], correct: 1, explanation: "\"us\" es objeto: recibe la tarea." },
+      { text: "___ is a great singer.", options: ["He", "Him", "His"], correct: 0, explanation: "\"He\" es sujeto de la oración." },
+      { text: "I saw ___ at the party last night.", options: ["they", "them", "their"], correct: 1, explanation: "\"them\" es objeto: recibe la acción de ver." },
+      { text: "___ has a new phone.", options: ["She", "Her", "Hers"], correct: 0, explanation: "\"She\" es sujeto de la oración." },
+      { text: "Please give the book to ___.", options: ["he", "him", "his"], correct: 1, explanation: "Después de \"to\" usamos el pronombre de objeto: \"him\"." }
+    ]
+  },
+  {
+    id: "clase3_articulos", section: "Gramática",
+    title: "Clase 3 · Artículos",
+    color: "#455a64", bg: "#eceff1",
+    explanation: {
+      intro: "\"a\" antes de sonido de consonante, \"an\" antes de sonido de vocal, \"the\" para algo específico o ya mencionado. A veces no se usa ningún artículo.",
+      points: [
+        "<span class=\"example\">a dog · an apple</span>",
+        "<span class=\"example\">the book I told you about</span> (algo específico)",
+        "<span class=\"example\">I like dogs.</span> (afirmación general, sin artículo)"
+      ]
+    },
+    questions: [
+      { text: "She has ___ umbrella in her bag.", options: ["a", "an", "the"], correct: 1, explanation: "\"umbrella\" empieza con sonido de vocal → \"an\"." },
+      { text: "I saw ___ dog in the park.", options: ["a", "an", "the"], correct: 0, explanation: "\"dog\" empieza con sonido de consonante → \"a\"." },
+      { text: "Can you close ___ door, please?", options: ["a", "an", "the"], correct: 2, explanation: "Es una puerta específica y conocida → \"the\"." },
+      { text: "___ cats are independent animals.", options: ["A", "The", "-"], correct: 2, explanation: "Afirmación general sobre los gatos → sin artículo." },
+      { text: "He is ___ best student in the class.", options: ["a", "an", "the"], correct: 2, explanation: "Los superlativos siempre llevan \"the\"." },
+      { text: "I need ___ hour to finish this.", options: ["a", "an", "the"], correct: 1, explanation: "\"hour\" suena como si empezara con vocal (la \"h\" es muda) → \"an\"." },
+      { text: "We watched ___ interesting movie last night.", options: ["a", "an", "the"], correct: 1, explanation: "\"interesting\" empieza con sonido de vocal → \"an\"." },
+      { text: "___ information is very useful.", options: ["A", "An", "-"], correct: 2, explanation: "\"information\" es incontable y aquí es general → sin artículo." }
+    ]
+  },
+  {
+    id: "clase4_posesivos", section: "Gramática",
+    title: "Clase 4 · Adjetivos y pronombres posesivos",
+    color: "#ff8f00", bg: "#fff3e0",
+    explanation: {
+      intro: "Los adjetivos posesivos van antes de un sustantivo (my, your, his, her, its, our, their). Los pronombres posesivos reemplazan al sustantivo (mine, yours, his, hers, ours, theirs).",
+      points: [
+        "<span class=\"example\">This is my book.</span> (adjetivo + sustantivo)",
+        "<span class=\"example\">This book is mine.</span> (pronombre, sin sustantivo)"
+      ]
+    },
+    questions: [
+      { text: "This is ___ dog.", options: ["my", "mine", "I"], correct: 0, explanation: "Va antes de un sustantivo (\"dog\") → adjetivo posesivo \"my\"." },
+      { text: "Is this pencil yours or ___?", options: ["my", "mine", "I"], correct: 1, explanation: "Reemplaza al sustantivo → pronombre posesivo \"mine\"." },
+      { text: "The cat licked ___ paw.", options: ["it's", "its", "his"], correct: 1, explanation: "\"its\" es el posesivo de \"it\", sin apóstrofe." },
+      { text: "That's not my bag, it's ___.", options: ["her", "hers", "she"], correct: 1, explanation: "Reemplaza al sustantivo → pronombre posesivo \"hers\"." },
+      { text: "We love ___ new house.", options: ["our", "ours", "us"], correct: 0, explanation: "Va antes de un sustantivo (\"house\") → adjetivo posesivo \"our\"." },
+      { text: "This backpack is ___, not yours.", options: ["my", "mine", "I"], correct: 1, explanation: "Reemplaza al sustantivo → pronombre posesivo \"mine\"." },
+      { text: "They finished ___ project early.", options: ["their", "theirs", "them"], correct: 0, explanation: "Va antes de un sustantivo (\"project\") → adjetivo posesivo \"their\"." },
+      { text: "Is that phone ___?", options: ["your", "yours", "you"], correct: 1, explanation: "Reemplaza al sustantivo → pronombre posesivo \"yours\"." }
+    ]
+  },
+  {
+    id: "clase5_presentperfect", section: "Gramática",
+    title: "Clase 5 · Present perfect vs. pasado simple",
     color: "#12b299", bg: "#e6faf6",
     explanation: {
       intro: "El pasado simple se usa con un momento concreto del pasado. El present perfect se usa cuando importa el resultado o la experiencia, no el momento exacto.",
@@ -259,8 +326,123 @@ const CLASSES = [
     ]
   },
   {
-    id: "clase3_modales", section: "Gramática",
-    title: "Clase 3 · Modales",
+    id: "clase6_tiempos_avanzado", section: "Gramática",
+    title: "Clase 6 · Presente continuo, perfecto y pasado",
+    color: "#d1495b", bg: "#fce9ec",
+    explanation: {
+      intro: "Tres tiempos, tres usos distintos.",
+      points: [
+        "Presente continuo: algo pasando ahora → <span class=\"example\">She is helping her neighbours right now.</span>",
+        "Present perfect: experiencia o resultado, sin momento exacto → <span class=\"example\">She has helped many people.</span>",
+        "Pasado simple: acción terminada en un momento concreto → <span class=\"example\">She helped her neighbour yesterday.</span>"
+      ]
+    },
+    questions: [
+      { text: "Look! It ___ outside.", options: ["rains", "is raining", "has rained"], correct: 1, explanation: "Algo que está pasando en este momento → presente continuo." },
+      { text: "I ___ my homework, so now I can watch TV.", options: ["am finishing", "have finished", "finished"], correct: 1, explanation: "Resultado importante ahora, sin momento exacto → present perfect." },
+      { text: "She ___ for this company since 2020.", options: ["is working", "has worked", "worked"], correct: 1, explanation: "\"since\" pide present perfect." },
+      { text: "We ___ dinner right now, can you call later?", options: ["are having", "have had", "had"], correct: 0, explanation: "\"right now\" indica presente continuo." },
+      { text: "He ___ to Spain last summer.", options: ["is going", "has gone", "went"], correct: 2, explanation: "\"last summer\" es un momento concreto → pasado simple." },
+      { text: "Right now, they ___ a new project at school.", options: ["are starting", "have started", "started"], correct: 0, explanation: "\"right now\" indica presente continuo." },
+      { text: "___ you ever tried sushi?", options: ["Do", "Have", "Did"], correct: 1, explanation: "\"Have you ever...?\" pregunta por experiencia." },
+      { text: "I can't talk now, I ___ dinner.", options: ["cook", "am cooking", "have cooked"], correct: 1, explanation: "Algo que está pasando en este momento → presente continuo." }
+    ]
+  },
+  {
+    id: "clase7_preposiciones", section: "Gramática",
+    title: "Clase 7 · Preposiciones comunes",
+    color: "#4a90e2", bg: "#eaf3fd",
+    explanation: {
+      intro: "Muchas preposiciones van fijas con ciertas palabras y conviene memorizarlas como bloques.",
+      points: [
+        "<span class=\"example\">interested in · good at · looking forward to</span>",
+        "<span class=\"example\">arrive at/in · by bus/car/train</span>",
+        "<span class=\"example\">in + mes/año · on + día · at + hora</span>"
+      ]
+    },
+    questions: [
+      { text: "I usually go to school ___ bus.", options: ["by", "in", "on"], correct: 0, explanation: "\"by bus\" para medios de transporte." },
+      { text: "The keys are ___ the table.", options: ["in", "on", "at"], correct: 1, explanation: "\"on\" para superficies." },
+      { text: "We arrived ___ the airport at 6pm.", options: ["at", "in", "on"], correct: 0, explanation: "\"at\" para lugares puntuales como aeropuertos." },
+      { text: "She's interested ___ learning French.", options: ["in", "on", "at"], correct: 0, explanation: "\"interested in\" es una expresión fija." },
+      { text: "I'm looking forward ___ the holidays.", options: ["to", "for", "at"], correct: 0, explanation: "\"looking forward to\" es una expresión fija." },
+      { text: "He's good ___ maths.", options: ["in", "at", "on"], correct: 1, explanation: "\"good at\" es una expresión fija." },
+      { text: "The present is ___ you.", options: ["for", "to", "at"], correct: 0, explanation: "\"for\" indica el destinatario." },
+      { text: "My birthday is ___ August.", options: ["in", "on", "at"], correct: 0, explanation: "\"in\" se usa con meses." }
+    ]
+  },
+  {
+    id: "clase8_conectores", section: "Gramática",
+    title: "Clase 8 · Conectores",
+    color: "#ab6b3f", bg: "#f7efe6",
+    explanation: {
+      intro: "Los conectores unen ideas y dan información sobre causa, contraste o tiempo.",
+      points: [
+        "<b>because</b> = causa · <b>so</b> = consecuencia",
+        "<b>but / although</b> = contraste",
+        "<b>when</b> = en el momento en que · <b>since</b> = desde que · <b>until</b> = hasta que"
+      ]
+    },
+    questions: [
+      { text: "I was tired, ___ I went to bed early.", options: ["because", "so", "but"], correct: 1, explanation: "\"so\" une causa (estar cansada) con consecuencia (irse a dormir)." },
+      { text: "She stayed home ___ she was sick.", options: ["because", "so", "although"], correct: 0, explanation: "\"because\" da la razón por la que se quedó en casa." },
+      { text: "It was raining, ___ we still went for a walk.", options: ["because", "so", "although"], correct: 2, explanation: "\"although\" marca un contraste inesperado." },
+      { text: "He started playing the guitar ___ he was seven years old.", options: ["when", "since", "until"], correct: 0, explanation: "\"when\" indica el momento en que empezó." },
+      { text: "I've known her ___ we were in primary school.", options: ["when", "since", "until"], correct: 1, explanation: "\"since\" indica desde cuándo la conoce." },
+      { text: "Wait here ___ I come back.", options: ["since", "when", "until"], correct: 2, explanation: "\"until\" indica hasta qué momento hay que esperar." },
+      { text: "I like tea, ___ I don't like coffee.", options: ["but", "so", "because"], correct: 0, explanation: "\"but\" marca un contraste entre dos gustos." },
+      { text: "She was hungry, ___ she made a sandwich.", options: ["although", "so", "but"], correct: 1, explanation: "\"so\" une causa (tener hambre) con consecuencia (hacerse un sándwich)." }
+    ]
+  },
+  {
+    id: "clase9_infinitivo_gerundio", section: "Gramática",
+    title: "Clase 9 · To + verbo vs. -ing",
+    color: "#43a047", bg: "#e9f7ec",
+    explanation: {
+      intro: "Usamos \"to + verbo\" para explicar el propósito de una acción (para qué se hace algo). El gerundio (-ing) se usa después de ciertas expresiones o como sujeto.",
+      points: [
+        "Propósito: <span class=\"example\">She uses an app to practise English.</span>",
+        "Después de \"instead of\", \"enjoy\": <span class=\"example\">He avoids talking in public.</span>",
+        "Como sujeto: <span class=\"example\">Reading is fun.</span>"
+      ]
+    },
+    questions: [
+      { text: "She saves money ___ a new bike.", options: ["to buy", "buying", "for buy"], correct: 0, explanation: "\"to buy\" expresa el propósito de ahorrar." },
+      { text: "I went to the shop ___ some bread.", options: ["for buying", "to buy", "buy"], correct: 1, explanation: "\"to buy\" expresa el propósito de ir al negocio." },
+      { text: "He uses the app ___ his English.", options: ["for practise", "to practise", "practising"], correct: 1, explanation: "\"to practise\" expresa el propósito de usar la app." },
+      { text: "Instead of ___ TV, she read a book.", options: ["watch", "to watch", "watching"], correct: 2, explanation: "Después de \"instead of\" va el gerundio." },
+      { text: "___ a musical instrument takes patience.", options: ["Learn", "To learn", "Learning"], correct: 2, explanation: "El gerundio funciona como sujeto de la oración." },
+      { text: "They study every day ___ good grades.", options: ["to get", "for getting", "getting"], correct: 0, explanation: "\"to get\" expresa el propósito de estudiar." },
+      { text: "She enjoys ___ new recipes.", options: ["to try", "trying", "for try"], correct: 1, explanation: "Después de \"enjoy\" va el gerundio." },
+      { text: "He called his friend ___ about the trip.", options: ["to talk", "talking", "for talk"], correct: 0, explanation: "\"to talk\" expresa el propósito de la llamada." }
+    ]
+  },
+  {
+    id: "clase10_preguntas_embebidas", section: "Gramática",
+    title: "Clase 10 · Preguntas dentro de oraciones",
+    color: "#00838f", bg: "#e0f7fa",
+    explanation: {
+      intro: "A veces usamos palabras interrogativas (how, what, when, why, where) dentro de una oración, sin invertir el sujeto y el verbo como en una pregunta normal.",
+      points: [
+        "<span class=\"example\">She showed me how to do it.</span>",
+        "<span class=\"example\">I don't know what he wants.</span>",
+        "<span class=\"example\">Can you tell me where the station is?</span>"
+      ]
+    },
+    questions: [
+      { text: "This app shows us ___ to improve our pronunciation.", options: ["how", "what", "why"], correct: 0, explanation: "\"how to improve\" describe la manera de hacer algo." },
+      { text: "I don't know ___ she is so upset.", options: ["how", "why", "what"], correct: 1, explanation: "\"why\" pregunta por la razón." },
+      { text: "Can you tell me ___ time it is?", options: ["how", "what", "why"], correct: 1, explanation: "\"what time\" pregunta por la hora." },
+      { text: "He explained ___ the machine works.", options: ["how", "what", "who"], correct: 0, explanation: "\"how\" describe el funcionamiento." },
+      { text: "I wonder ___ she lives.", options: ["where", "what", "how"], correct: 0, explanation: "\"where\" pregunta por el lugar." },
+      { text: "Do you know ___ the museum opens?", options: ["when", "how", "what"], correct: 0, explanation: "\"when\" pregunta por el momento." },
+      { text: "She asked me ___ I wanted to go.", options: ["where", "how", "why"], correct: 0, explanation: "\"where\" pregunta por el destino." },
+      { text: "Nobody understands ___ he did that.", options: ["why", "what", "who"], correct: 0, explanation: "\"why\" pregunta por la razón." }
+    ]
+  },
+  {
+    id: "clase11_modales", section: "Gramática",
+    title: "Clase 11 · Modales",
     color: "#ff7a50", bg: "#fff1ea",
     explanation: {
       intro: "Los modales expresan obligación, prohibición, consejo, permiso o posibilidad.",
@@ -284,212 +466,8 @@ const CLASSES = [
     ]
   },
   {
-    id: "clase4_reflexivos", section: "Gramática",
-    title: "Clase 4 · Reflexivos y recíprocos",
-    color: "#ef5da8", bg: "#fdeef6",
-    explanation: {
-      intro: "Los reflexivos se usan cuando la acción vuelve a la misma persona. Each other / one another se usan cuando la acción es mutua entre dos o más personas.",
-      points: [
-        "Reflexivos: myself, yourself, himself, herself, itself, ourselves, themselves.",
-        "Recíprocos: <span class=\"example\">They help each other.</span>"
-      ]
-    },
-    questions: [
-      { text: "I looked at ___ in the mirror.", options: ["myself", "each other", "themselves"], correct: 0, explanation: "\"myself\" porque la acción vuelve sobre \"I\"." },
-      { text: "They always help ___ with homework.", options: ["themselves", "each other", "herself"], correct: 1, explanation: "\"each other\" porque es una acción mutua entre dos o más personas." },
-      { text: "She hurt ___ when she fell.", options: ["herself", "each other", "ourselves"], correct: 0, explanation: "\"herself\" porque la acción vuelve sobre \"she\"." },
-      { text: "We organized the party ___, without any help.", options: ["ourselves", "each other", "himself"], correct: 0, explanation: "\"ourselves\" enfatiza que lo hicimos nosotros mismos." },
-      { text: "My brothers never talk to ___.", options: ["themselves", "each other", "itself"], correct: 1, explanation: "\"each other\" porque es algo mutuo entre ellos." },
-      { text: "Be careful, don't cut ___ with the knife.", options: ["yourself", "each other", "themselves"], correct: 0, explanation: "\"yourself\" porque hablamos de una sola persona (you)." },
-      { text: "The cat is cleaning ___.", options: ["itself", "themselves", "herself"], correct: 0, explanation: "\"itself\" porque \"the cat\" es singular y no es persona." },
-      { text: "Friends should support ___.", options: ["himself", "each other", "myself"], correct: 1, explanation: "\"each other\" porque es una acción mutua entre amigos." }
-    ]
-  },
-  {
-    id: "clase5_comparativos", section: "Gramática",
-    title: "Clase 5 · Comparativos y superlativos",
-    color: "#f5a623", bg: "#fff6e5",
-    explanation: {
-      intro: "La forma depende del largo del adjetivo.",
-      points: [
-        "Adjetivos cortos (1 sílaba): <b>-er / -est</b> → <span class=\"example\">tall → taller → tallest</span>",
-        "Adjetivos largos (2+ sílabas): <b>more / most</b> → <span class=\"example\">intelligent → more intelligent → most intelligent</span>",
-        "Irregulares: <span class=\"example\">good → better → best · bad → worse → worst</span>"
-      ]
-    },
-    questions: [
-      { text: "This exercise is ___ than the last one. (easy)", options: ["easier", "more easy", "easiest"], correct: 0, explanation: "Adjetivos cortos terminados en \"y\" → \"-ier\"." },
-      { text: "She is the ___ student in the class. (intelligent)", options: ["more intelligent", "most intelligent", "intelligentest"], correct: 1, explanation: "Adjetivos largos → \"most\" + adjetivo para el superlativo." },
-      { text: "My phone is ___ than yours. (good)", options: ["gooder", "better", "best"], correct: 1, explanation: "\"good\" es irregular: better / best." },
-      { text: "Today is ___ than yesterday. (hot)", options: ["hoter", "hottest", "hotter"], correct: 2, explanation: "Se duplica la consonante final: hot → hotter." },
-      { text: "This is the ___ movie I've ever seen. (bad)", options: ["worse", "worst", "badder"], correct: 1, explanation: "\"bad\" es irregular: worse / worst (superlativo)." },
-      { text: "He runs ___ than his brother. (fast)", options: ["faster", "fastest", "more fast"], correct: 0, explanation: "Adjetivos cortos → \"-er\" para comparar." },
-      { text: "This is the ___ building in the city. (tall)", options: ["taller", "tallest", "more tall"], correct: 1, explanation: "Adjetivos cortos → \"-est\" para el superlativo." },
-      { text: "My sister is ___ than me. (young)", options: ["younger", "more young", "youngest"], correct: 0, explanation: "Adjetivos cortos → \"-er\" para comparar." }
-    ]
-  },
-  {
-    id: "clase6_preposiciones", section: "Gramática",
-    title: "Clase 6 · Preposiciones comunes",
-    color: "#4a90e2", bg: "#eaf3fd",
-    explanation: {
-      intro: "Muchas preposiciones van fijas con ciertas palabras y conviene memorizarlas como bloques.",
-      points: [
-        "<span class=\"example\">interested in · good at · looking forward to</span>",
-        "<span class=\"example\">arrive at/in · by bus/car/train</span>",
-        "<span class=\"example\">in + mes/año · on + día · at + hora</span>"
-      ]
-    },
-    questions: [
-      { text: "I usually go to school ___ bus.", options: ["by", "in", "on"], correct: 0, explanation: "\"by bus\" para medios de transporte." },
-      { text: "The keys are ___ the table.", options: ["in", "on", "at"], correct: 1, explanation: "\"on\" para superficies." },
-      { text: "We arrived ___ the airport at 6pm.", options: ["at", "in", "on"], correct: 0, explanation: "\"at\" para lugares puntuales como aeropuertos." },
-      { text: "She's interested ___ learning French.", options: ["in", "on", "at"], correct: 0, explanation: "\"interested in\" es una expresión fija." },
-      { text: "I'm looking forward ___ the holidays.", options: ["to", "for", "at"], correct: 0, explanation: "\"looking forward to\" es una expresión fija." },
-      { text: "He's good ___ maths.", options: ["in", "at", "on"], correct: 1, explanation: "\"good at\" es una expresión fija." },
-      { text: "The present is ___ you.", options: ["for", "to", "at"], correct: 0, explanation: "\"for\" indica el destinatario." },
-      { text: "My birthday is ___ August.", options: ["in", "on", "at"], correct: 0, explanation: "\"in\" se usa con meses." }
-    ]
-  },
-  {
-    id: "clase7_pronombres", section: "Gramática",
-    title: "Clase 7 · Pronombres personales y de objeto",
-    color: "#5c6bc0", bg: "#eef0fb",
-    explanation: {
-      intro: "Los pronombres de sujeto (I, you, he, she, it, we, they) hacen la acción. Los de objeto (me, you, him, her, it, us, them) la reciben.",
-      points: [
-        "Sujeto: <span class=\"example\">She called him.</span>",
-        "Objeto: <span class=\"example\">They helped us.</span>"
-      ]
-    },
-    questions: [
-      { text: "___ is my best friend.", options: ["She", "Her", "Herself"], correct: 0, explanation: "\"She\" es sujeto de la oración." },
-      { text: "Can you help ___? I don't understand this exercise.", options: ["I", "me", "myself"], correct: 1, explanation: "\"me\" es objeto: recibe la ayuda." },
-      { text: "___ live in Buenos Aires.", options: ["We", "Us", "Ourselves"], correct: 0, explanation: "\"We\" es sujeto de la oración." },
-      { text: "The teacher gave ___ a lot of homework.", options: ["we", "us", "ourselves"], correct: 1, explanation: "\"us\" es objeto: recibe la tarea." },
-      { text: "___ is a great singer.", options: ["He", "Him", "His"], correct: 0, explanation: "\"He\" es sujeto de la oración." },
-      { text: "I saw ___ at the party last night.", options: ["they", "them", "their"], correct: 1, explanation: "\"them\" es objeto: recibe la acción de ver." },
-      { text: "___ has a new phone.", options: ["She", "Her", "Hers"], correct: 0, explanation: "\"She\" es sujeto de la oración." },
-      { text: "Please give the book to ___.", options: ["he", "him", "his"], correct: 1, explanation: "Después de \"to\" usamos el pronombre de objeto: \"him\"." }
-    ]
-  },
-  {
-    id: "clase8_infinitivo_gerundio", section: "Gramática",
-    title: "Clase 8 · To + verbo vs. -ing",
-    color: "#43a047", bg: "#e9f7ec",
-    explanation: {
-      intro: "Usamos \"to + verbo\" para explicar el propósito de una acción (para qué se hace algo). El gerundio (-ing) se usa después de ciertas expresiones o como sujeto.",
-      points: [
-        "Propósito: <span class=\"example\">She uses an app to practise English.</span>",
-        "Después de \"instead of\", \"enjoy\": <span class=\"example\">He avoids talking in public.</span>",
-        "Como sujeto: <span class=\"example\">Reading is fun.</span>"
-      ]
-    },
-    questions: [
-      { text: "She saves money ___ a new bike.", options: ["to buy", "buying", "for buy"], correct: 0, explanation: "\"to buy\" expresa el propósito de ahorrar." },
-      { text: "I went to the shop ___ some bread.", options: ["for buying", "to buy", "buy"], correct: 1, explanation: "\"to buy\" expresa el propósito de ir al negocio." },
-      { text: "He uses the app ___ his English.", options: ["for practise", "to practise", "practising"], correct: 1, explanation: "\"to practise\" expresa el propósito de usar la app." },
-      { text: "Instead of ___ TV, she read a book.", options: ["watch", "to watch", "watching"], correct: 2, explanation: "Después de \"instead of\" va el gerundio." },
-      { text: "___ a musical instrument takes patience.", options: ["Learn", "To learn", "Learning"], correct: 2, explanation: "El gerundio funciona como sujeto de la oración." },
-      { text: "They study every day ___ good grades.", options: ["to get", "for getting", "getting"], correct: 0, explanation: "\"to get\" expresa el propósito de estudiar." },
-      { text: "She enjoys ___ new recipes.", options: ["to try", "trying", "for try"], correct: 1, explanation: "Después de \"enjoy\" va el gerundio." },
-      { text: "He called his friend ___ about the trip.", options: ["to talk", "talking", "for talk"], correct: 0, explanation: "\"to talk\" expresa el propósito de la llamada." }
-    ]
-  },
-  {
-    id: "clase9_conectores", section: "Gramática",
-    title: "Clase 9 · Conectores",
-    color: "#ab6b3f", bg: "#f7efe6",
-    explanation: {
-      intro: "Los conectores unen ideas y dan información sobre causa, contraste o tiempo.",
-      points: [
-        "<b>because</b> = causa · <b>so</b> = consecuencia",
-        "<b>but / although</b> = contraste",
-        "<b>when</b> = en el momento en que · <b>since</b> = desde que · <b>until</b> = hasta que"
-      ]
-    },
-    questions: [
-      { text: "I was tired, ___ I went to bed early.", options: ["because", "so", "but"], correct: 1, explanation: "\"so\" une causa (estar cansada) con consecuencia (irse a dormir)." },
-      { text: "She stayed home ___ she was sick.", options: ["because", "so", "although"], correct: 0, explanation: "\"because\" da la razón por la que se quedó en casa." },
-      { text: "It was raining, ___ we still went for a walk.", options: ["because", "so", "although"], correct: 2, explanation: "\"although\" marca un contraste inesperado." },
-      { text: "He started playing the guitar ___ he was seven years old.", options: ["when", "since", "until"], correct: 0, explanation: "\"when\" indica el momento en que empezó." },
-      { text: "I've known her ___ we were in primary school.", options: ["when", "since", "until"], correct: 1, explanation: "\"since\" indica desde cuándo la conoce." },
-      { text: "Wait here ___ I come back.", options: ["since", "when", "until"], correct: 2, explanation: "\"until\" indica hasta qué momento hay que esperar." },
-      { text: "I like tea, ___ I don't like coffee.", options: ["but", "so", "because"], correct: 0, explanation: "\"but\" marca un contraste entre dos gustos." },
-      { text: "She was hungry, ___ she made a sandwich.", options: ["although", "so", "but"], correct: 1, explanation: "\"so\" une causa (tener hambre) con consecuencia (hacerse un sándwich)." }
-    ]
-  },
-  {
-    id: "clase10_tiempos_avanzado", section: "Gramática",
-    title: "Clase 10 · Presente continuo, perfecto y pasado",
-    color: "#d1495b", bg: "#fce9ec",
-    explanation: {
-      intro: "Tres tiempos, tres usos distintos.",
-      points: [
-        "Presente continuo: algo pasando ahora → <span class=\"example\">She is helping her neighbours right now.</span>",
-        "Present perfect: experiencia o resultado, sin momento exacto → <span class=\"example\">She has helped many people.</span>",
-        "Pasado simple: acción terminada en un momento concreto → <span class=\"example\">She helped her neighbour yesterday.</span>"
-      ]
-    },
-    questions: [
-      { text: "Look! It ___ outside.", options: ["rains", "is raining", "has rained"], correct: 1, explanation: "Algo que está pasando en este momento → presente continuo." },
-      { text: "I ___ my homework, so now I can watch TV.", options: ["am finishing", "have finished", "finished"], correct: 1, explanation: "Resultado importante ahora, sin momento exacto → present perfect." },
-      { text: "She ___ for this company since 2020.", options: ["is working", "has worked", "worked"], correct: 1, explanation: "\"since\" pide present perfect." },
-      { text: "We ___ dinner right now, can you call later?", options: ["are having", "have had", "had"], correct: 0, explanation: "\"right now\" indica presente continuo." },
-      { text: "He ___ to Spain last summer.", options: ["is going", "has gone", "went"], correct: 2, explanation: "\"last summer\" es un momento concreto → pasado simple." },
-      { text: "Right now, they ___ a new project at school.", options: ["are starting", "have started", "started"], correct: 0, explanation: "\"right now\" indica presente continuo." },
-      { text: "___ you ever tried sushi?", options: ["Do", "Have", "Did"], correct: 1, explanation: "\"Have you ever...?\" pregunta por experiencia." },
-      { text: "I can't talk now, I ___ dinner.", options: ["cook", "am cooking", "have cooked"], correct: 1, explanation: "Algo que está pasando en este momento → presente continuo." }
-    ]
-  },
-  {
-    id: "clase11_articulos", section: "Gramática",
-    title: "Clase 11 · Artículos",
-    color: "#455a64", bg: "#eceff1",
-    explanation: {
-      intro: "\"a\" antes de sonido de consonante, \"an\" antes de sonido de vocal, \"the\" para algo específico o ya mencionado. A veces no se usa ningún artículo.",
-      points: [
-        "<span class=\"example\">a dog · an apple</span>",
-        "<span class=\"example\">the book I told you about</span> (algo específico)",
-        "<span class=\"example\">I like dogs.</span> (afirmación general, sin artículo)"
-      ]
-    },
-    questions: [
-      { text: "She has ___ umbrella in her bag.", options: ["a", "an", "the"], correct: 1, explanation: "\"umbrella\" empieza con sonido de vocal → \"an\"." },
-      { text: "I saw ___ dog in the park.", options: ["a", "an", "the"], correct: 0, explanation: "\"dog\" empieza con sonido de consonante → \"a\"." },
-      { text: "Can you close ___ door, please?", options: ["a", "an", "the"], correct: 2, explanation: "Es una puerta específica y conocida → \"the\"." },
-      { text: "___ cats are independent animals.", options: ["A", "The", "-"], correct: 2, explanation: "Afirmación general sobre los gatos → sin artículo." },
-      { text: "He is ___ best student in the class.", options: ["a", "an", "the"], correct: 2, explanation: "Los superlativos siempre llevan \"the\"." },
-      { text: "I need ___ hour to finish this.", options: ["a", "an", "the"], correct: 1, explanation: "\"hour\" suena como si empezara con vocal (la \"h\" es muda) → \"an\"." },
-      { text: "We watched ___ interesting movie last night.", options: ["a", "an", "the"], correct: 1, explanation: "\"interesting\" empieza con sonido de vocal → \"an\"." },
-      { text: "___ information is very useful.", options: ["A", "An", "-"], correct: 2, explanation: "\"information\" es incontable y aquí es general → sin artículo." }
-    ]
-  },
-  {
-    id: "clase12_posesivos", section: "Gramática",
-    title: "Clase 12 · Adjetivos y pronombres posesivos",
-    color: "#ff8f00", bg: "#fff3e0",
-    explanation: {
-      intro: "Los adjetivos posesivos van antes de un sustantivo (my, your, his, her, its, our, their). Los pronombres posesivos reemplazan al sustantivo (mine, yours, his, hers, ours, theirs).",
-      points: [
-        "<span class=\"example\">This is my book.</span> (adjetivo + sustantivo)",
-        "<span class=\"example\">This book is mine.</span> (pronombre, sin sustantivo)"
-      ]
-    },
-    questions: [
-      { text: "This is ___ dog.", options: ["my", "mine", "I"], correct: 0, explanation: "Va antes de un sustantivo (\"dog\") → adjetivo posesivo \"my\"." },
-      { text: "Is this pencil yours or ___?", options: ["my", "mine", "I"], correct: 1, explanation: "Reemplaza al sustantivo → pronombre posesivo \"mine\"." },
-      { text: "The cat licked ___ paw.", options: ["it's", "its", "his"], correct: 1, explanation: "\"its\" es el posesivo de \"it\", sin apóstrofe." },
-      { text: "That's not my bag, it's ___.", options: ["her", "hers", "she"], correct: 1, explanation: "Reemplaza al sustantivo → pronombre posesivo \"hers\"." },
-      { text: "We love ___ new house.", options: ["our", "ours", "us"], correct: 0, explanation: "Va antes de un sustantivo (\"house\") → adjetivo posesivo \"our\"." },
-      { text: "This backpack is ___, not yours.", options: ["my", "mine", "I"], correct: 1, explanation: "Reemplaza al sustantivo → pronombre posesivo \"mine\"." },
-      { text: "They finished ___ project early.", options: ["their", "theirs", "them"], correct: 0, explanation: "Va antes de un sustantivo (\"project\") → adjetivo posesivo \"their\"." },
-      { text: "Is that phone ___?", options: ["your", "yours", "you"], correct: 1, explanation: "Reemplaza al sustantivo → pronombre posesivo \"yours\"." }
-    ]
-  },
-  {
-    id: "clase13_auxiliares", section: "Gramática",
-    title: "Clase 13 · Do / does / did y \"need to\"",
+    id: "clase12_auxiliares", section: "Gramática",
+    title: "Clase 12 · Do / does / did y \"need to\"",
     color: "#6d4c41", bg: "#efebe9",
     explanation: {
       intro: "Usamos do/does/did para preguntas y negaciones en presente y pasado. \"Need to\" significa que algo es necesario.",
@@ -511,26 +489,48 @@ const CLASSES = [
     ]
   },
   {
-    id: "clase14_preguntas_embebidas", section: "Gramática",
-    title: "Clase 14 · Preguntas dentro de oraciones",
-    color: "#00838f", bg: "#e0f7fa",
+    id: "clase13_comparativos", section: "Gramática",
+    title: "Clase 13 · Comparativos y superlativos",
+    color: "#f5a623", bg: "#fff6e5",
     explanation: {
-      intro: "A veces usamos palabras interrogativas (how, what, when, why, where) dentro de una oración, sin invertir el sujeto y el verbo como en una pregunta normal.",
+      intro: "La forma depende del largo del adjetivo.",
       points: [
-        "<span class=\"example\">She showed me how to do it.</span>",
-        "<span class=\"example\">I don't know what he wants.</span>",
-        "<span class=\"example\">Can you tell me where the station is?</span>"
+        "Adjetivos cortos (1 sílaba): <b>-er / -est</b> → <span class=\"example\">tall → taller → tallest</span>",
+        "Adjetivos largos (2+ sílabas): <b>more / most</b> → <span class=\"example\">intelligent → more intelligent → most intelligent</span>",
+        "Irregulares: <span class=\"example\">good → better → best · bad → worse → worst</span>"
       ]
     },
     questions: [
-      { text: "This app shows us ___ to improve our pronunciation.", options: ["how", "what", "why"], correct: 0, explanation: "\"how to improve\" describe la manera de hacer algo." },
-      { text: "I don't know ___ she is so upset.", options: ["how", "why", "what"], correct: 1, explanation: "\"why\" pregunta por la razón." },
-      { text: "Can you tell me ___ time it is?", options: ["how", "what", "why"], correct: 1, explanation: "\"what time\" pregunta por la hora." },
-      { text: "He explained ___ the machine works.", options: ["how", "what", "who"], correct: 0, explanation: "\"how\" describe el funcionamiento." },
-      { text: "I wonder ___ she lives.", options: ["where", "what", "how"], correct: 0, explanation: "\"where\" pregunta por el lugar." },
-      { text: "Do you know ___ the museum opens?", options: ["when", "how", "what"], correct: 0, explanation: "\"when\" pregunta por el momento." },
-      { text: "She asked me ___ I wanted to go.", options: ["where", "how", "why"], correct: 0, explanation: "\"where\" pregunta por el destino." },
-      { text: "Nobody understands ___ he did that.", options: ["why", "what", "who"], correct: 0, explanation: "\"why\" pregunta por la razón." }
+      { text: "This exercise is ___ than the last one. (easy)", options: ["easier", "more easy", "easiest"], correct: 0, explanation: "Adjetivos cortos terminados en \"y\" → \"-ier\"." },
+      { text: "She is the ___ student in the class. (intelligent)", options: ["more intelligent", "most intelligent", "intelligentest"], correct: 1, explanation: "Adjetivos largos → \"most\" + adjetivo para el superlativo." },
+      { text: "My phone is ___ than yours. (good)", options: ["gooder", "better", "best"], correct: 1, explanation: "\"good\" es irregular: better / best." },
+      { text: "Today is ___ than yesterday. (hot)", options: ["hoter", "hottest", "hotter"], correct: 2, explanation: "Se duplica la consonante final: hot → hotter." },
+      { text: "This is the ___ movie I've ever seen. (bad)", options: ["worse", "worst", "badder"], correct: 1, explanation: "\"bad\" es irregular: worse / worst (superlativo)." },
+      { text: "He runs ___ than his brother. (fast)", options: ["faster", "fastest", "more fast"], correct: 0, explanation: "Adjetivos cortos → \"-er\" para comparar." },
+      { text: "This is the ___ building in the city. (tall)", options: ["taller", "tallest", "more tall"], correct: 1, explanation: "Adjetivos cortos → \"-est\" para el superlativo." },
+      { text: "My sister is ___ than me. (young)", options: ["younger", "more young", "youngest"], correct: 0, explanation: "Adjetivos cortos → \"-er\" para comparar." }
+    ]
+  },
+  {
+    id: "clase14_reflexivos", section: "Gramática",
+    title: "Clase 14 · Reflexivos y recíprocos",
+    color: "#ef5da8", bg: "#fdeef6",
+    explanation: {
+      intro: "Los reflexivos se usan cuando la acción vuelve a la misma persona. Each other / one another se usan cuando la acción es mutua entre dos o más personas.",
+      points: [
+        "Reflexivos: myself, yourself, himself, herself, itself, ourselves, themselves.",
+        "Recíprocos: <span class=\"example\">They help each other.</span>"
+      ]
+    },
+    questions: [
+      { text: "I looked at ___ in the mirror.", options: ["myself", "each other", "themselves"], correct: 0, explanation: "\"myself\" porque la acción vuelve sobre \"I\"." },
+      { text: "They always help ___ with homework.", options: ["themselves", "each other", "herself"], correct: 1, explanation: "\"each other\" porque es una acción mutua entre dos o más personas." },
+      { text: "She hurt ___ when she fell.", options: ["herself", "each other", "ourselves"], correct: 0, explanation: "\"herself\" porque la acción vuelve sobre \"she\"." },
+      { text: "We organized the party ___, without any help.", options: ["ourselves", "each other", "himself"], correct: 0, explanation: "\"ourselves\" enfatiza que lo hicimos nosotros mismos." },
+      { text: "My brothers never talk to ___.", options: ["themselves", "each other", "itself"], correct: 1, explanation: "\"each other\" porque es algo mutuo entre ellos." },
+      { text: "Be careful, don't cut ___ with the knife.", options: ["yourself", "each other", "themselves"], correct: 0, explanation: "\"yourself\" porque hablamos de una sola persona (you)." },
+      { text: "The cat is cleaning ___.", options: ["itself", "themselves", "herself"], correct: 0, explanation: "\"itself\" porque \"the cat\" es singular y no es persona." },
+      { text: "Friends should support ___.", options: ["himself", "each other", "myself"], correct: 1, explanation: "\"each other\" porque es una acción mutua entre amigos." }
     ]
   },
   {
