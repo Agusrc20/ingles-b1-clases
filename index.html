@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inglés B1 · Mis clases</title>
+<style>
+:root { color-scheme: light; }
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: linear-gradient(180deg, #fdf6ff 0%, #f5f5f3 260px);
+  color: #33323a;
+  line-height: 1.6;
+}
+.wrap { max-width: 720px; margin: 0 auto; padding: 28px 20px 60px; }
+header { margin-bottom: 20px; text-align: center; }
+.banner { display: flex; justify-content: center; margin-bottom: 8px; }
+h1 { font-size: 26px; font-weight: 700; margin: 0 0 4px; color: #5b3fd6; }
+.subtitle { font-size: 14px; color: #7a7886; margin: 0; }
+.greeting { font-size: 15px; color: #33323a; margin: 10px 0 0; }
+.change-name { background: none; border: none; color: #8b7fe8; font-size: 12px; text-decoration: underline; cursor: pointer; padding: 2px; }
+
+.card {
+  background: #fff;
+  border: 1px solid #ece9f5;
+  border-radius: 16px;
+  padding: 20px 22px;
+  margin-bottom: 14px;
+  box-shadow: 0 2px 10px rgba(90, 70, 180, 0.06);
+}
+.section-header { font-size: 14px; font-weight: 700; color: #5b3fd6; margin: 22px 0 10px; text-transform: uppercase; letter-spacing: .04em; }
+.section-header:first-child { margin-top: 4px; }
+.class-grid { display: grid; gap: 14px; margin-bottom: 6px; }
+.class-card {
+  background: #fff;
+  border: 2px solid var(--accent-bg);
+  border-radius: 18px;
+  padding: 16px 18px;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  font-family: inherit;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  transition: transform .12s, box-shadow .12s;
+}
+.class-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(90,70,180,0.12); }
+.class-badge {
+  flex-shrink: 0;
+  width: 42px; height: 42px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 15px; color: #fff;
+  background: var(--accent);
+}
+.class-title { font-size: 15px; font-weight: 700; margin: 0 0 3px; color: #2c2b33; }
+.class-meta { font-size: 12px; color: #918fa0; margin: 0 0 8px; }
+.class-stats { font-size: 12px; color: #55535f; }
+.stars { color: #f5a623; letter-spacing: 1px; font-size: 14px; }
+
+button {
+  font-family: inherit; font-size: 14px; padding: 11px 18px; border-radius: 12px;
+  border: none; background: #efeef8; color: #33323a; cursor: pointer; font-weight: 600;
+}
+button:hover { background: #e4e2f5; }
+button.primary { background: #5b3fd6; color: #fff; }
+button.primary:hover { background: #4d33bf; }
+button:disabled { opacity: .5; cursor: default; }
+.row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.progress-bar-bg { height: 8px; background: #ece9f5; border-radius: 8px; overflow: hidden; margin: 14px 0 20px; }
+.progress-bar-fill { height: 100%; background: var(--accent, #5b3fd6); transition: width .2s; border-radius: 8px; }
+
+.explain-box { background: var(--accent-bg, #f1eefe); border-radius: 14px; padding: 16px 18px; margin-bottom: 16px; font-size: 14px; }
+.explain-box ul { margin: 8px 0 0; padding-left: 20px; }
+.example { color: #55535f; font-style: italic; }
+
+.opt-btn { display: block; width: 100%; text-align: left; margin-bottom: 8px; padding: 12px 16px; border-radius: 12px; border: 2px solid #ece9f5; background: #fff; font-weight: 500; }
+.opt-btn.selected { border-color: var(--accent, #5b3fd6); background: var(--accent-bg, #f1eefe); }
+.error-text { font-size: 13px; color: #d64d6b; margin: 0 0 12px; display: none; font-weight: 600; }
+
+.review-item { border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; }
+.review-item.correct { background: #eefaf1; }
+.review-item.incorrect { background: #fdeef1; }
+.review-q { font-size: 14px; font-weight: 700; margin: 0 0 6px; color: #2c2b33; }
+.review-a { font-size: 13px; color: #55535f; margin: 0 0 4px; }
+.review-exp { font-size: 13px; color: #7a7886; margin: 0; }
+.ok { color: #1e9e5a; font-weight: 700; }
+.bad { color: #d64d6b; font-weight: 700; }
+
+.link-btn { background: none; border: none; color: #5b3fd6; font-size: 13px; padding: 4px 0; cursor: pointer; text-decoration: underline; font-weight: 600; }
+.hidden { display: none !important; }
+.top-actions { margin-bottom: 16px; }
+
+.result-score { text-align: center; border-radius: 18px; padding: 26px; margin-bottom: 20px; background: var(--accent-bg, #f1eefe); }
+.result-score .big { font-size: 34px; font-weight: 800; margin: 6px 0; color: var(--accent, #5b3fd6); }
+.result-score .label { font-size: 13px; color: #55535f; }
+.result-score .msg { font-size: 16px; font-weight: 700; margin-top: 6px; color: #2c2b33; }
+
+.onboard { text-align: center; padding: 40px 20px; }
+.onboard input { font-size: 15px; padding: 12px 14px; border-radius: 12px; border: 2px solid #ece9f5; width: 100%; max-width: 260px; margin: 14px 0; font-family: inherit; }
+.onboard input:focus { outline: none; border-color: #5b3fd6; }
+
+.profile-switcher { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 12px; }
+.profile-chip { padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 700; background: #efeef8; border: 2px solid transparent; }
+.profile-chip.active { background: #5b3fd6; color: #fff; }
+.profile-chip.add { background: #fff; border: 2px dashed #d6d3e6; color: #5b3fd6; }
+#add-profile-form { display: flex; gap: 8px; justify-content: center; margin-top: 10px; align-items: center; }
+#add-profile-form input { font-size: 14px; padding: 8px 12px; border-radius: 10px; border: 2px solid #ece9f5; font-family: inherit; max-width: 160px; }
+
+.passage-box { max-height: 260px; overflow-y: auto; background: var(--accent-bg, #f1eefe); border-radius: 14px; padding: 16px 18px; margin-bottom: 16px; font-size: 14px; }
+.passage-box p { margin: 0 0 10px; }
+.audio-box { background: var(--accent-bg, #f1eefe); border-radius: 14px; padding: 16px 18px; margin-bottom: 16px; }
+.audio-box .row { margin-bottom: 6px; }
+
+.write-textarea { width: 100%; min-height: 160px; font-family: inherit; font-size: 14px; padding: 14px 16px; border-radius: 12px; border: 2px solid #ece9f5; resize: vertical; }
+.write-textarea:focus { outline: none; border-color: #5b3fd6; }
+.word-count { font-size: 12px; color: #918fa0; margin: 6px 0 16px; }
+.checklist-item { display: flex; align-items: flex-start; gap: 8px; font-size: 14px; margin-bottom: 8px; }
+.checklist-item input { margin-top: 3px; }
+.save-msg { font-size: 13px; color: #1e9e5a; font-weight: 600; margin: 10px 0 0; display: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="banner">
+      <svg width="120" height="70" viewBox="0 0 120 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="60" cy="60" rx="46" ry="6" fill="#f1eefe"/>
+        <path d="M20 50 L20 18 Q20 14 24 14 L56 14 L56 54 L24 54 Q20 54 20 50 Z" fill="#8b7fe8"/>
+        <path d="M100 50 L100 18 Q100 14 96 14 L64 14 L64 54 L96 54 Q100 54 100 50 Z" fill="#ef5da8"/>
+        <path d="M56 14 L60 18 L64 14" stroke="#fff" stroke-width="2" fill="none"/>
+        <circle cx="34" cy="30" r="3" fill="#fff"/>
+        <circle cx="86" cy="30" r="3" fill="#fff"/>
+        <path d="M14 8 L16 13 L21 13 L17 16 L19 21 L14 18 L9 21 L11 16 L7 13 L12 13 Z" fill="#f5a623"/>
+        <path d="M108 4 L109.5 8 L114 8 L110.5 10.5 L112 15 L108 12 L104 15 L105.5 10.5 L102 8 L106.5 8 Z" fill="#12b299"/>
+      </svg>
+    </div>
+    <h1>Inglés B1 · Mis clases</h1>
+    <p class="subtitle">Práctica para el examen de ingreso a bilingües e intensificadas</p>
+    <p class="greeting hidden" id="greeting"></p>
+    <div class="profile-switcher hidden" id="profile-switcher"></div>
+    <div class="hidden" id="add-profile-form">
+      <input type="text" id="new-profile-input" placeholder="Nombre" maxlength="30" onkeypress="if(event.key==='Enter') confirmAddProfile()">
+      <button onclick="confirmAddProfile()">Agregar</button>
+    </div>
+  </header>
+
+  <div id="view-onboard" class="hidden">
+    <div class="card onboard">
+      <p style="font-size:17px; font-weight:700; margin:0;">¿Cómo te llamás?</p>
+      <p style="font-size:13px; color:#7a7886;">Así puedo saludarte cada vez que entrás</p>
+      <input type="text" id="name-input" placeholder="Tu nombre" maxlength="30" onkeypress="if(event.key==='Enter') saveName()">
+      <p class="error-text" id="name-error">Escribí tu nombre para continuar.</p>
+      <div>
+        <button class="primary" onclick="saveName()">¡Empezar!</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="view-home" class="hidden">
+    <div id="class-container"></div>
+  </div>
+
+  <div id="view-explain" class="hidden">
+    <div class="top-actions"><button class="link-btn" onclick="goHome()">&larr; Volver a las clases</button></div>
+    <div class="card">
+      <p class="class-title" id="explain-title" style="font-size:19px;"></p>
+      <div class="explain-box" id="explain-body"></div>
+      <button class="primary" id="explain-start-btn" onclick="startExercises()">Empezar ejercicios</button>
+    </div>
+  </div>
+
+  <div id="view-exercise" class="hidden">
+    <div class="row" style="margin-bottom:6px;">
+      <button class="link-btn" onclick="goHome()">&larr; Salir</button>
+      <span class="subtitle" id="ex-progress"></span>
+    </div>
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="ex-bar" style="width:0%"></div></div>
+    <div id="ex-context" class="hidden"></div>
+    <div class="card">
+      <p class="review-q" id="ex-question" style="font-size:17px;"></p>
+      <div id="ex-options"></div>
+      <p class="error-text" id="ex-error">Elegí una opción antes de continuar.</p>
+      <div class="row">
+        <button id="ex-prev-btn" onclick="prevQuestion()">Anterior</button>
+        <button class="primary" id="ex-next-btn" onclick="nextQuestion()">Siguiente</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="view-result" class="hidden">
+    <div class="top-actions"><button class="link-btn" onclick="goHome()">&larr; Volver a las clases</button></div>
+    <div class="result-score">
+      <p class="label">Resultado — <span id="result-classname"></span></p>
+      <p class="big" id="result-score"></p>
+      <p class="msg" id="result-msg"></p>
+    </div>
+    <div id="result-review"></div>
+    <div class="row" style="margin-top:16px; justify-content:flex-end;">
+      <button class="primary" onclick="retryClass()">Repetir esta clase</button>
+    </div>
+  </div>
+
+  <div id="view-writing" class="hidden">
+    <div class="top-actions"><button class="link-btn" onclick="goHome()">&larr; Volver a las clases</button></div>
+    <div class="card">
+      <p class="class-title" id="write-title" style="font-size:19px;"></p>
+      <p style="font-size:14px; color:#55535f;" id="write-prompt"></p>
+      <p style="font-size:13px; font-weight:700; margin:14px 0 6px;">Incluí al menos 5 de estas ideas:</p>
+      <div id="write-checklist"></div>
+      <textarea class="write-textarea" id="write-textarea" placeholder="Escribí tu email acá..." oninput="updateWordCount()"></textarea>
+      <p class="word-count" id="word-count-label">0 palabras</p>
+      <p class="error-text" id="write-error">Escribí tu email antes de guardar.</p>
+      <div class="row">
+        <span></span>
+        <button class="primary" onclick="saveWritingAttempt()">Guardar intento</button>
+      </div>
+      <p class="save-msg" id="write-save-msg"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+const CLASSES = [
+  {
+    id: "clase1_relativos", section: "Gramática",
+    title: "Clase 1 · Pronombres relativos",
+    color: "#8b7fe8", bg: "#f1eefe",
+    explanation: {
+      intro: "Los pronombres relativos conectan dos ideas sin repetir palabras.",
+      points: [
+        "<b>who</b> → para personas: <span class=\"example\">The girl who lives next door...</span>",
+        "<b>which</b> → para cosas: <span class=\"example\">The book which I read...</span>",
+        "<b>where</b> → para lugares: <span class=\"example\">The park where we played...</span>"
+      ]
+    },
+    questions: [
+      { text: "The girl ___ lives next door is my classmate.", options: ["who", "which", "where"], correct: 0, explanation: "\"who\" se usa para personas." },
+      { text: "This is the book ___ I told you about.", options: ["who", "which", "where"], correct: 1, explanation: "\"which\" se usa para cosas." },
+      { text: "That's the park ___ we played football.", options: ["who", "which", "where"], correct: 2, explanation: "\"where\" se usa para lugares." },
+      { text: "My uncle, ___ is a doctor, lives in Rosario.", options: ["who", "which", "where"], correct: 0, explanation: "\"who\" se usa para personas." },
+      { text: "I don't like the film ___ we watched last night.", options: ["who", "which", "where"], correct: 1, explanation: "\"which\" se usa para cosas." },
+      { text: "The school ___ I study is very big.", options: ["who", "which", "where"], correct: 2, explanation: "\"where\" se usa para lugares." },
+      { text: "The people ___ live in that house are very friendly.", options: ["who", "which", "where"], correct: 0, explanation: "\"who\" se usa para personas." },
+      { text: "Is this the shop ___ you bought your shoes?", options: ["who", "which", "where"], correct: 2, explanation: "\"where\" se usa para lugares." }
+    ]
+  },
+  {
+    id: "clase2_presentperfect", section: "Gramática",
+    title: "Clase 2 · Present perfect vs. pasado simple",
+    color: "#12b299", bg: "#e6faf6",
+    explanation: {
+      intro: "El pasado simple se usa con un momento concreto del pasado. El present perfect se usa cuando importa el resultado o la experiencia, no el momento exacto.",
+      points: [
+        "Pasado simple: <span class=\"example\">I watched a movie last night.</span> (yesterday, last week, in 1995...)",
+        "Present perfect: <span class=\"example\">I have watched that movie before.</span> (already, just, never, ever, for/since...)"
+      ]
+    },
+    questions: [
+      { text: "I ___ my homework yesterday.", options: ["did", "have done", "have did"], correct: 0, explanation: "\"yesterday\" indica un momento concreto en el pasado → pasado simple." },
+      { text: "She ___ to Brazil three times.", options: ["went", "has been", "have been"], correct: 1, explanation: "Experiencia sin momento concreto → present perfect (has been)." },
+      { text: "We ___ this movie already.", options: ["saw", "have seen", "has seen"], correct: 1, explanation: "\"already\" y relevancia en el presente → present perfect." },
+      { text: "He ___ his phone last week.", options: ["has lost", "lost", "have lost"], correct: 1, explanation: "\"last week\" es un momento concreto → pasado simple." },
+      { text: "They ___ just finished their homework.", options: ["have", "has", "did"], correct: 0, explanation: "\"they\" va con \"have\" en present perfect." },
+      { text: "My parents ___ married in 1995.", options: ["got", "have got", "has got"], correct: 0, explanation: "Fecha concreta (1995) → pasado simple." },
+      { text: "I ___ that film before.", options: ["watched", "have watched", "has watched"], correct: 1, explanation: "\"before\" sin fecha concreta → present perfect." },
+      { text: "Yesterday, we ___ pizza for dinner.", options: ["have eaten", "ate", "eat"], correct: 1, explanation: "\"Yesterday\" es un momento concreto → pasado simple." }
+    ]
+  },
+  {
+    id: "clase3_modales", section: "Gramática",
+    title: "Clase 3 · Modales",
+    color: "#ff7a50", bg: "#fff1ea",
+    explanation: {
+      intro: "Los modales expresan obligación, prohibición, consejo, permiso o posibilidad.",
+      points: [
+        "<b>must</b> = obligación fuerte · <b>mustn't</b> = prohibición",
+        "<b>should</b> = consejo",
+        "<b>can / could</b> = permiso o habilidad",
+        "<b>might</b> = posibilidad",
+        "<b>don't have to</b> = no es necesario"
+      ]
+    },
+    questions: [
+      { text: "You ___ run in the corridors. It's dangerous.", options: ["must", "mustn't", "don't have to"], correct: 1, explanation: "\"mustn't\" expresa prohibición." },
+      { text: "___ I open the window? It's hot.", options: ["Can", "Must", "Should"], correct: 0, explanation: "\"Can\" se usa para pedir permiso." },
+      { text: "You ___ see a doctor if the pain continues.", options: ["should", "must", "can"], correct: 0, explanation: "\"should\" se usa para dar consejos." },
+      { text: "Students ___ wear a uniform at this school.", options: ["must", "might", "could"], correct: 0, explanation: "\"must\" expresa obligación." },
+      { text: "You ___ finish it today, you have until Friday.", options: ["mustn't", "don't have to", "shouldn't"], correct: 1, explanation: "\"don't have to\" indica que no hay obligación." },
+      { text: "It ___ rain later, take an umbrella just in case.", options: ["might", "must", "should"], correct: 0, explanation: "\"might\" expresa posibilidad." },
+      { text: "___ you swim when you were five?", options: ["Could", "Should", "Must"], correct: 0, explanation: "\"Could\" se usa para habilidad en el pasado." },
+      { text: "You ___ eat so much candy, it's bad for your teeth.", options: ["shouldn't", "mustn't", "couldn't"], correct: 0, explanation: "Es un consejo, no una prohibición estricta → \"shouldn't\"." }
+    ]
+  },
+  {
+    id: "clase4_reflexivos", section: "Gramática",
+    title: "Clase 4 · Reflexivos y recíprocos",
+    color: "#ef5da8", bg: "#fdeef6",
+    explanation: {
+      intro: "Los reflexivos se usan cuando la acción vuelve a la misma persona. Each other / one another se usan cuando la acción es mutua entre dos o más personas.",
+      points: [
+        "Reflexivos: myself, yourself, himself, herself, itself, ourselves, themselves.",
+        "Recíprocos: <span class=\"example\">They help each other.</span>"
+      ]
+    },
+    questions: [
+      { text: "I looked at ___ in the mirror.", options: ["myself", "each other", "themselves"], correct: 0, explanation: "\"myself\" porque la acción vuelve sobre \"I\"." },
+      { text: "They always help ___ with homework.", options: ["themselves", "each other", "herself"], correct: 1, explanation: "\"each other\" porque es una acción mutua entre dos o más personas." },
+      { text: "She hurt ___ when she fell.", options: ["herself", "each other", "ourselves"], correct: 0, explanation: "\"herself\" porque la acción vuelve sobre \"she\"." },
+      { text: "We organized the party ___, without any help.", options: ["ourselves", "each other", "himself"], correct: 0, explanation: "\"ourselves\" enfatiza que lo hicimos nosotros mismos." },
+      { text: "My brothers never talk to ___.", options: ["themselves", "each other", "itself"], correct: 1, explanation: "\"each other\" porque es algo mutuo entre ellos." },
+      { text: "Be careful, don't cut ___ with the knife.", options: ["yourself", "each other", "themselves"], correct: 0, explanation: "\"yourself\" porque hablamos de una sola persona (you)." },
+      { text: "The cat is cleaning ___.", options: ["itself", "themselves", "herself"], correct: 0, explanation: "\"itself\" porque \"the cat\" es singular y no es persona." },
+      { text: "Friends should support ___.", options: ["himself", "each other", "myself"], correct: 1, explanation: "\"each other\" porque es una acción mutua entre amigos." }
+    ]
+  },
+  {
+    id: "clase5_comparativos", section: "Gramática",
+    title: "Clase 5 · Comparativos y superlativos",
+    color: "#f5a623", bg: "#fff6e5",
+    explanation: {
+      intro: "La forma depende del largo del adjetivo.",
+      points: [
+        "Adjetivos cortos (1 sílaba): <b>-er / -est</b> → <span class=\"example\">tall → taller → tallest</span>",
+        "Adjetivos largos (2+ sílabas): <b>more / most</b> → <span class=\"example\">intelligent → more intelligent → most intelligent</span>",
+        "Irregulares: <span class=\"example\">good → better → best · bad → worse → worst</span>"
+      ]
+    },
+    questions: [
+      { text: "This exercise is ___ than the last one. (easy)", options: ["easier", "more easy", "easiest"], correct: 0, explanation: "Adjetivos cortos terminados en \"y\" → \"-ier\"." },
+      { text: "She is the ___ student in the class. (intelligent)", options: ["more intelligent", "most intelligent", "intelligentest"], correct: 1, explanation: "Adjetivos largos → \"most\" + adjetivo para el superlativo." },
+      { text: "My phone is ___ than yours. (good)", options: ["gooder", "better", "best"], correct: 1, explanation: "\"good\" es irregular: better / best." },
+      { text: "Today is ___ than yesterday. (hot)", options: ["hoter", "hottest", "hotter"], correct: 2, explanation: "Se duplica la consonante final: hot → hotter." },
+      { text: "This is the ___ movie I've ever seen. (bad)", options: ["worse", "worst", "badder"], correct: 1, explanation: "\"bad\" es irregular: worse / worst (superlativo)." },
+      { text: "He runs ___ than his brother. (fast)", options: ["faster", "fastest", "more fast"], correct: 0, explanation: "Adjetivos cortos → \"-er\" para comparar." },
+      { text: "This is the ___ building in the city. (tall)", options: ["taller", "tallest", "more tall"], correct: 1, explanation: "Adjetivos cortos → \"-est\" para el superlativo." },
+      { text: "My sister is ___ than me. (young)", options: ["younger", "more young", "youngest"], correct: 0, explanation: "Adjetivos cortos → \"-er\" para comparar." }
+    ]
+  },
+  {
+    id: "clase6_preposiciones", section: "Gramática",
+    title: "Clase 6 · Preposiciones comunes",
+    color: "#4a90e2", bg: "#eaf3fd",
+    explanation: {
+      intro: "Muchas preposiciones van fijas con ciertas palabras y conviene memorizarlas como bloques.",
+      points: [
+        "<span class=\"example\">interested in · good at · looking forward to</span>",
+        "<span class=\"example\">arrive at/in · by bus/car/train</span>",
+        "<span class=\"example\">in + mes/año · on + día · at + hora</span>"
+      ]
+    },
+    questions: [
+      { text: "I usually go to school ___ bus.", options: ["by", "in", "on"], correct: 0, explanation: "\"by bus\" para medios de transporte." },
+      { text: "The keys are ___ the table.", options: ["in", "on", "at"], correct: 1, explanation: "\"on\" para superficies." },
+      { text: "We arrived ___ the airport at 6pm.", options: ["at", "in", "on"], correct: 0, explanation: "\"at\" para lugares puntuales como aeropuertos." },
+      { text: "She's interested ___ learning French.", options: ["in", "on", "at"], correct: 0, explanation: "\"interested in\" es una expresión fija." },
+      { text: "I'm looking forward ___ the holidays.", options: ["to", "for", "at"], correct: 0, explanation: "\"looking forward to\" es una expresión fija." },
+      { text: "He's good ___ maths.", options: ["in", "at", "on"], correct: 1, explanation: "\"good at\" es una expresión fija." },
+      { text: "The present is ___ you.", options: ["for", "to", "at"], correct: 0, explanation: "\"for\" indica el destinatario." },
+      { text: "My birthday is ___ August.", options: ["in", "on", "at"], correct: 0, explanation: "\"in\" se usa con meses." }
+    ]
+  },
+  {
+    id: "clase7_pronombres", section: "Gramática",
+    title: "Clase 7 · Pronombres personales y de objeto",
+    color: "#5c6bc0", bg: "#eef0fb",
+    explanation: {
+      intro: "Los pronombres de sujeto (I, you, he, she, it, we, they) hacen la acción. Los de objeto (me, you, him, her, it, us, them) la reciben.",
+      points: [
+        "Sujeto: <span class=\"example\">She called him.</span>",
+        "Objeto: <span class=\"example\">They helped us.</span>"
+      ]
+    },
+    questions: [
+      { text: "___ is my best friend.", options: ["She", "Her", "Herself"], correct: 0, explanation: "\"She\" es sujeto de la oración." },
+      { text: "Can you help ___? I don't understand this exercise.", options: ["I", "me", "myself"], correct: 1, explanation: "\"me\" es objeto: recibe la ayuda." },
+      { text: "___ live in Buenos Aires.", options: ["We", "Us", "Ourselves"], correct: 0, explanation: "\"We\" es sujeto de la oración." },
+      { text: "The teacher gave ___ a lot of homework.", options: ["we", "us", "ourselves"], correct: 1, explanation: "\"us\" es objeto: recibe la tarea." },
+      { text: "___ is a great singer.", options: ["He", "Him", "His"], correct: 0, explanation: "\"He\" es sujeto de la oración." },
+      { text: "I saw ___ at the party last night.", options: ["they", "them", "their"], correct: 1, explanation: "\"them\" es objeto: recibe la acción de ver." },
+      { text: "___ has a new phone.", options: ["She", "Her", "Hers"], correct: 0, explanation: "\"She\" es sujeto de la oración." },
+      { text: "Please give the book to ___.", options: ["he", "him", "his"], correct: 1, explanation: "Después de \"to\" usamos el pronombre de objeto: \"him\"." }
+    ]
+  },
+  {
+    id: "clase8_infinitivo_gerundio", section: "Gramática",
+    title: "Clase 8 · To + verbo vs. -ing",
+    color: "#43a047", bg: "#e9f7ec",
+    explanation: {
+      intro: "Usamos \"to + verbo\" para explicar el propósito de una acción (para qué se hace algo). El gerundio (-ing) se usa después de ciertas expresiones o como sujeto.",
+      points: [
+        "Propósito: <span class=\"example\">She uses an app to practise English.</span>",
+        "Después de \"instead of\", \"enjoy\": <span class=\"example\">He avoids talking in public.</span>",
+        "Como sujeto: <span class=\"example\">Reading is fun.</span>"
+      ]
+    },
+    questions: [
+      { text: "She saves money ___ a new bike.", options: ["to buy", "buying", "for buy"], correct: 0, explanation: "\"to buy\" expresa el propósito de ahorrar." },
+      { text: "I went to the shop ___ some bread.", options: ["for buying", "to buy", "buy"], correct: 1, explanation: "\"to buy\" expresa el propósito de ir al negocio." },
+      { text: "He uses the app ___ his English.", options: ["for practise", "to practise", "practising"], correct: 1, explanation: "\"to practise\" expresa el propósito de usar la app." },
+      { text: "Instead of ___ TV, she read a book.", options: ["watch", "to watch", "watching"], correct: 2, explanation: "Después de \"instead of\" va el gerundio." },
+      { text: "___ a musical instrument takes patience.", options: ["Learn", "To learn", "Learning"], correct: 2, explanation: "El gerundio funciona como sujeto de la oración." },
+      { text: "They study every day ___ good grades.", options: ["to get", "for getting", "getting"], correct: 0, explanation: "\"to get\" expresa el propósito de estudiar." },
+      { text: "She enjoys ___ new recipes.", options: ["to try", "trying", "for try"], correct: 1, explanation: "Después de \"enjoy\" va el gerundio." },
+      { text: "He called his friend ___ about the trip.", options: ["to talk", "talking", "for talk"], correct: 0, explanation: "\"to talk\" expresa el propósito de la llamada." }
+    ]
+  },
+  {
+    id: "clase9_conectores", section: "Gramática",
+    title: "Clase 9 · Conectores",
+    color: "#ab6b3f", bg: "#f7efe6",
+    explanation: {
+      intro: "Los conectores unen ideas y dan información sobre causa, contraste o tiempo.",
+      points: [
+        "<b>because</b> = causa · <b>so</b> = consecuencia",
+        "<b>but / although</b> = contraste",
+        "<b>when</b> = en el momento en que · <b>since</b> = desde que · <b>until</b> = hasta que"
+      ]
+    },
+    questions: [
+      { text: "I was tired, ___ I went to bed early.", options: ["because", "so", "but"], correct: 1, explanation: "\"so\" une causa (estar cansada) con consecuencia (irse a dormir)." },
+      { text: "She stayed home ___ she was sick.", options: ["because", "so", "although"], correct: 0, explanation: "\"because\" da la razón por la que se quedó en casa." },
+      { text: "It was raining, ___ we still went for a walk.", options: ["because", "so", "although"], correct: 2, explanation: "\"although\" marca un contraste inesperado." },
+      { text: "He started playing the guitar ___ he was seven years old.", options: ["when", "since", "until"], correct: 0, explanation: "\"when\" indica el momento en que empezó." },
+      { text: "I've known her ___ we were in primary school.", options: ["when", "since", "until"], correct: 1, explanation: "\"since\" indica desde cuándo la conoce." },
+      { text: "Wait here ___ I come back.", options: ["since", "when", "until"], correct: 2, explanation: "\"until\" indica hasta qué momento hay que esperar." },
+      { text: "I like tea, ___ I don't like coffee.", options: ["but", "so", "because"], correct: 0, explanation: "\"but\" marca un contraste entre dos gustos." },
+      { text: "She was hungry, ___ she made a sandwich.", options: ["although", "so", "but"], correct: 1, explanation: "\"so\" une causa (tener hambre) con consecuencia (hacerse un sándwich)." }
+    ]
+  },
+  {
+    id: "clase10_tiempos_avanzado", section: "Gramática",
+    title: "Clase 10 · Presente continuo, perfecto y pasado",
+    color: "#d1495b", bg: "#fce9ec",
+    explanation: {
+      intro: "Tres tiempos, tres usos distintos.",
+      points: [
+        "Presente continuo: algo pasando ahora → <span class=\"example\">She is helping her neighbours right now.</span>",
+        "Present perfect: experiencia o resultado, sin momento exacto → <span class=\"example\">She has helped many people.</span>",
+        "Pasado simple: acción terminada en un momento concreto → <span class=\"example\">She helped her neighbour yesterday.</span>"
+      ]
+    },
+    questions: [
+      { text: "Look! It ___ outside.", options: ["rains", "is raining", "has rained"], correct: 1, explanation: "Algo que está pasando en este momento → presente continuo." },
+      { text: "I ___ my homework, so now I can watch TV.", options: ["am finishing", "have finished", "finished"], correct: 1, explanation: "Resultado importante ahora, sin momento exacto → present perfect." },
+      { text: "She ___ for this company since 2020.", options: ["is working", "has worked", "worked"], correct: 1, explanation: "\"since\" pide present perfect." },
+      { text: "We ___ dinner right now, can you call later?", options: ["are having", "have had", "had"], correct: 0, explanation: "\"right now\" indica presente continuo." },
+      { text: "He ___ to Spain last summer.", options: ["is going", "has gone", "went"], correct: 2, explanation: "\"last summer\" es un momento concreto → pasado simple." },
+      { text: "Right now, they ___ a new project at school.", options: ["are starting", "have started", "started"], correct: 0, explanation: "\"right now\" indica presente continuo." },
+      { text: "___ you ever tried sushi?", options: ["Do", "Have", "Did"], correct: 1, explanation: "\"Have you ever...?\" pregunta por experiencia." },
+      { text: "I can't talk now, I ___ dinner.", options: ["cook", "am cooking", "have cooked"], correct: 1, explanation: "Algo que está pasando en este momento → presente continuo." }
+    ]
+  },
+  {
+    id: "clase11_articulos", section: "Gramática",
+    title: "Clase 11 · Artículos",
+    color: "#455a64", bg: "#eceff1",
+    explanation: {
+      intro: "\"a\" antes de sonido de consonante, \"an\" antes de sonido de vocal, \"the\" para algo específico o ya mencionado. A veces no se usa ningún artículo.",
+      points: [
+        "<span class=\"example\">a dog · an apple</span>",
+        "<span class=\"example\">the book I told you about</span> (algo específico)",
+        "<span class=\"example\">I like dogs.</span> (afirmación general, sin artículo)"
+      ]
+    },
+    questions: [
+      { text: "She has ___ umbrella in her bag.", options: ["a", "an", "the"], correct: 1, explanation: "\"umbrella\" empieza con sonido de vocal → \"an\"." },
+      { text: "I saw ___ dog in the park.", options: ["a", "an", "the"], correct: 0, explanation: "\"dog\" empieza con sonido de consonante → \"a\"." },
+      { text: "Can you close ___ door, please?", options: ["a", "an", "the"], correct: 2, explanation: "Es una puerta específica y conocida → \"the\"." },
+      { text: "___ cats are independent animals.", options: ["A", "The", "-"], correct: 2, explanation: "Afirmación general sobre los gatos → sin artículo." },
+      { text: "He is ___ best student in the class.", options: ["a", "an", "the"], correct: 2, explanation: "Los superlativos siempre llevan \"the\"." },
+      { text: "I need ___ hour to finish this.", options: ["a", "an", "the"], correct: 1, explanation: "\"hour\" suena como si empezara con vocal (la \"h\" es muda) → \"an\"." },
+      { text: "We watched ___ interesting movie last night.", options: ["a", "an", "the"], correct: 1, explanation: "\"interesting\" empieza con sonido de vocal → \"an\"." },
+      { text: "___ information is very useful.", options: ["A", "An", "-"], correct: 2, explanation: "\"information\" es incontable y aquí es general → sin artículo." }
+    ]
+  },
+  {
+    id: "clase12_posesivos", section: "Gramática",
+    title: "Clase 12 · Adjetivos y pronombres posesivos",
+    color: "#ff8f00", bg: "#fff3e0",
+    explanation: {
+      intro: "Los adjetivos posesivos van antes de un sustantivo (my, your, his, her, its, our, their). Los pronombres posesivos reemplazan al sustantivo (mine, yours, his, hers, ours, theirs).",
+      points: [
+        "<span class=\"example\">This is my book.</span> (adjetivo + sustantivo)",
+        "<span class=\"example\">This book is mine.</span> (pronombre, sin sustantivo)"
+      ]
+    },
+    questions: [
+      { text: "This is ___ dog.", options: ["my", "mine", "I"], correct: 0, explanation: "Va antes de un sustantivo (\"dog\") → adjetivo posesivo \"my\"." },
+      { text: "Is this pencil yours or ___?", options: ["my", "mine", "I"], correct: 1, explanation: "Reemplaza al sustantivo → pronombre posesivo \"mine\"." },
+      { text: "The cat licked ___ paw.", options: ["it's", "its", "his"], correct: 1, explanation: "\"its\" es el posesivo de \"it\", sin apóstrofe." },
+      { text: "That's not my bag, it's ___.", options: ["her", "hers", "she"], correct: 1, explanation: "Reemplaza al sustantivo → pronombre posesivo \"hers\"." },
+      { text: "We love ___ new house.", options: ["our", "ours", "us"], correct: 0, explanation: "Va antes de un sustantivo (\"house\") → adjetivo posesivo \"our\"." },
+      { text: "This backpack is ___, not yours.", options: ["my", "mine", "I"], correct: 1, explanation: "Reemplaza al sustantivo → pronombre posesivo \"mine\"." },
+      { text: "They finished ___ project early.", options: ["their", "theirs", "them"], correct: 0, explanation: "Va antes de un sustantivo (\"project\") → adjetivo posesivo \"their\"." },
+      { text: "Is that phone ___?", options: ["your", "yours", "you"], correct: 1, explanation: "Reemplaza al sustantivo → pronombre posesivo \"yours\"." }
+    ]
+  },
+  {
+    id: "clase13_auxiliares", section: "Gramática",
+    title: "Clase 13 · Do / does / did y \"need to\"",
+    color: "#6d4c41", bg: "#efebe9",
+    explanation: {
+      intro: "Usamos do/does/did para preguntas y negaciones en presente y pasado. \"Need to\" significa que algo es necesario.",
+      points: [
+        "<span class=\"example\">She doesn't like coffee.</span>",
+        "<span class=\"example\">Did you finish your homework?</span>",
+        "<span class=\"example\">You need to study more.</span>"
+      ]
+    },
+    questions: [
+      { text: "She ___ not like spicy food.", options: ["do", "does", "did"], correct: 1, explanation: "\"She\" es tercera persona singular en presente → \"does\"." },
+      { text: "___ you go to the party last night?", options: ["Do", "Does", "Did"], correct: 2, explanation: "\"last night\" es pasado → \"Did\"." },
+      { text: "He ___ not have any brothers or sisters.", options: ["do", "does", "did"], correct: 1, explanation: "\"He\" es tercera persona singular en presente → \"does\"." },
+      { text: "___ they live near the school?", options: ["Do", "Does", "Did"], correct: 0, explanation: "\"they\" en presente → \"Do\"." },
+      { text: "I ___ not understand this exercise.", options: ["do", "does", "did"], correct: 0, explanation: "\"I\" en presente → \"do\"." },
+      { text: "You ___ to practise more if you want to improve.", options: ["need", "needs", "needed"], correct: 0, explanation: "\"You\" en presente → \"need\"." },
+      { text: "___ she finish her homework yesterday?", options: ["Do", "Does", "Did"], correct: 2, explanation: "\"yesterday\" es pasado → \"Did\"." },
+      { text: "We ___ to leave now, or we'll be late.", options: ["need", "needs", "needed"], correct: 0, explanation: "\"We\" en presente → \"need\"." }
+    ]
+  },
+  {
+    id: "clase14_preguntas_embebidas", section: "Gramática",
+    title: "Clase 14 · Preguntas dentro de oraciones",
+    color: "#00838f", bg: "#e0f7fa",
+    explanation: {
+      intro: "A veces usamos palabras interrogativas (how, what, when, why, where) dentro de una oración, sin invertir el sujeto y el verbo como en una pregunta normal.",
+      points: [
+        "<span class=\"example\">She showed me how to do it.</span>",
+        "<span class=\"example\">I don't know what he wants.</span>",
+        "<span class=\"example\">Can you tell me where the station is?</span>"
+      ]
+    },
+    questions: [
+      { text: "This app shows us ___ to improve our pronunciation.", options: ["how", "what", "why"], correct: 0, explanation: "\"how to improve\" describe la manera de hacer algo." },
+      { text: "I don't know ___ she is so upset.", options: ["how", "why", "what"], correct: 1, explanation: "\"why\" pregunta por la razón." },
+      { text: "Can you tell me ___ time it is?", options: ["how", "what", "why"], correct: 1, explanation: "\"what time\" pregunta por la hora." },
+      { text: "He explained ___ the machine works.", options: ["how", "what", "who"], correct: 0, explanation: "\"how\" describe el funcionamiento." },
+      { text: "I wonder ___ she lives.", options: ["where", "what", "how"], correct: 0, explanation: "\"where\" pregunta por el lugar." },
+      { text: "Do you know ___ the museum opens?", options: ["when", "how", "what"], correct: 0, explanation: "\"when\" pregunta por el momento." },
+      { text: "She asked me ___ I wanted to go.", options: ["where", "how", "why"], correct: 0, explanation: "\"where\" pregunta por el destino." },
+      { text: "Nobody understands ___ he did that.", options: ["why", "what", "who"], correct: 0, explanation: "\"why\" pregunta por la razón." }
+    ]
+  },
+  {
+    id: "clase15_reading", section: "Reading", type: "reading",
+    title: "Clase 15 · Comprensión de lectura",
+    color: "#3949ab", bg: "#e8eaf6",
+    explanation: {
+      intro: "Antes de leer, mirá las preguntas para saber qué buscar. No hace falta entender cada palabra del texto.",
+      points: [
+        "Leé el texto completo una vez, sin traducir palabra por palabra.",
+        "Volvé a las preguntas y buscá la parte exacta del texto que las responde.",
+        "Si no conocés una palabra, tratá de entenderla por el contexto."
+      ]
+    },
+    passage: "Fifteen-year-old Martina spends every Saturday morning at a local animal shelter. She started volunteering last year after her class visited the shelter for a school project. \"At first, I just wanted to see the puppies,\" she admits, \"but I ended up learning so much more.\"\n\nAt the shelter, Martina helps to feed the animals, clean their cages, and walk the dogs. She says the most difficult part of the job is saying goodbye when an animal finally finds a new family. \"I get attached to them,\" she explains, \"but then I remember that's exactly why they need a home, not a shelter.\"\n\nMartina's favourite task is helping visitors choose the right pet for their family. She has learned to ask people about their lifestyle before suggesting an animal. \"Some people want a dog, but they live in a small apartment and work long hours. I try to help them find an animal that will actually be happy in their home.\"\n\nHer parents were surprised by how responsible she has become since she started volunteering. \"She used to forget her own chores,\" her mother laughs, \"but now she never misses a Saturday at the shelter.\" Martina hopes to study veterinary science in the future, and she believes this experience is helping her prepare for that career.",
+    questions: [
+      { text: "Martina started volunteering at the shelter because...", options: ["her parents wanted her to.", "her class visited it for a project.", "she needed community service hours."], correct: 1, explanation: "El texto dice que empezó después de que su clase visitó el refugio por un proyecto escolar." },
+      { text: "According to Martina, the hardest part of volunteering is...", options: ["cleaning the cages.", "walking the dogs.", "saying goodbye to the animals."], correct: 2, explanation: "Ella dice que lo más difícil es despedirse cuando un animal encuentra familia." },
+      { text: "When choosing a pet for a family, Martina first...", options: ["asks about their lifestyle.", "shows them all the puppies.", "checks how big their house is."], correct: 0, explanation: "El texto dice que aprendió a preguntar sobre el estilo de vida antes de sugerir un animal." },
+      { text: "Martina's mother is surprised because...", options: ["Martina wants to be a vet.", "Martina has become more responsible.", "Martina forgets her chores."], correct: 1, explanation: "La madre dice que antes olvidaba sus tareas, y ahora es mucho más responsable." },
+      { text: "The phrase \"get attached\" (paragraph 2) means...", options: ["feel a strong connection.", "feel scared.", "feel bored."], correct: 0, explanation: "\"Get attached\" significa encariñarse, sentir una conexión fuerte." },
+      { text: "Martina hopes to...", options: ["open her own shelter.", "study veterinary science.", "adopt all the animals."], correct: 1, explanation: "El texto dice que espera estudiar veterinaria en el futuro." }
+    ]
+  },
+  {
+    id: "clase16_listening", section: "Listening", type: "listening",
+    title: "Clase 16 · Comprensión auditiva",
+    color: "#d81b60", bg: "#fce4ec",
+    explanation: {
+      intro: "Vas a escuchar un audio corto. Podés escucharlo las veces que quieras (en el examen real solo lo escuchás dos veces, así que después practicá escuchándolo solo dos veces para simularlo).",
+      points: [
+        "Primero escuchá para entender la idea general.",
+        "Volvé a escuchar prestando atención a los detalles.",
+        "Si te perdés una palabra, seguí escuchando: no hace falta entender todo."
+      ]
+    },
+    script: "Hi, I'm Tomás. Last weekend, I went camping with my family near a lake. We arrived on Friday afternoon and set up our tent before it got dark. On Saturday morning, we went fishing, but we didn't catch anything! In the afternoon, we walked around the lake and saw some really cool birds. In the evening, we made a fire and cooked sausages for dinner. My little sister was scared of the dark, so my dad told funny stories to make her laugh. On Sunday, it started raining, so we packed up early and drove home. Even though it rained at the end, it was one of the best weekends I've had this year.",
+    questions: [
+      { text: "When did Tomás and his family arrive at the campsite?", options: ["Friday morning.", "Friday afternoon.", "Saturday morning."], correct: 1, explanation: "Dice que llegaron el viernes por la tarde." },
+      { text: "What happened when they went fishing?", options: ["They caught a lot of fish.", "They didn't catch anything.", "They didn't go fishing."], correct: 1, explanation: "Dice que fueron a pescar pero no atraparon nada." },
+      { text: "What did they do in the evening on Saturday?", options: ["They went for a walk.", "They cooked sausages by the fire.", "They went to sleep early."], correct: 1, explanation: "Dice que hicieron fuego y cocinaron salchichas para cenar." },
+      { text: "Why was Tomás's dad telling stories?", options: ["To help his sister fall asleep.", "Because he likes stories.", "To make his scared sister laugh."], correct: 2, explanation: "Su hermana tenía miedo a la oscuridad, y el papá contaba historias para hacerla reír." },
+      { text: "Why did they leave early on Sunday?", options: ["They ran out of food.", "It started raining.", "They were tired."], correct: 1, explanation: "Dice que empezó a llover y por eso se fueron temprano." },
+      { text: "How did Tomás feel about the weekend?", options: ["It was boring.", "It was one of his best weekends.", "He wants to never go camping again."], correct: 1, explanation: "Dice que fue uno de los mejores fines de semana del año, a pesar de la lluvia." }
+    ]
+  },
+  {
+    id: "clase17_writing", section: "Writing", type: "writing",
+    title: "Clase 17 · Writing: email",
+    color: "#558b2f", bg: "#f1f8e9",
+    explanation: {
+      intro: "Vas a escribir un email corto en inglés, como en el examen real.",
+      points: [
+        "Incluí un saludo y un cierre.",
+        "Usá al menos 5 de las ideas sugeridas.",
+        "Escribí alrededor de 100 palabras.",
+        "Cuando termines, revisá los tiempos verbales."
+      ]
+    },
+    prompt: "Write an email to your English friend telling him/her about a weekend trip or a special day with your family. Include a greeting, what happened, and an ending. Write about 100 words.",
+    bulletIdeas: [
+      "Where and when was it?",
+      "Who were you with?",
+      "What did you do?",
+      "How did you feel?",
+      "Would you like to do it again? Why (not)?"
+    ]
+  }
+];
+
+let activeClass = null;
+let curQ = 0;
+let userAnswers = [];
+
+function slugify(name) {
+  return encodeURIComponent(name.trim().toLowerCase());
+}
+
+function getProfiles() {
+  try { return JSON.parse(localStorage.getItem('b1_profiles') || '[]'); } catch (e) { return []; }
+}
+function saveProfiles(list) { localStorage.setItem('b1_profiles', JSON.stringify(list)); }
+function addProfileIfNew(name) {
+  const list = getProfiles();
+  if (list.indexOf(name) === -1) { list.push(name); saveProfiles(list); }
+}
+function getCurrentName() { return localStorage.getItem('b1_current_name') || ''; }
+function setCurrentName(name) { localStorage.setItem('b1_current_name', name); }
+
+function storageKey(classId) { return "b1_attempts_" + slugify(getCurrentName()) + "_" + classId; }
+function getAttempts(classId) {
+  try { return JSON.parse(localStorage.getItem(storageKey(classId)) || "[]"); } catch (e) { return []; }
+}
+function saveAttemptObj(classId, obj) {
+  const attempts = getAttempts(classId);
+  attempts.push(Object.assign({ date: new Date().toISOString() }, obj));
+  localStorage.setItem(storageKey(classId), JSON.stringify(attempts));
+}
+function saveAttempt(classId, score, total) {
+  saveAttemptObj(classId, { score: score, total: total });
+}
+
+function getName() { return getCurrentName(); }
+
+function saveName() {
+  const input = document.getElementById('name-input');
+  const err = document.getElementById('name-error');
+  const val = input.value.trim();
+  if (!val) { err.style.display = 'block'; return; }
+  err.style.display = 'none';
+  addProfileIfNew(val);
+  setCurrentName(val);
+  init();
+}
+
+function switchProfile(name) {
+  setCurrentName(name);
+  document.getElementById('add-profile-form').classList.add('hidden');
+  goHome();
+}
+
+function showAddProfile() {
+  document.getElementById('add-profile-form').classList.remove('hidden');
+  document.getElementById('new-profile-input').focus();
+}
+
+function confirmAddProfile() {
+  const input = document.getElementById('new-profile-input');
+  const val = input.value.trim();
+  if (!val) return;
+  addProfileIfNew(val);
+  setCurrentName(val);
+  input.value = '';
+  document.getElementById('add-profile-form').classList.add('hidden');
+  goHome();
+}
+
+function renderProfileSwitcher() {
+  const el = document.getElementById('profile-switcher');
+  el.classList.remove('hidden');
+  const profiles = getProfiles();
+  const current = getCurrentName();
+  let html = '';
+  profiles.forEach(p => {
+    const active = p === current;
+    html += '<button class="profile-chip' + (active ? ' active' : '') + '" onclick="switchProfile(' + JSON.stringify(p) + ')">' + p + '</button>';
+  });
+  html += '<button class="profile-chip add" onclick="showAddProfile()">+ Nueva persona</button>';
+  el.innerHTML = html;
+}
+
+function showView(id) {
+  ['view-onboard', 'view-home', 'view-explain', 'view-exercise', 'view-result', 'view-writing'].forEach(v => {
+    document.getElementById(v).classList.toggle('hidden', v !== id);
+  });
+}
+
+function renderHome() {
+  const name = getCurrentName();
+  const greetEl = document.getElementById('greeting');
+  greetEl.classList.remove('hidden');
+  greetEl.innerHTML = '¡Hola, ' + name + '!';
+  renderProfileSwitcher();
+
+  const container = document.getElementById('class-container');
+  container.innerHTML = '';
+
+  const sections = [];
+  CLASSES.forEach(c => { if (sections.indexOf(c.section) === -1) sections.push(c.section); });
+
+  sections.forEach(sectionName => {
+    const header = document.createElement('p');
+    header.className = 'section-header';
+    header.textContent = sectionName;
+    container.appendChild(header);
+
+    const grid = document.createElement('div');
+    grid.className = 'class-grid';
+
+    CLASSES.filter(c => c.section === sectionName).forEach(c => {
+      const attempts = getAttempts(c.id);
+      const card = document.createElement('button');
+      card.className = 'class-card';
+      card.style.setProperty('--accent', c.color);
+      card.style.setProperty('--accent-bg', c.bg);
+      card.onclick = () => openClass(c.id);
+
+      const num = c.title.match(/Clase (\d+)/)[1];
+      const shortTitle = c.title.split('·')[1].trim();
+      const isWriting = c.type === 'writing';
+      const metaText = isWriting ? '1 consigna' : c.questions.length + ' ejercicios';
+
+      let statsHtml = '<span class="class-stats">Sin intentos todavía</span>';
+      if (attempts.length > 0) {
+        const last = attempts[attempts.length - 1];
+        if (isWriting) {
+          statsHtml = '<span class="class-stats">Intentos: ' + attempts.length +
+            ' · Último: ' + last.wordCount + ' palabras · Ideas: ' + last.checked + '/' + last.total + '</span>';
+        } else {
+          const best = attempts.reduce((m, a) => a.score > m.score ? a : m, attempts[0]);
+          const pct = best.score / best.total;
+          const starCount = pct === 1 ? 3 : pct >= 0.75 ? 2 : pct >= 0.5 ? 1 : 0;
+          const stars = '★'.repeat(starCount) + '☆'.repeat(3 - starCount);
+          statsHtml = '<span class="stars">' + stars + '</span><br><span class="class-stats">Intentos: ' + attempts.length +
+            ' · Último: ' + last.score + '/' + last.total + '</span>';
+        }
+      }
+
+      card.innerHTML =
+        '<span class="class-badge">' + num + '</span>' +
+        '<span>' +
+        '<p class="class-title">' + shortTitle + '</p>' +
+        '<p class="class-meta">' + metaText + '</p>' +
+        statsHtml +
+        '</span>';
+      grid.appendChild(card);
+    });
+
+    container.appendChild(grid);
+  });
+}
+
+function openClass(classId) {
+  activeClass = CLASSES.find(c => c.id === classId);
+  document.getElementById('explain-title').textContent = activeClass.title;
+  document.getElementById('explain-title').style.color = activeClass.color;
+  const box = document.getElementById('explain-body');
+  box.style.setProperty('--accent-bg', activeClass.bg);
+  box.innerHTML = '<p style="margin:0 0 6px;">' + activeClass.explanation.intro + '</p><ul>' +
+    activeClass.explanation.points.map(p => '<li>' + p + '</li>').join('') + '</ul>';
+  document.getElementById('explain-start-btn').textContent = activeClass.type === 'writing' ? 'Empezar a escribir' : 'Empezar ejercicios';
+  showView('view-explain');
+}
+
+function goHome() {
+  renderHome();
+  showView('view-home');
+}
+
+function startExercises() {
+  if (activeClass.type === 'writing') { startWriting(); return; }
+
+  curQ = 0;
+  userAnswers = new Array(activeClass.questions.length).fill(null);
+  showView('view-exercise');
+  document.getElementById('ex-bar').style.setProperty('--accent', activeClass.color);
+  buildContext();
+  renderQuestion();
+}
+
+function buildContext() {
+  const ctx = document.getElementById('ex-context');
+  ctx.style.setProperty('--accent-bg', activeClass.bg);
+  if (activeClass.type === 'reading') {
+    ctx.classList.remove('hidden');
+    const paras = activeClass.passage.split('\n\n').map(p => '<p>' + p + '</p>').join('');
+    ctx.innerHTML = '<div class="passage-box">' + paras + '</div>';
+  } else if (activeClass.type === 'listening') {
+    ctx.classList.remove('hidden');
+    ctx.innerHTML =
+      '<div class="audio-box">' +
+      '<div class="row"><button class="primary" onclick="playAudio()">&#9658; Reproducir audio</button>' +
+      '<button class="link-btn" onclick="toggleTranscript()">Mostrar texto</button></div>' +
+      '<div class="passage-box hidden" id="transcript-box"><p>' + activeClass.script + '</p></div>' +
+      '</div>';
+  } else {
+    ctx.classList.add('hidden');
+    ctx.innerHTML = '';
+  }
+}
+
+function playAudio() {
+  if (!('speechSynthesis' in window)) {
+    toggleTranscript(true);
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(activeClass.script);
+  utter.lang = 'en-US';
+  utter.rate = 0.92;
+  window.speechSynthesis.speak(utter);
+}
+
+function toggleTranscript(forceShow) {
+  const box = document.getElementById('transcript-box');
+  if (!box) return;
+  if (forceShow) { box.classList.remove('hidden'); return; }
+  box.classList.toggle('hidden');
+}
+
+function renderQuestion() {
+  const q = activeClass.questions[curQ];
+  document.getElementById('ex-progress').textContent = 'Pregunta ' + (curQ + 1) + ' de ' + activeClass.questions.length;
+  document.getElementById('ex-bar').style.width = Math.round(((curQ + 1) / activeClass.questions.length) * 100) + '%';
+  document.getElementById('ex-question').textContent = q.text;
+  document.getElementById('ex-error').style.display = 'none';
+
+  const optsEl = document.getElementById('ex-options');
+  optsEl.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn' + (userAnswers[curQ] === i ? ' selected' : '');
+    btn.style.setProperty('--accent', activeClass.color);
+    btn.style.setProperty('--accent-bg', activeClass.bg);
+    btn.textContent = opt;
+    btn.onclick = () => { userAnswers[curQ] = i; renderQuestion(); };
+    optsEl.appendChild(btn);
+  });
+
+  document.getElementById('ex-prev-btn').style.visibility = curQ === 0 ? 'hidden' : 'visible';
+  document.getElementById('ex-next-btn').textContent = curQ === activeClass.questions.length - 1 ? 'Ver resultado' : 'Siguiente';
+}
+
+function prevQuestion() { if (curQ > 0) { curQ--; renderQuestion(); } }
+
+function nextQuestion() {
+  if (userAnswers[curQ] === null) {
+    document.getElementById('ex-error').style.display = 'block';
+    return;
+  }
+  if (curQ < activeClass.questions.length - 1) { curQ++; renderQuestion(); }
+  else { showResult(); }
+}
+
+function showResult() {
+  let score = 0;
+  activeClass.questions.forEach((q, i) => { if (userAnswers[i] === q.correct) score++; });
+  saveAttempt(activeClass.id, score, activeClass.questions.length);
+
+  document.getElementById('result-classname').textContent = activeClass.title;
+  document.getElementById('result-score').textContent = score + ' / ' + activeClass.questions.length;
+  document.getElementById('result-score').parentElement.style.setProperty('--accent', activeClass.color);
+  document.getElementById('result-score').parentElement.style.setProperty('--accent-bg', activeClass.bg);
+
+  const pct = Math.round((score / activeClass.questions.length) * 100);
+  const name = getName();
+  let msg = 'Seguí practicando, ' + name + ', vas a mejorar.';
+  if (pct === 100) msg = '¡Perfecto, ' + name + '! Dominás este tema.';
+  else if (pct >= 75) msg = '¡Muy bien, ' + name + '! Casi perfecto.';
+  else if (pct >= 50) msg = 'Vas bien, repasá los que fallaste.';
+  document.getElementById('result-msg').textContent = msg;
+
+  const reviewEl = document.getElementById('result-review');
+  reviewEl.innerHTML = '';
+  activeClass.questions.forEach((q, i) => {
+    const isCorrect = userAnswers[i] === q.correct;
+    const userText = userAnswers[i] === null ? '(sin responder)' : q.options[userAnswers[i]];
+    const div = document.createElement('div');
+    div.className = 'review-item ' + (isCorrect ? 'correct' : 'incorrect');
+    div.innerHTML =
+      '<p class="review-q">' + (i + 1) + '. ' + q.text + '</p>' +
+      '<p class="review-a">Tu respuesta: <span class="' + (isCorrect ? 'ok' : 'bad') + '">' + userText + '</span>' +
+      (isCorrect ? '' : ' · Correcta: <span class="ok">' + q.options[q.correct] + '</span>') + '</p>' +
+      '<p class="review-exp">' + q.explanation + '</p>';
+    reviewEl.appendChild(div);
+  });
+
+  showView('view-result');
+}
+
+function retryClass() {
+  if (activeClass.type === 'writing') { startWriting(); return; }
+  startExercises();
+}
+
+function startWriting() {
+  showView('view-writing');
+  document.getElementById('write-title').textContent = activeClass.title;
+  document.getElementById('write-title').style.color = activeClass.color;
+  document.getElementById('write-prompt').textContent = activeClass.prompt;
+
+  const list = document.getElementById('write-checklist');
+  list.innerHTML = '';
+  activeClass.bulletIdeas.forEach((idea, i) => {
+    const row = document.createElement('label');
+    row.className = 'checklist-item';
+    row.innerHTML = '<input type="checkbox" id="write-check-' + i + '"><span>' + idea + '</span>';
+    list.appendChild(row);
+  });
+
+  document.getElementById('write-textarea').value = '';
+  document.getElementById('write-error').style.display = 'none';
+  document.getElementById('write-save-msg').style.display = 'none';
+  updateWordCount();
+}
+
+function updateWordCount() {
+  const text = document.getElementById('write-textarea').value.trim();
+  const words = text.length ? text.split(/\s+/).length : 0;
+  document.getElementById('word-count-label').textContent = words + ' palabras (objetivo: ~100)';
+}
+
+function saveWritingAttempt() {
+  const textarea = document.getElementById('write-textarea');
+  const text = textarea.value.trim();
+  const err = document.getElementById('write-error');
+  if (!text) { err.style.display = 'block'; return; }
+  err.style.display = 'none';
+
+  const words = text.split(/\s+/).length;
+  const checked = document.querySelectorAll('#write-checklist input:checked').length;
+  const total = activeClass.bulletIdeas.length;
+  saveAttemptObj(activeClass.id, { wordCount: words, checked: checked, total: total });
+
+  const msg = document.getElementById('write-save-msg');
+  msg.textContent = '¡Guardado! Escribiste ' + words + ' palabras e incluiste ' + checked + ' de ' + total + ' ideas.';
+  msg.style.display = 'block';
+}
+
+function init() {
+  const profiles = getProfiles();
+  if (profiles.length === 0) {
+    document.getElementById('greeting').classList.add('hidden');
+    document.getElementById('profile-switcher').classList.add('hidden');
+    showView('view-onboard');
+  } else {
+    if (!getCurrentName() || profiles.indexOf(getCurrentName()) === -1) {
+      setCurrentName(profiles[profiles.length - 1]);
+    }
+    goHome();
+  }
+}
+
+init();
+</script>
+</body>
+</html>
