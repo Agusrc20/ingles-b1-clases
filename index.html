@@ -119,6 +119,31 @@ button:disabled { opacity: .5; cursor: default; }
 .checklist-item { display: flex; align-items: flex-start; gap: 8px; font-size: 14px; margin-bottom: 8px; }
 .checklist-item input { margin-top: 3px; }
 .save-msg { font-size: 13px; color: #1e9e5a; font-weight: 600; margin: 10px 0 0; display: none; }
+
+.tips-box { background: var(--accent-bg, #f1eefe); border-radius: 14px; padding: 12px 16px; margin-bottom: 14px; font-size: 13px; }
+.tips-box summary { cursor: pointer; font-weight: 700; color: var(--accent, #5b3fd6); list-style: none; display: flex; align-items: center; gap: 6px; }
+.tips-box summary::-webkit-details-marker { display: none; }
+.tips-box summary::before { content: "\1F4A1"; }
+.tips-box ul { margin: 8px 0 0; padding-left: 20px; }
+.tips-box p.tips-intro { margin: 8px 0 0; }
+
+.tanda-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin-bottom: 6px; }
+.tanda-card {
+  background: #fff; border: 2px solid var(--accent-bg); border-radius: 16px;
+  padding: 14px; cursor: pointer; text-align: left; font-family: inherit;
+}
+.tanda-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(90,70,180,0.12); }
+.tanda-card .tanda-num { font-weight: 800; font-size: 15px; color: var(--accent); margin: 0 0 4px; }
+.tanda-card .tanda-stats { font-size: 11px; color: #918fa0; }
+
+.translate-box { background: #faf9fd; border: 2px dashed #ece9f5; border-radius: 12px; padding: 14px 16px; margin: 14px 0 0; }
+.translate-box label { font-size: 13px; font-weight: 700; color: #5b3fd6; display: block; margin-bottom: 8px; }
+.translate-textarea { width: 100%; min-height: 60px; font-family: inherit; font-size: 13px; padding: 10px 12px; border-radius: 10px; border: 2px solid #ece9f5; resize: vertical; }
+.translate-textarea:focus { outline: none; border-color: #5b3fd6; }
+.translate-feedback { font-size: 13px; margin-top: 10px; padding: 10px 12px; border-radius: 10px; display: none; }
+.translate-feedback.good { background: #eefaf1; color: #1e9e5a; }
+.translate-feedback.warn { background: #fff6e5; color: #a06a00; }
+.translate-feedback b { display: block; margin-bottom: 3px; }
 </style>
 </head>
 <body>
@@ -167,8 +192,13 @@ button:disabled { opacity: .5; cursor: default; }
     <div id="class-container"></div>
   </div>
 
+  <div id="view-tandas" class="hidden">
+    <div class="top-actions"><button class="link-btn" onclick="goHome()">&larr; Volver a las actividades</button></div>
+    <div id="tanda-container"></div>
+  </div>
+
   <div id="view-explain" class="hidden">
-    <div class="top-actions"><button class="link-btn" onclick="goHome()">&larr; Volver al tema</button></div>
+    <div class="top-actions"><button class="link-btn" onclick="goToTandaList()">&larr; Volver a las tandas</button></div>
     <div class="card">
       <p class="class-title" id="explain-title" style="font-size:19px;"></p>
       <div class="explain-box" id="explain-body"></div>
@@ -178,15 +208,21 @@ button:disabled { opacity: .5; cursor: default; }
 
   <div id="view-exercise" class="hidden">
     <div class="row" style="margin-bottom:6px;">
-      <button class="link-btn" onclick="goHome()">&larr; Salir</button>
+      <button class="link-btn" onclick="goToTandaList()">&larr; Salir</button>
       <span class="subtitle" id="ex-progress"></span>
     </div>
     <div class="progress-bar-bg"><div class="progress-bar-fill" id="ex-bar" style="width:0%"></div></div>
+    <details class="tips-box" id="ex-tips" open>
+      <summary>Recordatorio</summary>
+      <p class="tips-intro" id="ex-tips-intro"></p>
+      <ul id="ex-tips-list"></ul>
+    </details>
     <div id="ex-context" class="hidden"></div>
     <div class="card">
       <p class="review-q" id="ex-question" style="font-size:17px;"></p>
       <div id="ex-options"></div>
       <p class="error-text" id="ex-error">Elegí una opción antes de continuar.</p>
+      <div id="ex-translate" class="hidden"></div>
       <div class="row">
         <button id="ex-prev-btn" onclick="prevQuestion()">Anterior</button>
         <button class="primary" id="ex-next-btn" onclick="nextQuestion()">Siguiente</button>
@@ -195,7 +231,7 @@ button:disabled { opacity: .5; cursor: default; }
   </div>
 
   <div id="view-result" class="hidden">
-    <div class="top-actions"><button class="link-btn" onclick="goHome()">&larr; Volver al tema</button></div>
+    <div class="top-actions"><button class="link-btn" onclick="goToTandaList()">&larr; Volver a las tandas</button></div>
     <div class="result-score">
       <p class="label">Resultado — <span id="result-classname"></span></p>
       <p class="big" id="result-score"></p>
@@ -203,16 +239,21 @@ button:disabled { opacity: .5; cursor: default; }
     </div>
     <div id="result-review"></div>
     <div class="row" style="margin-top:16px; justify-content:flex-end;">
-      <button class="primary" onclick="retryClass()">Repetir esta clase</button>
+      <button class="primary" onclick="retryClass()">Repetir esta tanda</button>
     </div>
   </div>
 
   <div id="view-writing" class="hidden">
-    <div class="top-actions"><button class="link-btn" onclick="goHome()">&larr; Volver al tema</button></div>
+    <div class="top-actions"><button class="link-btn" onclick="goToTandaList()">&larr; Volver a las tandas</button></div>
+    <details class="tips-box" id="write-tips" open>
+      <summary>Recordatorio</summary>
+      <p class="tips-intro" id="write-tips-intro"></p>
+      <ul id="write-tips-list"></ul>
+    </details>
     <div class="card">
       <p class="class-title" id="write-title" style="font-size:19px;"></p>
       <p style="font-size:14px; color:#55535f;" id="write-prompt"></p>
-      <p style="font-size:13px; font-weight:700; margin:14px 0 6px;">Incluí al menos 5 de estas ideas:</p>
+      <p style="font-size:13px; font-weight:700; margin:14px 0 6px;" id="write-checklist-label">Incluí estas ideas:</p>
       <div id="write-checklist"></div>
       <textarea class="write-textarea" id="write-textarea" placeholder="Escribí tu email acá..." oninput="updateWordCount()"></textarea>
       <p class="word-count" id="word-count-label">0 palabras</p>
@@ -5187,6 +5228,49 @@ const CLASSES = [
 let activeClass = null;
 let curQ = 0;
 let userAnswers = [];
+let userTranslations = [];
+
+const ES_STOPWORDS = ["el","la","los","las","un","una","unos","unas","de","del","al","en","y","a","que","se","por","con","su","sus","lo","mi","mis","tu","tus"];
+
+function normalizeEs(s) {
+  return (s || '')
+    .toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[¿?¡!.,;:"'`´()]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function translationSimilarity(userText, refText) {
+  const userWords = normalizeEs(userText).split(' ').filter(Boolean);
+  const refWords = normalizeEs(refText).split(' ').filter(w => w && ES_STOPWORDS.indexOf(w) === -1);
+  if (refWords.length === 0) return 1;
+  const userSet = new Set(userWords);
+  let matches = 0;
+  refWords.forEach(w => { if (userSet.has(w)) matches++; });
+  return matches / refWords.length;
+}
+
+function saveTranslation(i, value) { userTranslations[i] = value; }
+
+function checkTranslation(i) {
+  const q = activeClass.questions[i];
+  const box = document.getElementById('translate-feedback-' + i);
+  if (!box) return;
+  const text = document.getElementById('translate-input-' + i).value;
+  userTranslations[i] = text;
+  if (!text.trim()) { box.style.display = 'none'; return; }
+  const sim = translationSimilarity(text, q.translation);
+  box.classList.remove('good', 'warn');
+  if (sim >= 0.55) {
+    box.classList.add('good');
+    box.innerHTML = '<b>¡Muy bien! Tu traducción se entiende.</b>Comparala igual con la nuestra: “' + q.translation + '”';
+  } else {
+    box.classList.add('warn');
+    box.innerHTML = '<b>Revisá tu traducción.</b>Una posible traducción es: “' + q.translation + '”';
+  }
+  box.style.display = 'block';
+}
 
 const SUPABASE_URL = "https://wbrsewfcjhcgegjhbouv.supabase.co";
 const SUPABASE_KEY = "sb_publishable_2DQYa9lNPQ0LqBCCjHk2sg_oZ5Jwd8X";
@@ -5287,7 +5371,7 @@ async function saveName() {
 
 function showView(id) {
   if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-  ['view-categories', 'view-onboard', 'view-home', 'view-explain', 'view-exercise', 'view-result', 'view-writing'].forEach(v => {
+  ['view-categories', 'view-onboard', 'view-home', 'view-tandas', 'view-explain', 'view-exercise', 'view-result', 'view-writing'].forEach(v => {
     document.getElementById(v).classList.toggle('hidden', v !== id);
   });
 }
@@ -5295,11 +5379,17 @@ function showView(id) {
 const ACTIVITY_ICONS = { "Gramática": "📘", "Reading": "📖", "Listening": "🎧", "Writing": "✍️" };
 const ACTIVITY_ORDER = ["Gramática", "Reading", "Listening", "Writing"];
 let activeTopic = null;
+let activeActivity = null;
 
 function getTopics() {
   const topics = [];
   CLASSES.forEach(c => { if (topics.indexOf(c.topic) === -1) topics.push(c.topic); });
   return topics;
+}
+
+function getTandas(topicName, activityName) {
+  return CLASSES.filter(c => c.topic === topicName && c.activity === activityName)
+    .sort((a, b) => (a.tanda || 1) - (b.tanda || 1));
 }
 
 function renderCategories() {
@@ -5357,32 +5447,20 @@ function renderTopics() {
   grid.className = 'class-grid';
 
   ACTIVITY_ORDER.forEach(activityName => {
-    const c = CLASSES.find(cl => cl.topic === activeTopic && cl.activity === activityName);
-    const attempts = getAttempts(c.id);
+    const tandas = getTandas(activeTopic, activityName);
+    const first = tandas[0];
     const card = document.createElement('button');
     card.className = 'class-card';
-    card.style.setProperty('--accent', c.color);
-    card.style.setProperty('--accent-bg', c.bg);
-    card.onclick = () => openClass(c.id);
+    card.style.setProperty('--accent', first.color);
+    card.style.setProperty('--accent-bg', first.bg);
+    card.onclick = () => openActivity(activityName);
 
-    const isWriting = c.type === 'writing';
-    const metaText = isWriting ? '1 consigna' : c.questions.length + ' ejercicios';
-
-    let statsHtml = '<span class="class-stats">Sin intentos todavía</span>';
-    if (attempts.length > 0) {
-      const last = attempts[attempts.length - 1];
-      if (isWriting) {
-        statsHtml = '<span class="class-stats">Intentos: ' + attempts.length +
-          ' · Último: ' + last.wordCount + ' palabras · Ideas: ' + last.checked + '/' + last.total + '</span>';
-      } else {
-        const best = attempts.reduce((m, a) => a.score > m.score ? a : m, attempts[0]);
-        const pct = best.score / best.total;
-        const starCount = pct === 1 ? 3 : pct >= 0.75 ? 2 : pct >= 0.5 ? 1 : 0;
-        const stars = '★'.repeat(starCount) + '☆'.repeat(3 - starCount);
-        statsHtml = '<span class="stars">' + stars + '</span><br><span class="class-stats">Intentos: ' + attempts.length +
-          ' · Último: ' + last.score + '/' + last.total + '</span>';
-      }
-    }
+    let attempted = 0;
+    tandas.forEach(t => { if (getAttempts(t.id).length > 0) attempted++; });
+    const metaText = tandas.length + ' tanda' + (tandas.length === 1 ? '' : 's');
+    const statsHtml = attempted === 0
+      ? '<span class="class-stats">Sin intentos todavía</span>'
+      : '<span class="class-stats">' + attempted + ' de ' + tandas.length + ' tandas empezadas</span>';
 
     card.innerHTML =
       '<span class="class-badge">' + (ACTIVITY_ICONS[activityName] || '📚') + '</span>' +
@@ -5391,6 +5469,60 @@ function renderTopics() {
       '<p class="class-meta">' + metaText + '</p>' +
       statsHtml +
       '</span>';
+    grid.appendChild(card);
+  });
+
+  container.appendChild(grid);
+}
+
+function openActivity(activityName) {
+  activeActivity = activityName;
+  renderTandaList();
+  showView('view-tandas');
+}
+
+function goToTandaList() {
+  renderTandaList();
+  showView('view-tandas');
+}
+
+function renderTandaList() {
+  const container = document.getElementById('tanda-container');
+  container.innerHTML = '';
+
+  const header = document.createElement('p');
+  header.className = 'section-header';
+  header.textContent = activeTopic + ' · ' + activeActivity;
+  container.appendChild(header);
+
+  const grid = document.createElement('div');
+  grid.className = 'tanda-grid';
+
+  const tandas = getTandas(activeTopic, activeActivity);
+  tandas.forEach((c, i) => {
+    const attempts = getAttempts(c.id);
+    const card = document.createElement('button');
+    card.className = 'tanda-card';
+    card.style.setProperty('--accent', c.color);
+    card.style.setProperty('--accent-bg', c.bg);
+    card.onclick = () => openClass(c.id);
+
+    let statsHtml = '<span class="tanda-stats">Sin intentos</span>';
+    const isWriting = c.type === 'writing';
+    if (attempts.length > 0) {
+      const last = attempts[attempts.length - 1];
+      if (isWriting) {
+        statsHtml = '<span class="tanda-stats">' + last.wordCount + ' palabras · ' + last.checked + '/' + last.total + ' ideas</span>';
+      } else {
+        const best = attempts.reduce((m, a) => a.score > m.score ? a : m, attempts[0]);
+        const pct = best.score / best.total;
+        const starCount = pct === 1 ? 3 : pct >= 0.75 ? 2 : pct >= 0.5 ? 1 : 0;
+        const stars = '★'.repeat(starCount) + '☆'.repeat(3 - starCount);
+        statsHtml = '<span class="stars">' + stars + '</span><br><span class="tanda-stats">' + last.score + '/' + last.total + '</span>';
+      }
+    }
+
+    card.innerHTML = '<p class="tanda-num">Tanda ' + (i + 1) + '</p>' + statsHtml;
     grid.appendChild(card);
   });
 
@@ -5414,13 +5546,21 @@ function goHome() {
   showView('view-home');
 }
 
+function fillTipsBox(prefixId) {
+  document.getElementById(prefixId + '-tips-intro').textContent = activeClass.explanation.intro;
+  document.getElementById(prefixId + '-tips-list').innerHTML =
+    activeClass.explanation.points.map(p => '<li>' + p + '</li>').join('');
+}
+
 function startExercises() {
   if (activeClass.type === 'writing') { startWriting(); return; }
 
   curQ = 0;
   userAnswers = new Array(activeClass.questions.length).fill(null);
+  userTranslations = new Array(activeClass.questions.length).fill('');
   showView('view-exercise');
   document.getElementById('ex-bar').style.setProperty('--accent', activeClass.color);
+  fillTipsBox('ex');
   buildContext();
   renderQuestion();
 }
@@ -5489,6 +5629,25 @@ function renderQuestion() {
     optsEl.appendChild(btn);
   });
 
+  const translateEl = document.getElementById('ex-translate');
+  if (activeClass.activity === 'Gramática' && q.translation) {
+    translateEl.classList.remove('hidden');
+    const savedText = userTranslations[curQ] || '';
+    translateEl.innerHTML =
+      '<div class="translate-box">' +
+      '<label for="translate-input-' + curQ + '">✍️ Traducí la oración completa al español (con la respuesta correcta):</label>' +
+      '<textarea class="translate-textarea" id="translate-input-' + curQ + '" oninput="saveTranslation(' + curQ + ', this.value)"></textarea>' +
+      '<div class="row" style="margin-top:8px; justify-content:flex-end;">' +
+      '<button onclick="checkTranslation(' + curQ + ')">Corregir traducción</button>' +
+      '</div>' +
+      '<div class="translate-feedback" id="translate-feedback-' + curQ + '"></div>' +
+      '</div>';
+    document.getElementById('translate-input-' + curQ).value = savedText;
+  } else {
+    translateEl.classList.add('hidden');
+    translateEl.innerHTML = '';
+  }
+
   document.getElementById('ex-prev-btn').style.visibility = curQ === 0 ? 'hidden' : 'visible';
   document.getElementById('ex-next-btn').textContent = curQ === activeClass.questions.length - 1 ? 'Ver resultado' : 'Siguiente';
 }
@@ -5547,6 +5706,7 @@ function retryClass() {
 
 function startWriting() {
   showView('view-writing');
+  fillTipsBox('write');
   document.getElementById('write-title').textContent = activeClass.title;
   document.getElementById('write-title').style.color = activeClass.color;
   document.getElementById('write-prompt').textContent = activeClass.prompt;
