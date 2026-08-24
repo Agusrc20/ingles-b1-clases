@@ -130,12 +130,6 @@ button:disabled { opacity: .5; cursor: default; }
 .checklist-item input { margin-top: 3px; }
 .save-msg { font-size: 13px; color: #1e9e5a; font-weight: 600; margin: 10px 0 0; display: none; }
 
-.tips-box { background: var(--accent-bg, #f1eefe); border-radius: 14px; padding: 12px 16px; margin-bottom: 14px; font-size: 13px; }
-.tips-box summary { cursor: pointer; font-weight: 700; color: var(--accent, #5b3fd6); list-style: none; display: flex; align-items: center; gap: 6px; }
-.tips-box summary::-webkit-details-marker { display: none; }
-.tips-box summary::before { content: "\1F4A1"; }
-.tips-box ul { margin: 8px 0 0; padding-left: 20px; }
-.tips-box p.tips-intro { margin: 8px 0 0; }
 
 .tanda-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin-bottom: 6px; }
 .tanda-card {
@@ -222,11 +216,6 @@ button:disabled { opacity: .5; cursor: default; }
       <span class="subtitle" id="ex-progress"></span>
     </div>
     <div class="progress-bar-bg"><div class="progress-bar-fill" id="ex-bar" style="width:0%"></div></div>
-    <details class="tips-box" id="ex-tips" open>
-      <summary>Recordatorio</summary>
-      <p class="tips-intro" id="ex-tips-intro"></p>
-      <ul id="ex-tips-list"></ul>
-    </details>
     <div id="ex-context" class="hidden"></div>
     <div class="card">
       <p class="review-q" id="ex-question" style="font-size:17px;"></p>
@@ -255,11 +244,6 @@ button:disabled { opacity: .5; cursor: default; }
 
   <div id="view-writing" class="hidden">
     <div class="top-actions"><button class="link-btn" onclick="goToTandaList()">&larr; Volver a las tandas</button></div>
-    <details class="tips-box" id="write-tips" open>
-      <summary>Recordatorio</summary>
-      <p class="tips-intro" id="write-tips-intro"></p>
-      <ul id="write-tips-list"></ul>
-    </details>
     <div class="card">
       <p class="class-title" id="write-title" style="font-size:19px;"></p>
       <p style="font-size:14px; color:#55535f;" id="write-prompt"></p>
@@ -42580,12 +42564,6 @@ function goHome() {
   showView('view-home');
 }
 
-function fillTipsBox(prefixId) {
-  document.getElementById(prefixId + '-tips-intro').textContent = activeClass.explanation.intro;
-  document.getElementById(prefixId + '-tips-list').innerHTML =
-    activeClass.explanation.points.map(p => '<li>' + p + '</li>').join('');
-}
-
 function shuffleArray(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -42605,7 +42583,6 @@ function startExercises() {
   questionOptionOrder = activeClass.questions.map(q => shuffleArray(q.options.map((_, i) => i)));
   showView('view-exercise');
   document.getElementById('ex-bar').style.setProperty('--accent', activeClass.color);
-  fillTipsBox('ex');
   buildContext();
   renderQuestion();
 }
@@ -42824,7 +42801,6 @@ function retryClass() {
 
 function startWriting() {
   showView('view-writing');
-  fillTipsBox('write');
   document.getElementById('write-title').textContent = activeClass.title;
   document.getElementById('write-title').style.color = activeClass.color;
   document.getElementById('write-prompt').textContent = activeClass.prompt;
