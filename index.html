@@ -79,6 +79,8 @@ button:disabled { opacity: .5; cursor: default; }
 
 .opt-btn { display: block; width: 100%; text-align: left; margin-bottom: 8px; padding: 12px 16px; border-radius: 12px; border: 2px solid #ece9f5; background: #fff; font-weight: 500; }
 .opt-btn.selected { border-color: var(--accent, #5b3fd6); background: var(--accent-bg, #f1eefe); }
+.opt-btn.correct { border-color: #1e9e5a; background: #eefaf1; }
+.opt-btn.incorrect { border-color: #d64d6b; background: #fdeef1; }
 .error-text { font-size: 13px; color: #d64d6b; margin: 0 0 12px; display: none; font-weight: 600; }
 
 .review-item { border-radius: 14px; padding: 14px 16px 16px; margin-bottom: 12px; border-left: 5px solid transparent; }
@@ -223,6 +225,7 @@ button:disabled { opacity: .5; cursor: default; }
       <p class="review-q" id="ex-question" style="font-size:17px;"></p>
       <div id="ex-options"></div>
       <p class="error-text" id="ex-error">Elegí una opción antes de continuar.</p>
+      <div id="ex-feedback" class="hidden"></div>
       <div id="ex-translate" class="hidden"></div>
       <div class="row">
         <button id="ex-prev-btn" onclick="prevQuestion()">Anterior</button>
@@ -42324,6 +42327,7 @@ async function saveName() {
 }
 
 function showView(id) {
+  if (typeof audioGen !== 'undefined') audioGen++;
   if ('speechSynthesis' in window) window.speechSynthesis.cancel();
   if (typeof audioState !== 'undefined') { clearInterval(audioState.timer); audioState.playing = false; }
   ['view-categories', 'view-onboard', 'view-home', 'view-tandas', 'view-explain', 'view-exercise', 'view-result', 'view-writing', 'view-history'].forEach(v => {
@@ -42659,6 +42663,8 @@ function playAudio() { speakFrom(0); }
 
 function scriptWords() { return activeClass.script.trim().split(/\s+/); }
 
+let audioGen = 0;
+
 function speakFrom(startSec) {
   if (!('speechSynthesis' in window)) {
     toggleTranscript(true);
@@ -42668,20 +42674,24 @@ function speakFrom(startSec) {
   const startWordIdx = audioState.duration ? Math.min(words.length - 1, Math.round((startSec / audioState.duration) * words.length)) : 0;
   const remainingText = words.slice(startWordIdx).join(' ');
 
+  // Cancelling the speaker fires onend/onerror asynchronously on whatever was speaking before —
+  // bump the generation so that stale callback can't stomp on the state we're about to set here.
+  const myGen = ++audioGen;
   window.speechSynthesis.cancel();
   clearInterval(audioState.timer);
   audioState.elapsed = Math.max(0, Math.min(audioState.duration, startSec));
   updateAudioProgress();
 
-  if (!remainingText.trim()) { finishAudio(); return; }
+  if (!remainingText.trim()) { finishAudio(myGen); return; }
 
   // Small delay avoids a Chrome bug where speak() right after cancel() is dropped or queued behind the cancelled one.
   setTimeout(() => {
+    if (myGen !== audioGen) return; // superseded by a newer seek/play/pause before this fired
     const utter = new SpeechSynthesisUtterance(remainingText);
     utter.lang = 'en-US';
     utter.rate = 0.92;
-    utter.onend = finishAudio;
-    utter.onerror = finishAudio;
+    utter.onend = () => finishAudio(myGen);
+    utter.onerror = () => finishAudio(myGen);
     window.speechSynthesis.speak(utter);
     audioState.playing = true;
     updatePlayBtn();
@@ -42704,7 +42714,8 @@ function seekToClick(evt) {
   speakFrom(pct * audioState.duration);
 }
 
-function finishAudio() {
+function finishAudio(myGen) {
+  if (myGen !== undefined && myGen !== audioGen) return; // stale callback from an already-cancelled utterance
   audioState.playing = false;
   audioState.elapsed = 0;
   clearInterval(audioState.timer);
@@ -42713,6 +42724,7 @@ function finishAudio() {
 }
 
 function pauseAudio() {
+  audioGen++;
   if ('speechSynthesis' in window) window.speechSynthesis.cancel();
   clearInterval(audioState.timer);
   audioState.playing = false;
@@ -42720,6 +42732,7 @@ function pauseAudio() {
 }
 
 function stopAudio() {
+  audioGen++;
   if ('speechSynthesis' in window) window.speechSynthesis.cancel();
   clearInterval(audioState.timer);
   audioState.playing = false;
@@ -42756,18 +42769,38 @@ function renderQuestion() {
   document.getElementById('ex-question').textContent = q.text;
   document.getElementById('ex-error').style.display = 'none';
 
+  const answered = userAnswers[curQ] !== null;
   const optsEl = document.getElementById('ex-options');
   optsEl.innerHTML = '';
   const order = questionOptionOrder[curQ] || q.options.map((_, i) => i);
   order.forEach((origIdx) => {
     const btn = document.createElement('button');
-    btn.className = 'opt-btn' + (userAnswers[curQ] === origIdx ? ' selected' : '');
+    let cls = 'opt-btn';
+    if (answered) {
+      if (origIdx === q.correct) cls += ' correct';
+      else if (origIdx === userAnswers[curQ]) cls += ' incorrect';
+    } else if (userAnswers[curQ] === origIdx) {
+      cls += ' selected';
+    }
+    btn.className = cls;
     btn.style.setProperty('--accent', activeClass.color);
     btn.style.setProperty('--accent-bg', activeClass.bg);
     btn.textContent = q.options[origIdx];
     btn.onclick = () => { userAnswers[curQ] = origIdx; renderQuestion(); };
     optsEl.appendChild(btn);
   });
+
+  const feedbackEl = document.getElementById('ex-feedback');
+  if (answered) {
+    const isCorrect = userAnswers[curQ] === q.correct;
+    feedbackEl.classList.remove('hidden');
+    feedbackEl.innerHTML =
+      '<p class="review-q" style="margin:12px 0 8px;"><span class="review-icon ' + (isCorrect ? 'ok-bg' : 'bad-bg') + '">' + (isCorrect ? '&#10003;' : '&#10007;') + '</span>' + (isCorrect ? '¡Correcto!' : 'Incorrecto') + '</p>' +
+      buildAnswerFeedbackHtml(q, userAnswers[curQ]);
+  } else {
+    feedbackEl.classList.add('hidden');
+    feedbackEl.innerHTML = '';
+  }
 
   const translateEl = document.getElementById('ex-translate');
   if (activeClass.activity === 'Gramática' && q.translation) {
@@ -42790,6 +42823,21 @@ function renderQuestion() {
 
   document.getElementById('ex-prev-btn').style.visibility = curQ === 0 ? 'hidden' : 'visible';
   document.getElementById('ex-next-btn').textContent = curQ === activeClass.questions.length - 1 ? 'Ver resultado' : 'Siguiente';
+}
+
+function buildAnswerFeedbackHtml(q, chosenIdx) {
+  const isCorrect = chosenIdx === q.correct;
+  let html = '<div class="review-exp-box"><span class="review-exp-label">&#128161;</span><p class="review-exp-text">' + q.explanation + '</p></div>';
+  if (!isCorrect) {
+    const wrongSentence = q.text.replace('___', q.options[chosenIdx]);
+    const correctSentence = q.text.replace('___', q.options[q.correct]);
+    html += '<div class="answer-detail-box">' +
+      '<p>&#10060; Así queda mal, con "' + q.options[chosenIdx] + '": <i>"' + wrongSentence + '"</i></p>' +
+      '<p>&#9989; Así queda bien, con "' + q.options[q.correct] + '": <i>"' + correctSentence + '"</i></p>' +
+      (q.translation ? '<p>&#128172; En español: "' + q.translation + '"</p>' : '') +
+      '</div>';
+  }
+  return html;
 }
 
 function prevQuestion() { if (curQ > 0) { curQ--; renderQuestion(); } }
@@ -42838,18 +42886,11 @@ function showResult() {
     let html =
       '<p class="review-q"><span class="review-icon ' + (isCorrect ? 'ok-bg' : 'bad-bg') + '">' + (isCorrect ? '&#10003;' : '&#10007;') + '</span>' + (i + 1) + '. ' + q.text + '</p>' +
       '<p class="review-a">Tu respuesta: <span class="' + (isCorrect ? 'ok' : 'bad') + '">' + userText + '</span>' +
-      (isCorrect ? '' : ' · Correcta: <span class="ok">' + q.options[q.correct] + '</span>') + '</p>' +
-      '<div class="review-exp-box"><span class="review-exp-label">&#128161;</span><p class="review-exp-text">' + q.explanation + '</p></div>';
+      (isCorrect ? '' : ' · Correcta: <span class="ok">' + q.options[q.correct] + '</span>') + '</p>';
 
-    if (!isCorrect && userAnswers[i] !== null) {
-      const wrongSentence = q.text.replace('___', q.options[userAnswers[i]]);
-      const correctSentence = q.text.replace('___', q.options[q.correct]);
-      html += '<div class="answer-detail-box">' +
-        '<p>&#10060; Así queda mal, con "' + q.options[userAnswers[i]] + '": <i>"' + wrongSentence + '"</i></p>' +
-        '<p>&#9989; Así queda bien, con "' + q.options[q.correct] + '": <i>"' + correctSentence + '"</i></p>' +
-        (q.translation ? '<p>&#128172; En español: "' + q.translation + '"</p>' : '') +
-        '</div>';
-    }
+    html += userAnswers[i] === null
+      ? '<div class="review-exp-box"><span class="review-exp-label">&#128161;</span><p class="review-exp-text">' + q.explanation + '</p></div>'
+      : buildAnswerFeedbackHtml(q, userAnswers[i]);
 
     div.innerHTML = html;
     reviewEl.appendChild(div);
@@ -42929,7 +42970,8 @@ function autoCheckWriting(text) {
   // Repeated word right next to itself — usually a typo, easy to point out and fix.
   const repeatMatches = text.match(/\b(\w+)\s+\1\b/gi);
   if (repeatMatches && repeatMatches.length) {
-    feedback.push({ type: 'warn', msg: 'Repetiste una palabra sin querer: "' + repeatMatches[0] + '" — revisá esa parte.' });
+    const fixed = repeatMatches[0].replace(/^(\w+)\s+\1$/i, '$1');
+    feedback.push({ type: 'warn', msg: 'Repetiste una palabra sin querer: "' + repeatMatches[0] + '" — quedaría mejor así: "' + fixed + '".' });
   }
 
   // Sentences with no recognizable verb read as incomplete/confusing — flag them so they can be reworked.
@@ -42939,7 +42981,7 @@ function autoCheckWriting(text) {
     return !tokens.some(t => COMMON_VERB_WORDS.indexOf(t.replace(/'s$|'re$|'m$|'ll$|'d$|'ve$/, '')) !== -1 || /n't$/.test(t));
   });
   if (noVerb.length) {
-    feedback.push({ type: 'warn', msg: 'Esta parte no parece tener un verbo, revisala: "' + noVerb[0] + '"' });
+    feedback.push({ type: 'warn', msg: 'Esta parte no parece tener un verbo, así que suena incompleta: "' + noVerb[0] + '". Probá agregarle uno — por ejemplo, algo como "' + noVerb[0].replace(/[.!?]$/, '') + ' + [verbo] + ...".' });
   }
 
   return feedback;
