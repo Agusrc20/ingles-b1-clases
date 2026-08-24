@@ -151,6 +151,7 @@ button:disabled { opacity: .5; cursor: default; }
 .translate-feedback { font-size: 13px; margin-top: 10px; padding: 10px 12px; border-radius: 10px; display: none; }
 .translate-feedback.good { background: #eefaf1; color: #1e9e5a; }
 .translate-feedback.warn { background: #fff6e5; color: #a06a00; }
+.translate-feedback.mid { background: #fff0e0; color: #b25900; }
 .translate-feedback b { display: block; margin-bottom: 3px; }
 </style>
 </head>
@@ -42208,6 +42209,17 @@ function translationSimilarity(userText, refText) {
   return matches / refWords.length;
 }
 
+// These small connector/relative words are exactly what most Gramática translation exercises are testing
+// (que vs. donde vs. cuyo, etc.) — the general stopword filter above ignores them, so check them separately.
+const ES_CONNECTOR_WORDS = ["que","donde","quien","quienes","cuyo","cuya","cuyos","cuyas","cual","cuales","cuando","mientras","aunque","como","si","sino"];
+
+function connectorMismatch(userText, refText) {
+  const userConn = new Set(normalizeEs(userText).split(' ').filter(w => ES_CONNECTOR_WORDS.indexOf(w) !== -1));
+  const refConn = new Set(normalizeEs(refText).split(' ').filter(w => ES_CONNECTOR_WORDS.indexOf(w) !== -1));
+  const extra = Array.from(userConn).filter(w => !refConn.has(w));
+  return extra.length ? extra[0] : null;
+}
+
 function saveTranslation(i, value) { userTranslations[i] = value; }
 
 function checkTranslation(i) {
@@ -42218,8 +42230,12 @@ function checkTranslation(i) {
   userTranslations[i] = text;
   if (!text.trim()) { box.style.display = 'none'; return; }
   const sim = translationSimilarity(text, q.translation);
-  box.classList.remove('good', 'warn');
-  if (sim >= 0.55) {
+  const badConnector = connectorMismatch(text, q.translation);
+  box.classList.remove('good', 'warn', 'mid');
+  if (sim >= 0.55 && badConnector) {
+    box.classList.add('mid');
+    box.innerHTML = '<b>Más o menos — revisá esta palabra.</b>Usaste "' + badConnector + '", pero la traducción correcta usa otra palabra ahí: “' + q.translation + '”';
+  } else if (sim >= 0.55) {
     box.classList.add('good');
     box.innerHTML = '<b>¡Muy bien! Tu traducción se entiende.</b>Comparala igual con la nuestra: “' + q.translation + '”';
   } else {
@@ -42692,11 +42708,23 @@ function speakFrom(startSec) {
     utter.rate = 0.92;
     utter.onend = () => finishAudio(myGen);
     utter.onerror = () => finishAudio(myGen);
+    // The estimated total duration rarely matches how fast the voice actually reads. Whenever the
+    // browser reports a real word boundary, resync elapsed to that true position so the bar (and any
+    // later seek) stays grounded in reality instead of drifting off our wall-clock guess and finishing
+    // (and resetting to 0) well before — or after — it visually looks done.
+    utter.onboundary = (event) => {
+      if (myGen !== audioGen || (event.name && event.name !== 'word') || !audioState.duration) return;
+      const spokenSoFar = remainingText.slice(0, event.charIndex).trim();
+      const wordsSpoken = spokenSoFar ? spokenSoFar.split(/\s+/).length : 0;
+      const absoluteWordIdx = startWordIdx + wordsSpoken;
+      audioState.elapsed = Math.min(audioState.duration, (absoluteWordIdx / words.length) * audioState.duration);
+      updateAudioProgress();
+    };
     window.speechSynthesis.speak(utter);
     audioState.playing = true;
     updatePlayBtn();
     audioState.timer = setInterval(() => {
-      audioState.elapsed++;
+      audioState.elapsed = Math.min(audioState.duration, audioState.elapsed + 1);
       updateAudioProgress();
       if (audioState.elapsed >= audioState.duration) clearInterval(audioState.timer);
     }, 1000);
@@ -42828,15 +42856,15 @@ function renderQuestion() {
 function buildAnswerFeedbackHtml(q, chosenIdx) {
   const isCorrect = chosenIdx === q.correct;
   let html = '<div class="review-exp-box"><span class="review-exp-label">&#128161;</span><p class="review-exp-text">' + q.explanation + '</p></div>';
+  const correctSentence = q.text.replace('___', q.options[q.correct]);
+  html += '<div class="answer-detail-box">';
   if (!isCorrect) {
     const wrongSentence = q.text.replace('___', q.options[chosenIdx]);
-    const correctSentence = q.text.replace('___', q.options[q.correct]);
-    html += '<div class="answer-detail-box">' +
-      '<p>&#10060; Así queda mal, con "' + q.options[chosenIdx] + '": <i>"' + wrongSentence + '"</i></p>' +
-      '<p>&#9989; Así queda bien, con "' + q.options[q.correct] + '": <i>"' + correctSentence + '"</i></p>' +
-      (q.translation ? '<p>&#128172; En español: "' + q.translation + '"</p>' : '') +
-      '</div>';
+    html += '<p>&#10060; Así queda mal, con "' + q.options[chosenIdx] + '": <i>"' + wrongSentence + '"</i></p>';
   }
+  html += '<p>&#9989; Así queda bien, con "' + q.options[q.correct] + '": <i>"' + correctSentence + '"</i></p>' +
+    (q.translation ? '<p>&#128172; En español: "' + q.translation + '"</p>' : '') +
+    '</div>';
   return html;
 }
 
