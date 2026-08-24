@@ -112,11 +112,13 @@ button:disabled { opacity: .5; cursor: default; }
 .passage-box p { margin: 0 0 10px; }
 .audio-box { background: var(--accent-bg, #f1eefe); border-radius: 14px; padding: 16px 18px; margin-bottom: 16px; }
 .audio-box .row { margin-bottom: 6px; }
-.voice-note { display: flex; align-items: center; gap: 12px; background: #fff; border-radius: 999px; padding: 8px 16px 8px 8px; }
+.voice-note { display: flex; align-items: center; gap: 10px; background: #fff; border-radius: 999px; padding: 8px 16px 8px 10px; }
 .voice-note .play-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--accent, #5b3fd6); color: #fff; font-size: 14px; flex-shrink: 0; padding: 0; display: flex; align-items: center; justify-content: center; }
 .voice-note .play-btn:hover { background: var(--accent, #5b3fd6); opacity: .9; }
-.voice-note .vn-track { flex: 1; height: 4px; background: #ece9f5; border-radius: 4px; position: relative; overflow: hidden; }
-.voice-note .vn-track-fill { position: absolute; left: 0; top: 0; height: 100%; background: var(--accent, #5b3fd6); width: 0%; }
+.voice-note .seek-btn { width: 28px; height: 28px; border-radius: 50%; background: #efeef8; color: #5b3fd6; font-size: 9px; flex-shrink: 0; padding: 0; display: flex; align-items: center; justify-content: center; }
+.voice-note .vn-track { flex: 1; position: relative; height: 16px; cursor: pointer; }
+.voice-note .vn-track::before { content: ''; position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); height: 4px; background: #ece9f5; border-radius: 4px; }
+.voice-note .vn-track-fill { position: absolute; left: 0; top: 50%; transform: translateY(-50%); height: 4px; background: var(--accent, #5b3fd6); width: 0%; border-radius: 4px; pointer-events: none; }
 .voice-note .vn-time { font-size: 11px; color: #918fa0; flex-shrink: 0; min-width: 32px; text-align: right; }
 
 .answer-detail-box { background: rgba(255,255,255,0.75); border: 1.5px dashed #c9c5db; border-radius: 10px; padding: 10px 12px; margin-top: 10px; font-size: 13px; color: #4a4854; }
@@ -266,6 +268,11 @@ button:disabled { opacity: .5; cursor: default; }
     <div class="result-score">
       <p class="label">Respuestas de <span id="history-name"></span> — <span id="history-classname"></span></p>
       <p class="msg" id="history-summary"></p>
+    </div>
+    <div class="row history-nav" id="history-nav" style="margin-bottom:14px;">
+      <button id="history-prev-btn" onclick="showHistoryAttempt(historyAttemptIndex - 1)">&larr; Intento anterior</button>
+      <span class="subtitle" id="history-attempt-label"></span>
+      <button id="history-next-btn" onclick="showHistoryAttempt(historyAttemptIndex + 1)">Intento siguiente &rarr;</button>
     </div>
     <div id="history-review"></div>
   </div>
@@ -42198,7 +42205,7 @@ function translationSimilarity(userText, refText) {
   return matches / refWords.length;
 }
 
-function saveTranslation(i, value) { userTranslations[i] = value; updateLastAttemptTranslation(activeClass.id, i, value); }
+function saveTranslation(i, value) { userTranslations[i] = value; }
 
 function checkTranslation(i) {
   const q = activeClass.questions[i];
@@ -42206,7 +42213,6 @@ function checkTranslation(i) {
   if (!box) return;
   const text = document.getElementById('translate-input-' + i).value;
   userTranslations[i] = text;
-  updateLastAttemptTranslation(activeClass.id, i, text);
   if (!text.trim()) { box.style.display = 'none'; return; }
   const sim = translationSimilarity(text, q.translation);
   box.classList.remove('good', 'warn');
@@ -42292,15 +42298,6 @@ function saveAttemptObj(classId, obj) {
 }
 function saveAttempt(classId, score, total, details) {
   saveAttemptObj(classId, { score: score, total: total, details: details || [] });
-}
-function updateLastAttemptTranslation(classId, questionIndex, text) {
-  const attempts = getAttempts(classId);
-  if (!attempts.length) return;
-  const last = attempts[attempts.length - 1];
-  if (!last.details || !last.details[questionIndex]) return;
-  last.details[questionIndex].translation = text;
-  localStorage.setItem(storageKey(classId), JSON.stringify(attempts));
-  pushToCloud();
 }
 
 function getName() { return getCurrentName(); }
@@ -42501,38 +42498,67 @@ function renderTandaList() {
   container.appendChild(grid);
 }
 
+let historyAttempts = [];
+let historyAttemptIndex = 0;
+
 function showHistory(classId) {
   activeClass = CLASSES.find(c => c.id === classId);
-  const attempts = getAttempts(classId);
+  historyAttempts = getAttempts(classId);
   document.getElementById('history-name').textContent = getName();
   document.getElementById('history-classname').textContent = activeClass.title;
-  const reviewEl = document.getElementById('history-review');
-  reviewEl.innerHTML = '';
 
-  if (!attempts.length) {
+  if (!historyAttempts.length) {
     document.getElementById('history-summary').textContent = 'Todavía no hay intentos guardados.';
+    document.getElementById('history-nav').classList.add('hidden');
+    document.getElementById('history-review').innerHTML = '';
     showView('view-history');
     return;
   }
 
-  const last = attempts[attempts.length - 1];
+  document.getElementById('history-nav').classList.remove('hidden');
+  showHistoryAttempt(historyAttempts.length - 1);
+  showView('view-history');
+}
+
+function showHistoryAttempt(index) {
+  if (index < 0 || index >= historyAttempts.length) return;
+  historyAttemptIndex = index;
+  const attempt = historyAttempts[index];
+  const reviewEl = document.getElementById('history-review');
+  reviewEl.innerHTML = '';
+
+  document.getElementById('history-attempt-label').textContent =
+    'Intento ' + (index + 1) + ' de ' + historyAttempts.length + ' — ' + new Date(attempt.date).toLocaleString('es-AR');
+  document.getElementById('history-prev-btn').style.visibility = index === 0 ? 'hidden' : 'visible';
+  document.getElementById('history-next-btn').style.visibility = index === historyAttempts.length - 1 ? 'hidden' : 'visible';
+
   if (activeClass.type === 'writing') {
     document.getElementById('history-summary').textContent =
-      'Último intento (' + new Date(last.date).toLocaleString('es-AR') + '): ' + last.wordCount + ' palabras, ' + last.checked + '/' + last.total + ' ideas marcadas.';
+      attempt.wordCount + ' palabras, ' + attempt.checked + '/' + attempt.total + ' ideas marcadas.';
     const div = document.createElement('div');
     div.className = 'review-item correct';
-    let html = '<p class="review-q">' + activeClass.prompt + '</p>' +
-      '<div class="answer-detail-box"><p style="white-space:pre-wrap;">' + (last.text || '(no se guardó el texto de este intento)') + '</p></div>';
-    if (last.autoFeedback && last.autoFeedback.length) {
-      html += '<div class="answer-detail-box"><p style="font-weight:700; color:#5b3fd6;">Corrección automática:</p>' +
-        last.autoFeedback.map(f => '<p>' + (f.type === 'ok' ? '&#9989; ' : '&#9888;&#65039; ') + f.msg + '</p>').join('') + '</div>';
+    let html = '<p class="review-q">' + activeClass.prompt + '</p>';
+    if (attempt.text) {
+      html += '<div class="answer-detail-box"><p style="white-space:pre-wrap;">' + attempt.text + '</p></div>';
+      if (attempt.autoFeedback && attempt.autoFeedback.length) {
+        html += '<div class="answer-detail-box"><p style="font-weight:700; color:#5b3fd6;">Corrección automática:</p>' +
+          attempt.autoFeedback.map(f => '<p>' + (f.type === 'ok' ? '&#9989; ' : '&#9888;&#65039; ') + f.msg + '</p>').join('') + '</div>';
+      }
+    } else {
+      html += '<div class="answer-detail-box"><p>Este intento es de antes de que empezáramos a guardar el texto — solo tenemos las palabras y las ideas marcadas.</p></div>';
     }
     div.innerHTML = html;
     reviewEl.appendChild(div);
   } else {
-    document.getElementById('history-summary').textContent =
-      'Último intento (' + new Date(last.date).toLocaleString('es-AR') + '): ' + last.score + '/' + last.total + '. Intentos totales: ' + attempts.length + '.';
-    (last.details || []).forEach((d, i) => {
+    document.getElementById('history-summary').textContent = attempt.score + '/' + attempt.total + '.';
+    if (!attempt.details || !attempt.details.length) {
+      const div = document.createElement('div');
+      div.className = 'review-item';
+      div.innerHTML = '<div class="answer-detail-box"><p>Este intento es de antes de que empezáramos a guardar el detalle de las respuestas — solo tenemos el puntaje final.</p></div>';
+      reviewEl.appendChild(div);
+      return;
+    }
+    attempt.details.forEach((d, i) => {
       const div = document.createElement('div');
       div.className = 'review-item ' + (d.isCorrect ? 'correct' : 'incorrect');
       let html = '<p class="review-q"><span class="review-icon ' + (d.isCorrect ? 'ok-bg' : 'bad-bg') + '">' + (d.isCorrect ? '&#10003;' : '&#10007;') + '</span>' + (i + 1) + '. ' + d.question + '</p>' +
@@ -42543,8 +42569,6 @@ function showHistory(classId) {
       reviewEl.appendChild(div);
     });
   }
-
-  showView('view-history');
 }
 
 function openClass(classId) {
@@ -42602,8 +42626,10 @@ function buildContext() {
     ctx.innerHTML =
       '<div class="audio-box">' +
       '<div class="voice-note">' +
+      '<button class="seek-btn" onclick="seekAudio(-10)" title="Retroceder 10 segundos">&#9664;&#9664;</button>' +
       '<button class="play-btn" id="vn-play-btn" onclick="toggleAudio()">&#9658;</button>' +
-      '<div class="vn-track"><div class="vn-track-fill" id="vn-track-fill"></div></div>' +
+      '<button class="seek-btn" onclick="seekAudio(10)" title="Avanzar 10 segundos">&#9654;&#9654;</button>' +
+      '<div class="vn-track" id="vn-track" onclick="seekToClick(event)"><div class="vn-track-fill" id="vn-track-fill"></div></div>' +
       '<span class="vn-time" id="vn-time">' + formatTime(audioState.duration) + '</span>' +
       '</div>' +
       '<button class="link-btn" onclick="toggleTranscript()" style="margin-top:8px;">Mostrar texto</button>' +
@@ -42626,20 +42652,32 @@ function formatTime(sec) {
 }
 
 function toggleAudio() {
-  if (audioState.playing) stopAudio(); else playAudio();
+  if (audioState.playing) pauseAudio(); else speakFrom(audioState.elapsed);
 }
 
-function playAudio() {
+function playAudio() { speakFrom(0); }
+
+function scriptWords() { return activeClass.script.trim().split(/\s+/); }
+
+function speakFrom(startSec) {
   if (!('speechSynthesis' in window)) {
     toggleTranscript(true);
     return;
   }
+  const words = scriptWords();
+  const startWordIdx = audioState.duration ? Math.min(words.length - 1, Math.round((startSec / audioState.duration) * words.length)) : 0;
+  const remainingText = words.slice(startWordIdx).join(' ');
+
   window.speechSynthesis.cancel();
   clearInterval(audioState.timer);
-  audioState.elapsed = 0;
+  audioState.elapsed = Math.max(0, Math.min(audioState.duration, startSec));
+  updateAudioProgress();
+
+  if (!remainingText.trim()) { finishAudio(); return; }
+
   // Small delay avoids a Chrome bug where speak() right after cancel() is dropped or queued behind the cancelled one.
   setTimeout(() => {
-    const utter = new SpeechSynthesisUtterance(activeClass.script);
+    const utter = new SpeechSynthesisUtterance(remainingText);
     utter.lang = 'en-US';
     utter.rate = 0.92;
     utter.onend = finishAudio;
@@ -42655,17 +42693,39 @@ function playAudio() {
   }, 60);
 }
 
+function seekAudio(deltaSec) {
+  speakFrom(audioState.elapsed + deltaSec);
+}
+
+function seekToClick(evt) {
+  const track = document.getElementById('vn-track');
+  const rect = track.getBoundingClientRect();
+  const pct = Math.max(0, Math.min(1, (evt.clientX - rect.left) / rect.width));
+  speakFrom(pct * audioState.duration);
+}
+
 function finishAudio() {
   audioState.playing = false;
-  clearInterval(audioState.timer);
   audioState.elapsed = 0;
+  clearInterval(audioState.timer);
   updatePlayBtn();
   updateAudioProgress();
 }
 
+function pauseAudio() {
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+  clearInterval(audioState.timer);
+  audioState.playing = false;
+  updatePlayBtn();
+}
+
 function stopAudio() {
   if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-  finishAudio();
+  clearInterval(audioState.timer);
+  audioState.playing = false;
+  audioState.elapsed = 0;
+  updatePlayBtn();
+  updateAudioProgress();
 }
 
 function updatePlayBtn() {
@@ -42709,8 +42769,24 @@ function renderQuestion() {
     optsEl.appendChild(btn);
   });
 
-  document.getElementById('ex-translate').classList.add('hidden');
-  document.getElementById('ex-translate').innerHTML = '';
+  const translateEl = document.getElementById('ex-translate');
+  if (activeClass.activity === 'Gramática' && q.translation) {
+    translateEl.classList.remove('hidden');
+    const savedText = userTranslations[curQ] || '';
+    translateEl.innerHTML =
+      '<div class="translate-box">' +
+      '<label for="translate-input-' + curQ + '">✍️ Traducí la oración completa al español:</label>' +
+      '<textarea class="translate-textarea" id="translate-input-' + curQ + '" oninput="saveTranslation(' + curQ + ', this.value)"></textarea>' +
+      '<div class="row" style="margin-top:8px; justify-content:flex-end;">' +
+      '<button onclick="checkTranslation(' + curQ + ')">Corregir traducción</button>' +
+      '</div>' +
+      '<div class="translate-feedback" id="translate-feedback-' + curQ + '"></div>' +
+      '</div>';
+    document.getElementById('translate-input-' + curQ).value = savedText;
+  } else {
+    translateEl.classList.add('hidden');
+    translateEl.innerHTML = '';
+  }
 
   document.getElementById('ex-prev-btn').style.visibility = curQ === 0 ? 'hidden' : 'visible';
   document.getElementById('ex-next-btn').textContent = curQ === activeClass.questions.length - 1 ? 'Ver resultado' : 'Siguiente';
@@ -42775,18 +42851,6 @@ function showResult() {
         '</div>';
     }
 
-    if (activeClass.activity === 'Gramática' && q.translation) {
-      const savedText = userTranslations[i] || '';
-      html += '<div class="translate-box">' +
-        '<label for="translate-input-' + i + '">✍️ Ahora traducí vos la oración completa al español:</label>' +
-        '<textarea class="translate-textarea" id="translate-input-' + i + '" oninput="saveTranslation(' + i + ', this.value)">' + savedText + '</textarea>' +
-        '<div class="row" style="margin-top:8px; justify-content:flex-end;">' +
-        '<button onclick="checkTranslation(' + i + ')">Corregir traducción</button>' +
-        '</div>' +
-        '<div class="translate-feedback" id="translate-feedback-' + i + '"></div>' +
-        '</div>';
-    }
-
     div.innerHTML = html;
     reviewEl.appendChild(div);
   });
@@ -42827,7 +42891,21 @@ function updateWordCount() {
   document.getElementById('word-count-label').textContent = words + ' palabras (objetivo: ~100)';
 }
 
-const COMMON_SPANISH_WORDS = ['que','de','la','el','en','y','a','los','se','del','las','un','por','con','no','una','su','para','es','al','lo','como','más','pero','sus','le','ya','o','porque','muy','sin','sobre','también','me','hasta','donde','quien','desde','todo','nos','durante','uno','les','ni','contra','otros','ese','eso','ante','ellos','esto','antes','algunos','qué','unos','yo','otro','otras','otra','él','tanto','esa','estos','mucho','quienes','nada','muchos','cual','poco','ella','estar','estas','algunas','algo','nosotros','porque','está','están'];
+const COMMON_SPANISH_WORDS = ['que','de','la','el','en','y','a','los','se','del','las','un','por','con','no','una','su','para','es','al','lo','como','más','pero','sus','le','ya','o','porque','muy','sin','sobre','también','me','hasta','donde','quien','desde','todo','nos','durante','uno','les','ni','contra','otros','ese','eso','ante','ellos','esto','antes','algunos','qué','unos','yo','otro','otras','otra','él','tanto','esa','estos','mucho','quienes','nada','muchos','cual','poco','ella','estar','estas','algunas','algo','nosotros','está','están'];
+
+// English contractions written without the apostrophe (dont, im, youre...) — treated as fine, not flagged as Spanish or as a fragment.
+const APOSTROPHE_LESS_OK = ['dont','im','youre','were','theyre','hes','shes','its','thats','whats','lets','cant','wont','didnt','isnt','arent','wasnt','werent','hasnt','havent','couldnt','wouldnt','shouldnt','ive','youve','weve','theyve','ill','youll','hell','shell','well','theyll','id','youd','hed','shed','wed','theyd'];
+
+// A rough "does this sentence have a verb" check — tolerant like the translation-matching, not a strict grammar rule.
+const COMMON_VERB_WORDS = ['am','is','are','was','were','be','been','being','have','has','had','do','does','did','can','could','will','would','shall','should','must','may','might','go','goes','went','gone','going','make','makes','made','making','get','gets','got','getting','love','loves','loved','loving','like','likes','liked','liking','think','thinks','thought','thinking','feel','feels','felt','feeling','say','says','said','saying','see','sees','saw','seen','seeing','know','knows','knew','known','knowing','want','wants','wanted','wanting','need','needs','needed','live','lives','lived','living','work','works','worked','working','play','plays','played','playing','help','helps','helped','helping','tell','tells','told','telling','ask','asks','asked','asking','call','calls','called','calling','try','tries','tried','trying','use','uses','used','using','find','finds','found','finding','give','gives','gave','given','giving','take','takes','took','taken','taking','come','comes','came','coming','look','looks','looked','looking','become','becomes','became','leave','leaves','left','leaving','put','puts','putting','mean','means','meant','meaning','keep','keeps','kept','keeping','let','lets','letting','begin','begins','began','begun','beginning','seem','seems','seemed','show','shows','showed','shown','showing','write','writes','wrote','written','writing','read','reads','reading','run','runs','ran','running','move','moves','moved','moving','turn','turns','turned','turning','start','starts','started','starting','hear','hears','heard','hearing','bring','brings','brought','bringing','happen','happens','happened','happening','remember','remembers','remembered','understand','understands','understood','decide','decides','decided','deciding','arrived','arrive','arrives','arriving','met','meet','meets','meeting','told','walked','walk','walks','walking','talked','talk','talks','talking','asked','answered','answer','answers','answering','stayed','stay','stays','staying','looked'];
+
+function normalizeApostrophes(text) {
+  // Don't penalize a contraction just because the apostrophe was left out.
+  return text.split(/\b/).map(tok => {
+    const lower = tok.toLowerCase();
+    return APOSTROPHE_LESS_OK.indexOf(lower) !== -1 ? '' : tok;
+  }).join(' ');
+}
 
 function autoCheckWriting(text) {
   const words = text.trim().split(/\s+/).filter(Boolean);
@@ -42838,21 +42916,31 @@ function autoCheckWriting(text) {
   else if (wordCount > 140) feedback.push({ type: 'warn', msg: 'Te pasaste bastante: escribiste ' + wordCount + ' palabras, el objetivo es ~100.' });
   else feedback.push({ type: 'ok', msg: 'La extensión está bien: ' + wordCount + ' palabras (objetivo ~100).' });
 
-  const lowerTokens = text.toLowerCase().replace(/[.,!?;:"'()]/g, ' ').split(/\s+/).filter(Boolean);
+  const cleanedForSpanishCheck = normalizeApostrophes(text);
+  const lowerTokens = cleanedForSpanishCheck.toLowerCase().replace(/[.,!?;:"'()]/g, ' ').split(/\s+/).filter(Boolean);
   const spanishHits = lowerTokens.filter(w => COMMON_SPANISH_WORDS.indexOf(w) !== -1);
   const spanishRatio = lowerTokens.length ? spanishHits.length / lowerTokens.length : 0;
   if (spanishRatio > 0.08) {
     feedback.push({ type: 'warn', msg: 'Encontramos palabras en español (' + Array.from(new Set(spanishHits)).slice(0, 5).join(', ') + '). Recordá escribir todo en inglés.' });
   }
 
-  const sentences = text.split(/(?<=[.!?])\s+/).map(s => s.trim()).filter(Boolean);
-  const badCap = sentences.filter(s => /^[a-z]/.test(s));
-  if (badCap.length > 0) feedback.push({ type: 'warn', msg: badCap.length + ' oración(es) no empiezan con mayúscula.' });
+  const sentences = text.split(/(?<=[.!?])\s+|\n+/).map(s => s.trim()).filter(Boolean);
 
-  const noPunct = sentences.filter(s => !/[.!?]$/.test(s));
-  if (noPunct.length > 1) feedback.push({ type: 'warn', msg: 'Revisá la puntuación: algunas oraciones no terminan con punto, signo de pregunta o exclamación.' });
+  // Repeated word right next to itself — usually a typo, easy to point out and fix.
+  const repeatMatches = text.match(/\b(\w+)\s+\1\b/gi);
+  if (repeatMatches && repeatMatches.length) {
+    feedback.push({ type: 'warn', msg: 'Repetiste una palabra sin querer: "' + repeatMatches[0] + '" — revisá esa parte.' });
+  }
 
-  if (!/\b(I|you|he|she|it|we|they)\b/i.test(text)) feedback.push({ type: 'warn', msg: 'No encontramos un sujeto claro (I, you, he, she...) en el texto — revisá que tus oraciones tengan sujeto.' });
+  // Sentences with no recognizable verb read as incomplete/confusing — flag them so they can be reworked.
+  const noVerb = sentences.filter(s => {
+    const tokens = s.toLowerCase().replace(/[.,!?;:"()]/g, ' ').split(/\s+/).filter(Boolean);
+    if (tokens.length < 3) return false;
+    return !tokens.some(t => COMMON_VERB_WORDS.indexOf(t.replace(/'s$|'re$|'m$|'ll$|'d$|'ve$/, '')) !== -1 || /n't$/.test(t));
+  });
+  if (noVerb.length) {
+    feedback.push({ type: 'warn', msg: 'Esta parte no parece tener un verbo, revisala: "' + noVerb[0] + '"' });
+  }
 
   return feedback;
 }
