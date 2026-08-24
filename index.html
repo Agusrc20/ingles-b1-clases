@@ -112,6 +112,16 @@ button:disabled { opacity: .5; cursor: default; }
 .passage-box p { margin: 0 0 10px; }
 .audio-box { background: var(--accent-bg, #f1eefe); border-radius: 14px; padding: 16px 18px; margin-bottom: 16px; }
 .audio-box .row { margin-bottom: 6px; }
+.voice-note { display: flex; align-items: center; gap: 12px; background: #fff; border-radius: 999px; padding: 8px 16px 8px 8px; }
+.voice-note .play-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--accent, #5b3fd6); color: #fff; font-size: 14px; flex-shrink: 0; padding: 0; display: flex; align-items: center; justify-content: center; }
+.voice-note .play-btn:hover { background: var(--accent, #5b3fd6); opacity: .9; }
+.voice-note .vn-track { flex: 1; height: 4px; background: #ece9f5; border-radius: 4px; position: relative; overflow: hidden; }
+.voice-note .vn-track-fill { position: absolute; left: 0; top: 0; height: 100%; background: var(--accent, #5b3fd6); width: 0%; }
+.voice-note .vn-time { font-size: 11px; color: #918fa0; flex-shrink: 0; min-width: 32px; text-align: right; }
+
+.answer-detail-box { background: rgba(255,255,255,0.75); border: 1.5px dashed #c9c5db; border-radius: 10px; padding: 10px 12px; margin-top: 10px; font-size: 13px; color: #4a4854; }
+.answer-detail-box p { margin: 0 0 6px; }
+.answer-detail-box p:last-child { margin-bottom: 0; }
 
 .write-textarea { width: 100%; min-height: 160px; font-family: inherit; font-size: 14px; padding: 14px 16px; border-radius: 12px; border: 2px solid #ece9f5; resize: vertical; }
 .write-textarea:focus { outline: none; border-color: #5b3fd6; }
@@ -263,7 +273,17 @@ button:disabled { opacity: .5; cursor: default; }
         <button class="primary" onclick="saveWritingAttempt()">Guardar intento</button>
       </div>
       <p class="save-msg" id="write-save-msg"></p>
+      <div id="write-auto-feedback"></div>
     </div>
+  </div>
+
+  <div id="view-history" class="hidden">
+    <div class="top-actions"><button class="link-btn" onclick="goToTandaList()">&larr; Volver a las tandas</button></div>
+    <div class="result-score">
+      <p class="label">Respuestas de <span id="history-name"></span> — <span id="history-classname"></span></p>
+      <p class="msg" id="history-summary"></p>
+    </div>
+    <div id="history-review"></div>
   </div>
 </div>
 
@@ -9520,7 +9540,7 @@ const CLASSES = [
         "translation": "Emiliano y Simón dijeron que el trofeo era de ellos, no del otro equipo."
       },
       {
-        "text": "___ is knocking on the door so late at night?",
+        "text": "___ knocking on the door so late at night?",
         "options": [
           "Whose",
           "Who's",
@@ -9608,7 +9628,7 @@ const CLASSES = [
         "translation": "Los mellizos le mostraron a todos su nuevo cuarto."
       },
       {
-        "text": "Whose backpack is this? It's too heavy to be a child's.",
+        "text": "___ backpack is this? It's too heavy to be a child's.",
         "options": [
           "Whose",
           "Who's",
@@ -9782,7 +9802,7 @@ const CLASSES = [
         "translation": "Los alumnos organizaron su propia fiesta de fin de año."
       },
       {
-        "text": "Whose umbrella is dripping water all over the floor?",
+        "text": "___ umbrella is dripping water all over the floor?",
         "options": [
           "Whose",
           "Who's",
@@ -9890,7 +9910,7 @@ const CLASSES = [
         "translation": "Emiliano y Catalina paseaban a su perro por la manzana todas las tardes."
       },
       {
-        "text": "___ is complaining so loudly in the hallway?",
+        "text": "___ complaining so loudly in the hallway?",
         "options": [
           "Whose",
           "Who's",
@@ -9967,7 +9987,7 @@ const CLASSES = [
         "translation": "Los jugadores festejaron su victoria con una gran cena."
       },
       {
-        "text": "Whose backpack has a broken zipper like that one?",
+        "text": "___ backpack has a broken zipper like that one?",
         "options": [
           "Whose",
           "Who's",
@@ -10152,7 +10172,7 @@ const CLASSES = [
         "translation": "Los vecinos pintaron su reja de un azul brillante."
       },
       {
-        "text": "Whose notebook is full of drawings like this one?",
+        "text": "___ notebook is full of drawings like this one?",
         "options": [
           "Whose",
           "Who's",
@@ -10337,7 +10357,7 @@ const CLASSES = [
         "translation": "Los scouts armaron sus carpas cerca del río."
       },
       {
-        "text": "Whose sweater is hanging on the back of that chair?",
+        "text": "___ sweater is hanging on the back of that chair?",
         "options": [
           "Whose",
           "Who's",
@@ -10522,7 +10542,7 @@ const CLASSES = [
         "translation": "Los bailarines ensayaron sus pasos hasta la medianoche."
       },
       {
-        "text": "Whose glasses are these lying on the couch?",
+        "text": "___ glasses are these lying on the couch?",
         "options": [
           "Whose",
           "Who's",
@@ -10707,7 +10727,7 @@ const CLASSES = [
         "translation": "Los voluntarios usaron sus remeras iguales en el evento."
       },
       {
-        "text": "Whose drawing won first prize in the art contest?",
+        "text": "___ drawing won first prize in the art contest?",
         "options": [
           "Whose",
           "Who's",
@@ -42194,7 +42214,7 @@ function translationSimilarity(userText, refText) {
   return matches / refWords.length;
 }
 
-function saveTranslation(i, value) { userTranslations[i] = value; }
+function saveTranslation(i, value) { userTranslations[i] = value; updateLastAttemptTranslation(activeClass.id, i, value); }
 
 function checkTranslation(i) {
   const q = activeClass.questions[i];
@@ -42202,6 +42222,7 @@ function checkTranslation(i) {
   if (!box) return;
   const text = document.getElementById('translate-input-' + i).value;
   userTranslations[i] = text;
+  updateLastAttemptTranslation(activeClass.id, i, text);
   if (!text.trim()) { box.style.display = 'none'; return; }
   const sim = translationSimilarity(text, q.translation);
   box.classList.remove('good', 'warn');
@@ -42285,8 +42306,17 @@ function saveAttemptObj(classId, obj) {
   localStorage.setItem(storageKey(classId), JSON.stringify(attempts));
   pushToCloud();
 }
-function saveAttempt(classId, score, total) {
-  saveAttemptObj(classId, { score: score, total: total });
+function saveAttempt(classId, score, total, details) {
+  saveAttemptObj(classId, { score: score, total: total, details: details || [] });
+}
+function updateLastAttemptTranslation(classId, questionIndex, text) {
+  const attempts = getAttempts(classId);
+  if (!attempts.length) return;
+  const last = attempts[attempts.length - 1];
+  if (!last.details || !last.details[questionIndex]) return;
+  last.details[questionIndex].translation = text;
+  localStorage.setItem(storageKey(classId), JSON.stringify(attempts));
+  pushToCloud();
 }
 
 function getName() { return getCurrentName(); }
@@ -42314,7 +42344,8 @@ async function saveName() {
 
 function showView(id) {
   if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-  ['view-categories', 'view-onboard', 'view-home', 'view-tandas', 'view-explain', 'view-exercise', 'view-result', 'view-writing'].forEach(v => {
+  if (typeof audioState !== 'undefined') { clearInterval(audioState.timer); audioState.playing = false; }
+  ['view-categories', 'view-onboard', 'view-home', 'view-tandas', 'view-explain', 'view-exercise', 'view-result', 'view-writing', 'view-history'].forEach(v => {
     document.getElementById(v).classList.toggle('hidden', v !== id);
   });
 }
@@ -42444,8 +42475,11 @@ function renderTandaList() {
   const tandas = getTandas(activeTopic, activeActivity);
   tandas.forEach((c, i) => {
     const attempts = getAttempts(c.id);
+    const wrapper = document.createElement('div');
+
     const card = document.createElement('button');
     card.className = 'tanda-card';
+    card.style.width = '100%';
     card.style.setProperty('--accent', c.color);
     card.style.setProperty('--accent-bg', c.bg);
     card.onclick = () => openClass(c.id);
@@ -42466,10 +42500,67 @@ function renderTandaList() {
     }
 
     card.innerHTML = '<p class="tanda-num">Tanda ' + (i + 1) + '</p>' + statsHtml;
-    grid.appendChild(card);
+    wrapper.appendChild(card);
+
+    if (attempts.length > 0) {
+      const reviewBtn = document.createElement('button');
+      reviewBtn.className = 'link-btn';
+      reviewBtn.style.cssText = 'display:block; width:100%; text-align:center; margin-top:4px; font-size:11px;';
+      reviewBtn.textContent = '👀 Ver respuestas';
+      reviewBtn.onclick = (e) => { e.stopPropagation(); showHistory(c.id); };
+      wrapper.appendChild(reviewBtn);
+    }
+
+    grid.appendChild(wrapper);
   });
 
   container.appendChild(grid);
+}
+
+function showHistory(classId) {
+  activeClass = CLASSES.find(c => c.id === classId);
+  const attempts = getAttempts(classId);
+  document.getElementById('history-name').textContent = getName();
+  document.getElementById('history-classname').textContent = activeClass.title;
+  const reviewEl = document.getElementById('history-review');
+  reviewEl.innerHTML = '';
+
+  if (!attempts.length) {
+    document.getElementById('history-summary').textContent = 'Todavía no hay intentos guardados.';
+    showView('view-history');
+    return;
+  }
+
+  const last = attempts[attempts.length - 1];
+  if (activeClass.type === 'writing') {
+    document.getElementById('history-summary').textContent =
+      'Último intento (' + new Date(last.date).toLocaleString('es-AR') + '): ' + last.wordCount + ' palabras, ' + last.checked + '/' + last.total + ' ideas marcadas.';
+    const div = document.createElement('div');
+    div.className = 'review-item correct';
+    let html = '<p class="review-q">' + activeClass.prompt + '</p>' +
+      '<div class="answer-detail-box"><p style="white-space:pre-wrap;">' + (last.text || '(no se guardó el texto de este intento)') + '</p></div>';
+    if (last.autoFeedback && last.autoFeedback.length) {
+      html += '<div class="answer-detail-box"><p style="font-weight:700; color:#5b3fd6;">Corrección automática:</p>' +
+        last.autoFeedback.map(f => '<p>' + (f.type === 'ok' ? '&#9989; ' : '&#9888;&#65039; ') + f.msg + '</p>').join('') + '</div>';
+    }
+    div.innerHTML = html;
+    reviewEl.appendChild(div);
+  } else {
+    document.getElementById('history-summary').textContent =
+      'Último intento (' + new Date(last.date).toLocaleString('es-AR') + '): ' + last.score + '/' + last.total + '. Intentos totales: ' + attempts.length + '.';
+    (last.details || []).forEach((d, i) => {
+      const div = document.createElement('div');
+      div.className = 'review-item ' + (d.isCorrect ? 'correct' : 'incorrect');
+      let html = '<p class="review-q"><span class="review-icon ' + (d.isCorrect ? 'ok-bg' : 'bad-bg') + '">' + (d.isCorrect ? '&#10003;' : '&#10007;') + '</span>' + (i + 1) + '. ' + d.question + '</p>' +
+        '<p class="review-a">Respondió: <span class="' + (d.isCorrect ? 'ok' : 'bad') + '">' + (d.chosenText || '(sin responder)') + '</span>' +
+        (d.isCorrect ? '' : ' · Correcta: <span class="ok">' + d.correctText + '</span>') + '</p>';
+      if (d.translation) html += '<div class="answer-detail-box"><p>Traducción de Alma: "' + d.translation + '"</p></div>';
+      div.innerHTML = html;
+      reviewEl.appendChild(div);
+    });
+  }
+
+  showView('view-history');
 }
 
 function openClass(classId) {
@@ -42495,18 +42586,31 @@ function fillTipsBox(prefixId) {
     activeClass.explanation.points.map(p => '<li>' + p + '</li>').join('');
 }
 
+function shuffleArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+let questionOptionOrder = [];
+
 function startExercises() {
   if (activeClass.type === 'writing') { startWriting(); return; }
 
   curQ = 0;
   userAnswers = new Array(activeClass.questions.length).fill(null);
   userTranslations = new Array(activeClass.questions.length).fill('');
+  questionOptionOrder = activeClass.questions.map(q => shuffleArray(q.options.map((_, i) => i)));
   showView('view-exercise');
   document.getElementById('ex-bar').style.setProperty('--accent', activeClass.color);
   fillTipsBox('ex');
   buildContext();
   renderQuestion();
 }
+
+let audioState = { playing: false, timer: null, duration: 0, elapsed: 0 };
 
 function buildContext() {
   const ctx = document.getElementById('ex-context');
@@ -42517,17 +42621,35 @@ function buildContext() {
     ctx.innerHTML = '<div class="passage-box">' + paras + '</div>';
   } else if (activeClass.type === 'listening') {
     ctx.classList.remove('hidden');
+    audioState = { playing: false, timer: null, duration: estimateAudioDuration(activeClass.script), elapsed: 0 };
     ctx.innerHTML =
       '<div class="audio-box">' +
-      '<div class="row"><span><button class="primary" onclick="playAudio()">&#9658; Reproducir audio</button> ' +
-      '<button onclick="stopAudio()">&#9632; Pausar</button></span>' +
-      '<button class="link-btn" onclick="toggleTranscript()">Mostrar texto</button></div>' +
-      '<div class="passage-box hidden" id="transcript-box"><p>' + activeClass.script + '</p></div>' +
+      '<div class="voice-note">' +
+      '<button class="play-btn" id="vn-play-btn" onclick="toggleAudio()">&#9658;</button>' +
+      '<div class="vn-track"><div class="vn-track-fill" id="vn-track-fill"></div></div>' +
+      '<span class="vn-time" id="vn-time">' + formatTime(audioState.duration) + '</span>' +
+      '</div>' +
+      '<button class="link-btn" onclick="toggleTranscript()" style="margin-top:8px;">Mostrar texto</button>' +
+      '<div class="passage-box hidden" id="transcript-box" style="margin-top:8px;"><p>' + activeClass.script + '</p></div>' +
       '</div>';
   } else {
     ctx.classList.add('hidden');
     ctx.innerHTML = '';
   }
+}
+
+function estimateAudioDuration(script) {
+  const words = script.trim().split(/\s+/).length;
+  return Math.max(3, Math.round(words / ((150 * 0.92) / 60)));
+}
+
+function formatTime(sec) {
+  const m = Math.floor(sec / 60), s = Math.max(0, Math.round(sec % 60));
+  return m + ':' + String(s).padStart(2, '0');
+}
+
+function toggleAudio() {
+  if (audioState.playing) stopAudio(); else playAudio();
 }
 
 function playAudio() {
@@ -42536,14 +42658,51 @@ function playAudio() {
     return;
   }
   window.speechSynthesis.cancel();
-  const utter = new SpeechSynthesisUtterance(activeClass.script);
-  utter.lang = 'en-US';
-  utter.rate = 0.92;
-  window.speechSynthesis.speak(utter);
+  clearInterval(audioState.timer);
+  audioState.elapsed = 0;
+  // Small delay avoids a Chrome bug where speak() right after cancel() is dropped or queued behind the cancelled one.
+  setTimeout(() => {
+    const utter = new SpeechSynthesisUtterance(activeClass.script);
+    utter.lang = 'en-US';
+    utter.rate = 0.92;
+    utter.onend = finishAudio;
+    utter.onerror = finishAudio;
+    window.speechSynthesis.speak(utter);
+    audioState.playing = true;
+    updatePlayBtn();
+    audioState.timer = setInterval(() => {
+      audioState.elapsed++;
+      updateAudioProgress();
+      if (audioState.elapsed >= audioState.duration) clearInterval(audioState.timer);
+    }, 1000);
+  }, 60);
+}
+
+function finishAudio() {
+  audioState.playing = false;
+  clearInterval(audioState.timer);
+  audioState.elapsed = 0;
+  updatePlayBtn();
+  updateAudioProgress();
 }
 
 function stopAudio() {
   if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+  finishAudio();
+}
+
+function updatePlayBtn() {
+  const btn = document.getElementById('vn-play-btn');
+  if (btn) btn.innerHTML = audioState.playing ? '&#10074;&#10074;' : '&#9658;';
+}
+
+function updateAudioProgress() {
+  const fill = document.getElementById('vn-track-fill');
+  const time = document.getElementById('vn-time');
+  if (!fill || !time) return;
+  const pct = audioState.duration ? Math.min(100, (audioState.elapsed / audioState.duration) * 100) : 0;
+  fill.style.width = pct + '%';
+  time.textContent = formatTime(audioState.duration - audioState.elapsed);
 }
 
 function toggleTranscript(forceShow) {
@@ -42562,34 +42721,19 @@ function renderQuestion() {
 
   const optsEl = document.getElementById('ex-options');
   optsEl.innerHTML = '';
-  q.options.forEach((opt, i) => {
+  const order = questionOptionOrder[curQ] || q.options.map((_, i) => i);
+  order.forEach((origIdx) => {
     const btn = document.createElement('button');
-    btn.className = 'opt-btn' + (userAnswers[curQ] === i ? ' selected' : '');
+    btn.className = 'opt-btn' + (userAnswers[curQ] === origIdx ? ' selected' : '');
     btn.style.setProperty('--accent', activeClass.color);
     btn.style.setProperty('--accent-bg', activeClass.bg);
-    btn.textContent = opt;
-    btn.onclick = () => { userAnswers[curQ] = i; renderQuestion(); };
+    btn.textContent = q.options[origIdx];
+    btn.onclick = () => { userAnswers[curQ] = origIdx; renderQuestion(); };
     optsEl.appendChild(btn);
   });
 
-  const translateEl = document.getElementById('ex-translate');
-  if (activeClass.activity === 'Gramática' && q.translation) {
-    translateEl.classList.remove('hidden');
-    const savedText = userTranslations[curQ] || '';
-    translateEl.innerHTML =
-      '<div class="translate-box">' +
-      '<label for="translate-input-' + curQ + '">✍️ Traducí la oración completa al español (con la respuesta correcta):</label>' +
-      '<textarea class="translate-textarea" id="translate-input-' + curQ + '" oninput="saveTranslation(' + curQ + ', this.value)"></textarea>' +
-      '<div class="row" style="margin-top:8px; justify-content:flex-end;">' +
-      '<button onclick="checkTranslation(' + curQ + ')">Corregir traducción</button>' +
-      '</div>' +
-      '<div class="translate-feedback" id="translate-feedback-' + curQ + '"></div>' +
-      '</div>';
-    document.getElementById('translate-input-' + curQ).value = savedText;
-  } else {
-    translateEl.classList.add('hidden');
-    translateEl.innerHTML = '';
-  }
+  document.getElementById('ex-translate').classList.add('hidden');
+  document.getElementById('ex-translate').innerHTML = '';
 
   document.getElementById('ex-prev-btn').style.visibility = curQ === 0 ? 'hidden' : 'visible';
   document.getElementById('ex-next-btn').textContent = curQ === activeClass.questions.length - 1 ? 'Ver resultado' : 'Siguiente';
@@ -42609,7 +42753,14 @@ function nextQuestion() {
 function showResult() {
   let score = 0;
   activeClass.questions.forEach((q, i) => { if (userAnswers[i] === q.correct) score++; });
-  saveAttempt(activeClass.id, score, activeClass.questions.length);
+  const details = activeClass.questions.map((q, i) => ({
+    question: q.text,
+    chosenText: userAnswers[i] === null ? null : q.options[userAnswers[i]],
+    correctText: q.options[q.correct],
+    isCorrect: userAnswers[i] === q.correct,
+    translation: userTranslations[i] || ''
+  }));
+  saveAttempt(activeClass.id, score, activeClass.questions.length, details);
 
   document.getElementById('result-classname').textContent = activeClass.title;
   document.getElementById('result-score').textContent = score + ' / ' + activeClass.questions.length;
@@ -42631,11 +42782,35 @@ function showResult() {
     const userText = userAnswers[i] === null ? '(sin responder)' : q.options[userAnswers[i]];
     const div = document.createElement('div');
     div.className = 'review-item ' + (isCorrect ? 'correct' : 'incorrect');
-    div.innerHTML =
+    let html =
       '<p class="review-q"><span class="review-icon ' + (isCorrect ? 'ok-bg' : 'bad-bg') + '">' + (isCorrect ? '&#10003;' : '&#10007;') + '</span>' + (i + 1) + '. ' + q.text + '</p>' +
       '<p class="review-a">Tu respuesta: <span class="' + (isCorrect ? 'ok' : 'bad') + '">' + userText + '</span>' +
       (isCorrect ? '' : ' · Correcta: <span class="ok">' + q.options[q.correct] + '</span>') + '</p>' +
       '<div class="review-exp-box"><span class="review-exp-label">&#128161;</span><p class="review-exp-text">' + q.explanation + '</p></div>';
+
+    if (!isCorrect && userAnswers[i] !== null) {
+      const wrongSentence = q.text.replace('___', q.options[userAnswers[i]]);
+      const correctSentence = q.text.replace('___', q.options[q.correct]);
+      html += '<div class="answer-detail-box">' +
+        '<p>&#10060; Así queda mal, con "' + q.options[userAnswers[i]] + '": <i>"' + wrongSentence + '"</i></p>' +
+        '<p>&#9989; Así queda bien, con "' + q.options[q.correct] + '": <i>"' + correctSentence + '"</i></p>' +
+        (q.translation ? '<p>&#128172; En español: "' + q.translation + '"</p>' : '') +
+        '</div>';
+    }
+
+    if (activeClass.activity === 'Gramática' && q.translation) {
+      const savedText = userTranslations[i] || '';
+      html += '<div class="translate-box">' +
+        '<label for="translate-input-' + i + '">✍️ Ahora traducí vos la oración completa al español:</label>' +
+        '<textarea class="translate-textarea" id="translate-input-' + i + '" oninput="saveTranslation(' + i + ', this.value)">' + savedText + '</textarea>' +
+        '<div class="row" style="margin-top:8px; justify-content:flex-end;">' +
+        '<button onclick="checkTranslation(' + i + ')">Corregir traducción</button>' +
+        '</div>' +
+        '<div class="translate-feedback" id="translate-feedback-' + i + '"></div>' +
+        '</div>';
+    }
+
+    div.innerHTML = html;
     reviewEl.appendChild(div);
   });
 
@@ -42666,6 +42841,7 @@ function startWriting() {
   document.getElementById('write-textarea').value = '';
   document.getElementById('write-error').style.display = 'none';
   document.getElementById('write-save-msg').style.display = 'none';
+  document.getElementById('write-auto-feedback').innerHTML = '';
   updateWordCount();
 }
 
@@ -42673,6 +42849,36 @@ function updateWordCount() {
   const text = document.getElementById('write-textarea').value.trim();
   const words = text.length ? text.split(/\s+/).length : 0;
   document.getElementById('word-count-label').textContent = words + ' palabras (objetivo: ~100)';
+}
+
+const COMMON_SPANISH_WORDS = ['que','de','la','el','en','y','a','los','se','del','las','un','por','con','no','una','su','para','es','al','lo','como','más','pero','sus','le','ya','o','porque','muy','sin','sobre','también','me','hasta','donde','quien','desde','todo','nos','durante','uno','les','ni','contra','otros','ese','eso','ante','ellos','esto','antes','algunos','qué','unos','yo','otro','otras','otra','él','tanto','esa','estos','mucho','quienes','nada','muchos','cual','poco','ella','estar','estas','algunas','algo','nosotros','porque','está','están'];
+
+function autoCheckWriting(text) {
+  const words = text.trim().split(/\s+/).filter(Boolean);
+  const wordCount = words.length;
+  const feedback = [];
+
+  if (wordCount < 70) feedback.push({ type: 'warn', msg: 'Te faltan palabras: escribiste ' + wordCount + ', el objetivo es ~100.' });
+  else if (wordCount > 140) feedback.push({ type: 'warn', msg: 'Te pasaste bastante: escribiste ' + wordCount + ' palabras, el objetivo es ~100.' });
+  else feedback.push({ type: 'ok', msg: 'La extensión está bien: ' + wordCount + ' palabras (objetivo ~100).' });
+
+  const lowerTokens = text.toLowerCase().replace(/[.,!?;:"'()]/g, ' ').split(/\s+/).filter(Boolean);
+  const spanishHits = lowerTokens.filter(w => COMMON_SPANISH_WORDS.indexOf(w) !== -1);
+  const spanishRatio = lowerTokens.length ? spanishHits.length / lowerTokens.length : 0;
+  if (spanishRatio > 0.08) {
+    feedback.push({ type: 'warn', msg: 'Encontramos palabras en español (' + Array.from(new Set(spanishHits)).slice(0, 5).join(', ') + '). Recordá escribir todo en inglés.' });
+  }
+
+  const sentences = text.split(/(?<=[.!?])\s+/).map(s => s.trim()).filter(Boolean);
+  const badCap = sentences.filter(s => /^[a-z]/.test(s));
+  if (badCap.length > 0) feedback.push({ type: 'warn', msg: badCap.length + ' oración(es) no empiezan con mayúscula.' });
+
+  const noPunct = sentences.filter(s => !/[.!?]$/.test(s));
+  if (noPunct.length > 1) feedback.push({ type: 'warn', msg: 'Revisá la puntuación: algunas oraciones no terminan con punto, signo de pregunta o exclamación.' });
+
+  if (!/\b(I|you|he|she|it|we|they)\b/i.test(text)) feedback.push({ type: 'warn', msg: 'No encontramos un sujeto claro (I, you, he, she...) en el texto — revisá que tus oraciones tengan sujeto.' });
+
+  return feedback;
 }
 
 function saveWritingAttempt() {
@@ -42685,11 +42891,18 @@ function saveWritingAttempt() {
   const words = text.split(/\s+/).length;
   const checked = document.querySelectorAll('#write-checklist input:checked').length;
   const total = activeClass.bulletIdeas.length;
-  saveAttemptObj(activeClass.id, { wordCount: words, checked: checked, total: total });
+  const autoFeedback = autoCheckWriting(text);
+  saveAttemptObj(activeClass.id, { wordCount: words, checked: checked, total: total, text: text, autoFeedback: autoFeedback });
 
   const msg = document.getElementById('write-save-msg');
   msg.textContent = '¡Guardado! Escribiste ' + words + ' palabras e incluiste ' + checked + ' de ' + total + ' ideas.';
   msg.style.display = 'block';
+
+  const fbBox = document.getElementById('write-auto-feedback');
+  fbBox.innerHTML = '<div class="answer-detail-box">' +
+    '<p style="font-weight:700; color:#5b3fd6; margin-bottom:8px;">Corrección automática:</p>' +
+    autoFeedback.map(f => '<p>' + (f.type === 'ok' ? '&#9989; ' : '&#9888;&#65039; ') + f.msg + '</p>').join('') +
+    '</div>';
 }
 
 function init() {
