@@ -48832,8 +48832,7 @@ function renderTandaList() {
       if (isWriting) {
         statsHtml = '<span class="tanda-stats">' + last.wordCount + ' palabras · ' + last.checked + '/' + last.total + ' ideas</span>';
       } else {
-        const best = attempts.reduce((m, a) => a.score > m.score ? a : m, attempts[0]);
-        const pct = best.score / best.total;
+        const pct = last.score / last.total;
         const starCount = pct === 1 ? 3 : pct >= 0.75 ? 2 : pct >= 0.5 ? 1 : 0;
         const stars = '★'.repeat(starCount) + '☆'.repeat(3 - starCount);
         statsHtml = '<span class="stars">' + stars + '</span><br><span class="tanda-stats">' + last.score + '/' + last.total + '</span>';
