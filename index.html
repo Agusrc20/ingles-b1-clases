@@ -48915,7 +48915,8 @@ function showHistoryAttempt(index) {
     div.innerHTML = html;
     reviewEl.appendChild(div);
   } else {
-    document.getElementById('history-summary').textContent = attempt.score + '/' + attempt.total + '  ' + starsForScore(attempt.score, attempt.total);
+    document.getElementById('history-summary').innerHTML =
+      attempt.score + '/' + attempt.total + ' <span class="stars">' + starsForScore(attempt.score, attempt.total) + '</span>';
     if (!attempt.details || !attempt.details.length) {
       const div = document.createElement('div');
       div.className = 'review-item';
