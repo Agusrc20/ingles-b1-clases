@@ -61,6 +61,11 @@ h1 { font-size: 26px; font-weight: 700; margin: 0 0 4px; color: #5b3fd6; }
 .class-stats { font-size: 12px; color: #55535f; }
 .stars { color: #f5a623; letter-spacing: 1px; font-size: 14px; }
 
+.stars-legend-title { font-size: 14px; font-weight: 700; margin: 0 0 10px; color: #2c2b33; }
+.stars-legend-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; font-size: 13px; }
+.stars-legend-pct { color: #55535f; }
+.stars-legend .stars { font-size: 15px; }
+
 button {
   font-family: inherit; font-size: 14px; padding: 11px 18px; border-radius: 12px;
   border: none; background: #efeef8; color: #33323a; cursor: pointer; font-weight: 600;
@@ -194,6 +199,13 @@ button:disabled { opacity: .5; cursor: default; }
   </div>
 
   <div id="view-categories" class="hidden">
+    <div class="card stars-legend">
+      <p class="stars-legend-title">⭐ ¿Qué significan las estrellas?</p>
+      <div class="stars-legend-row"><span class="stars-legend-pct">100% correctas</span><span class="stars">★★★</span></div>
+      <div class="stars-legend-row"><span class="stars-legend-pct">75-99% correctas</span><span class="stars">★★☆</span></div>
+      <div class="stars-legend-row"><span class="stars-legend-pct">50-74% correctas</span><span class="stars">★☆☆</span></div>
+      <div class="stars-legend-row"><span class="stars-legend-pct">Menos de 50%</span><span class="stars">☆☆☆</span></div>
+    </div>
     <div id="category-container"></div>
   </div>
 
