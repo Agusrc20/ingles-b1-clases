@@ -81,6 +81,7 @@ button:disabled { opacity: .5; cursor: default; }
 .opt-btn.selected { border-color: var(--accent, #5b3fd6); background: var(--accent-bg, #f1eefe); }
 .opt-btn.correct { border-color: #1e9e5a; background: #eefaf1; }
 .opt-btn.incorrect { border-color: #d64d6b; background: #fdeef1; }
+.opt-btn:disabled { opacity: 1; cursor: default; }
 .error-text { font-size: 13px; color: #d64d6b; margin: 0 0 12px; display: none; font-weight: 600; }
 
 .review-item { border-radius: 14px; padding: 14px 16px 16px; margin-bottom: 12px; border-left: 5px solid transparent; }
@@ -48526,6 +48527,7 @@ const CLASSES = [
 let activeClass = null;
 let curQ = 0;
 let userAnswers = [];
+let userChecked = [];
 let userTranslations = [];
 
 const ES_STOPWORDS = ["el","la","los","las","un","una","unos","unas","de","del","al","en","y","a","que","se","por","con","su","sus","lo","mi","mis","tu","tus"];
@@ -48966,6 +48968,7 @@ function startExercises() {
 
   curQ = 0;
   userAnswers = new Array(activeClass.questions.length).fill(null);
+  userChecked = new Array(activeClass.questions.length).fill(false);
   userTranslations = new Array(activeClass.questions.length).fill('');
   questionOptionOrder = activeClass.questions.map(q => shuffleArray(q.options.map((_, i) => i)));
   showView('view-exercise');
@@ -49140,14 +49143,14 @@ function renderQuestion() {
   document.getElementById('ex-question').textContent = q.text;
   document.getElementById('ex-error').style.display = 'none';
 
-  const answered = userAnswers[curQ] !== null;
+  const checked = !!userChecked[curQ];
   const optsEl = document.getElementById('ex-options');
   optsEl.innerHTML = '';
   const order = questionOptionOrder[curQ] || q.options.map((_, i) => i);
   order.forEach((origIdx) => {
     const btn = document.createElement('button');
     let cls = 'opt-btn';
-    if (answered) {
+    if (checked) {
       if (origIdx === q.correct) cls += ' correct';
       else if (origIdx === userAnswers[curQ]) cls += ' incorrect';
     } else if (userAnswers[curQ] === origIdx) {
@@ -49157,12 +49160,13 @@ function renderQuestion() {
     btn.style.setProperty('--accent', activeClass.color);
     btn.style.setProperty('--accent-bg', activeClass.bg);
     btn.textContent = q.options[origIdx];
-    btn.onclick = () => { userAnswers[curQ] = origIdx; renderQuestion(); };
+    btn.disabled = checked;
+    btn.onclick = () => { if (userChecked[curQ]) return; userAnswers[curQ] = origIdx; renderQuestion(); };
     optsEl.appendChild(btn);
   });
 
   const feedbackEl = document.getElementById('ex-feedback');
-  if (answered) {
+  if (checked) {
     const isCorrect = userAnswers[curQ] === q.correct;
     feedbackEl.classList.remove('hidden');
     feedbackEl.innerHTML =
@@ -49193,7 +49197,9 @@ function renderQuestion() {
   }
 
   document.getElementById('ex-prev-btn').style.visibility = curQ === 0 ? 'hidden' : 'visible';
-  document.getElementById('ex-next-btn').textContent = curQ === activeClass.questions.length - 1 ? 'Ver resultado' : 'Siguiente';
+  document.getElementById('ex-next-btn').textContent = !checked
+    ? 'Corregir'
+    : (curQ === activeClass.questions.length - 1 ? 'Ver resultado' : 'Siguiente');
 }
 
 function buildAnswerFeedbackHtml(q, chosenIdx) {
@@ -49216,6 +49222,12 @@ function prevQuestion() { if (curQ > 0) { curQ--; renderQuestion(); } }
 function nextQuestion() {
   if (userAnswers[curQ] === null) {
     document.getElementById('ex-error').style.display = 'block';
+    return;
+  }
+  document.getElementById('ex-error').style.display = 'none';
+  if (!userChecked[curQ]) {
+    userChecked[curQ] = true;
+    renderQuestion();
     return;
   }
   if (curQ < activeClass.questions.length - 1) { curQ++; renderQuestion(); }
