@@ -80206,6 +80206,28 @@ const ACTIVITY_ORDER = ["Gramática", "Reading", "Listening", "Writing"];
 let activeTopic = null;
 let activeActivity = null;
 
+// Temas que efectivamente se toman en el Examen de Ingreso A2 (Simulacro 2027),
+// según el análisis del cuadernillo, la clave de corrección y la transcripción del audio.
+const EXAM_TOPICS = [
+  "Pronombres relativos",
+  "Pronombres personales y de objeto",
+  "To + verbo vs. -ing",
+  "Conjunciones de tiempo",
+  "Modales",
+  "Present perfect vs. pasado simple",
+  "Pasado simple vs. continuo",
+  "Present simple vs. continuo",
+  "Reflexivos y recíprocos",
+  "Conectores",
+  "Preposiciones comunes",
+  "Adjetivos y pronombres posesivos",
+  "Comparativos y superlativos",
+  "Do / does / did y \"need to\"",
+  "Verbos Regulares",
+  "Verbos Irregulares"
+];
+const EXAM_THEORY_IDS = ["vregular_g1", "virregular_g1"];
+
 function getTopics() {
   const topics = [];
   CLASSES.forEach(c => { if (topics.indexOf(c.topic) === -1) topics.push(c.topic); });
@@ -80225,10 +80247,8 @@ function renderCategories() {
 
   const container = document.getElementById('category-container');
   container.innerHTML = '';
-  const grid = document.createElement('div');
-  grid.className = 'class-grid';
 
-  getTopics().forEach((topicName, i) => {
+  function makeTopicCard(topicName, badge) {
     const grammarClass = CLASSES.find(c => c.topic === topicName && c.activity === 'Gramática');
     const card = document.createElement('button');
     card.className = 'class-card';
@@ -80236,23 +80256,15 @@ function renderCategories() {
     card.style.setProperty('--accent-bg', grammarClass.bg);
     card.onclick = () => openCategory(topicName);
     card.innerHTML =
-      '<span class="class-badge">' + (i + 1) + '</span>' +
+      '<span class="class-badge">' + badge + '</span>' +
       '<span>' +
       '<p class="class-title">' + topicName + '</p>' +
       '<p class="class-meta">Gramática · Reading · Listening · Writing</p>' +
       '</span>';
-    grid.appendChild(card);
-  });
+    return card;
+  }
 
-  const theoryCards = [
-    { id: 'vregular_g1', label: 'Verbos Regulares · Teoría' },
-    { id: 'virregular_g1', label: 'Verbos Irregulares · Teoría' },
-    { id: 'pasiva_g1', label: 'Voz Pasiva · Teoría' },
-    { id: 'reportado_g1', label: 'Discurso Indirecto · Teoría' },
-    { id: 'condicional_g1', label: 'Condicionales · Teoría' },
-    { id: 'cuantif_g1', label: 'Cuantificadores · Teoría' }
-  ];
-  theoryCards.forEach(t => {
+  function makeTheoryCard(t) {
     const ref = CLASSES.find(c => c.id === t.id);
     const card = document.createElement('button');
     card.className = 'class-card';
@@ -80265,10 +80277,51 @@ function renderCategories() {
       '<p class="class-title">' + t.label + '</p>' +
       '<p class="class-meta">Lista de verbos y reglas para memorizar</p>' +
       '</span>';
-    grid.appendChild(card);
-  });
+    return card;
+  }
 
-  container.appendChild(grid);
+  const allTopics = getTopics();
+  const examTopicNames = allTopics.filter(t => EXAM_TOPICS.includes(t));
+  const otherTopicNames = allTopics.filter(t => !EXAM_TOPICS.includes(t));
+
+  const theoryCards = [
+    { id: 'vregular_g1', label: 'Verbos Regulares · Teoría' },
+    { id: 'virregular_g1', label: 'Verbos Irregulares · Teoría' },
+    { id: 'pasiva_g1', label: 'Voz Pasiva · Teoría' },
+    { id: 'reportado_g1', label: 'Discurso Indirecto · Teoría' },
+    { id: 'condicional_g1', label: 'Condicionales · Teoría' },
+    { id: 'cuantif_g1', label: 'Cuantificadores · Teoría' }
+  ];
+  const examTheoryCards = theoryCards.filter(t => EXAM_THEORY_IDS.includes(t.id));
+  const otherTheoryCards = theoryCards.filter(t => !EXAM_THEORY_IDS.includes(t.id));
+
+  const examHeader = document.createElement('p');
+  examHeader.className = 'section-header';
+  examHeader.textContent = '📝 Temas del examen de ingreso';
+  container.appendChild(examHeader);
+
+  const examNote = document.createElement('p');
+  examNote.className = 'class-meta';
+  examNote.style.margin = '-4px 0 12px';
+  examNote.textContent = 'Son los únicos temas que toman en el simulacro. Conviene estudiar solo estos.';
+  container.appendChild(examNote);
+
+  const examGrid = document.createElement('div');
+  examGrid.className = 'class-grid';
+  examTopicNames.forEach((topicName, i) => examGrid.appendChild(makeTopicCard(topicName, i + 1)));
+  examTheoryCards.forEach(t => examGrid.appendChild(makeTheoryCard(t)));
+  container.appendChild(examGrid);
+
+  const otherHeader = document.createElement('p');
+  otherHeader.className = 'section-header';
+  otherHeader.textContent = 'Otros temas (no entran en este examen)';
+  container.appendChild(otherHeader);
+
+  const otherGrid = document.createElement('div');
+  otherGrid.className = 'class-grid';
+  otherTopicNames.forEach((topicName, i) => otherGrid.appendChild(makeTopicCard(topicName, i + 1)));
+  otherTheoryCards.forEach(t => otherGrid.appendChild(makeTheoryCard(t)));
+  container.appendChild(otherGrid);
 }
 
 function openTheory(classId) {
