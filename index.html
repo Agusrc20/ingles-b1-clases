@@ -233,6 +233,14 @@ button:disabled { opacity: .5; cursor: default; }
     </div>
   </div>
 
+  <div id="view-theory" class="hidden">
+    <div class="top-actions"><button class="link-btn" onclick="goToCategories()">&larr; Volver a los temas</button></div>
+    <div class="card">
+      <p class="class-title" id="theory-title" style="font-size:19px;"></p>
+      <div class="explain-box" id="theory-body"></div>
+    </div>
+  </div>
+
   <div id="view-exercise" class="hidden">
     <div class="row" style="margin-bottom:6px;">
       <button class="link-btn" onclick="goToTandaList()">&larr; Salir</button>
@@ -68219,7 +68227,7 @@ function showView(id) {
   if (typeof audioGen !== 'undefined') audioGen++;
   if ('speechSynthesis' in window) window.speechSynthesis.cancel();
   if (typeof audioState !== 'undefined') { clearInterval(audioState.timer); audioState.playing = false; }
-  ['view-categories', 'view-onboard', 'view-home', 'view-tandas', 'view-explain', 'view-exercise', 'view-result', 'view-writing', 'view-history'].forEach(v => {
+  ['view-categories', 'view-onboard', 'view-home', 'view-tandas', 'view-explain', 'view-theory', 'view-exercise', 'view-result', 'view-writing', 'view-history'].forEach(v => {
     document.getElementById(v).classList.toggle('hidden', v !== id);
   });
 }
@@ -68267,7 +68275,38 @@ function renderCategories() {
     grid.appendChild(card);
   });
 
+  const theoryCards = [
+    { id: 'vregular_g1', label: 'Verbos Regulares · Teoría' },
+    { id: 'virregular_g1', label: 'Verbos Irregulares · Teoría' }
+  ];
+  theoryCards.forEach(t => {
+    const ref = CLASSES.find(c => c.id === t.id);
+    const card = document.createElement('button');
+    card.className = 'class-card';
+    card.style.setProperty('--accent', ref.color);
+    card.style.setProperty('--accent-bg', ref.bg);
+    card.onclick = () => openTheory(t.id);
+    card.innerHTML =
+      '<span class="class-badge">📋</span>' +
+      '<span>' +
+      '<p class="class-title">' + t.label + '</p>' +
+      '<p class="class-meta">Lista de verbos y reglas para memorizar</p>' +
+      '</span>';
+    grid.appendChild(card);
+  });
+
   container.appendChild(grid);
+}
+
+function openTheory(classId) {
+  const ref = CLASSES.find(c => c.id === classId);
+  document.getElementById('theory-title').textContent = ref.title.replace(' · Gramática · Tanda 1', ' · Teoría');
+  document.getElementById('theory-title').style.color = ref.color;
+  const box = document.getElementById('theory-body');
+  box.style.setProperty('--accent-bg', ref.bg);
+  box.innerHTML = '<p style="margin:0 0 6px;">' + ref.explanation.intro + '</p><ul>' +
+    ref.explanation.points.map(p => '<li>' + p + '</li>').join('') + '</ul>';
+  showView('view-theory');
 }
 
 function openCategory(topicName) {
@@ -68340,8 +68379,6 @@ function starsForScore(score, total) {
   return '★'.repeat(starCount) + '☆'.repeat(3 - starCount);
 }
 
-const VERB_REFERENCE_IDS = { 'Verbos Regulares': 'vregular_g1', 'Verbos Irregulares': 'virregular_g1' };
-
 function renderTandaList() {
   const container = document.getElementById('tanda-container');
   container.innerHTML = '';
@@ -68350,19 +68387,6 @@ function renderTandaList() {
   header.className = 'section-header';
   header.textContent = activeTopic + ' · ' + activeActivity;
   container.appendChild(header);
-
-  const refId = VERB_REFERENCE_IDS[activeTopic];
-  if (refId) {
-    const ref = CLASSES.find(c => c.id === refId);
-    const refBox = document.createElement('details');
-    refBox.className = 'explain-box';
-    refBox.style.setProperty('--accent-bg', ref.bg);
-    refBox.innerHTML =
-      '<summary style="cursor:pointer; font-weight:700; color:' + ref.color + ';">📋 Ver lista completa de verbos y reglas</summary>' +
-      '<div style="margin-top:10px;"><p style="margin:0 0 6px;">' + ref.explanation.intro + '</p><ul>' +
-      ref.explanation.points.map(p => '<li>' + p + '</li>').join('') + '</ul></div>';
-    container.appendChild(refBox);
-  }
 
   const grid = document.createElement('div');
   grid.className = 'tanda-grid';
