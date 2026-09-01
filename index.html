@@ -68335,6 +68335,8 @@ function starsForScore(score, total) {
   return '★'.repeat(starCount) + '☆'.repeat(3 - starCount);
 }
 
+const VERB_REFERENCE_IDS = { 'Verbos Regulares': 'vregular_g1', 'Verbos Irregulares': 'virregular_g1' };
+
 function renderTandaList() {
   const container = document.getElementById('tanda-container');
   container.innerHTML = '';
@@ -68343,6 +68345,19 @@ function renderTandaList() {
   header.className = 'section-header';
   header.textContent = activeTopic + ' · ' + activeActivity;
   container.appendChild(header);
+
+  const refId = VERB_REFERENCE_IDS[activeTopic];
+  if (refId) {
+    const ref = CLASSES.find(c => c.id === refId);
+    const refBox = document.createElement('details');
+    refBox.className = 'explain-box';
+    refBox.style.setProperty('--accent-bg', ref.bg);
+    refBox.innerHTML =
+      '<summary style="cursor:pointer; font-weight:700; color:' + ref.color + ';">📋 Ver lista completa de verbos y reglas</summary>' +
+      '<div style="margin-top:10px;"><p style="margin:0 0 6px;">' + ref.explanation.intro + '</p><ul>' +
+      ref.explanation.points.map(p => '<li>' + p + '</li>').join('') + '</ul></div>';
+    container.appendChild(refBox);
+  }
 
   const grid = document.createElement('div');
   grid.className = 'tanda-grid';
