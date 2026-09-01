@@ -33,6 +33,16 @@ h1 { font-size: 26px; font-weight: 700; margin: 0 0 4px; color: #5b3fd6; }
 }
 .section-header { font-size: 14px; font-weight: 700; color: #5b3fd6; margin: 22px 0 10px; text-transform: uppercase; letter-spacing: .04em; }
 .section-header:first-child { margin-top: 4px; }
+.advanced-box { margin-top: 22px; }
+.advanced-box summary {
+  cursor: pointer; list-style: none; font-size: 13px; font-weight: 700;
+  color: #918fa0; padding: 10px 14px; border: 1px dashed #ddd9ec; border-radius: 12px;
+  user-select: none;
+}
+.advanced-box summary::-webkit-details-marker { display: none; }
+.advanced-box summary::before { content: '▸ '; }
+.advanced-box[open] summary::before { content: '▾ '; }
+.advanced-box .class-grid { margin-top: 14px; }
 .class-grid { display: grid; gap: 14px; margin-bottom: 6px; }
 .class-card {
   background: #fff;
@@ -80312,16 +80322,20 @@ function renderCategories() {
   examTheoryCards.forEach(t => examGrid.appendChild(makeTheoryCard(t)));
   container.appendChild(examGrid);
 
-  const otherHeader = document.createElement('p');
-  otherHeader.className = 'section-header';
-  otherHeader.textContent = 'Otros temas (no entran en este examen)';
-  container.appendChild(otherHeader);
+  const advancedBox = document.createElement('details');
+  advancedBox.className = 'advanced-box';
+  const advancedSummary = document.createElement('summary');
+  const advancedCount = otherTopicNames.length + otherTheoryCards.length;
+  advancedSummary.textContent = 'Temas avanzados (' + advancedCount + ' — no entran en este examen)';
+  advancedBox.appendChild(advancedSummary);
 
   const otherGrid = document.createElement('div');
   otherGrid.className = 'class-grid';
   otherTopicNames.forEach((topicName, i) => otherGrid.appendChild(makeTopicCard(topicName, i + 1)));
   otherTheoryCards.forEach(t => otherGrid.appendChild(makeTheoryCard(t)));
-  container.appendChild(otherGrid);
+  advancedBox.appendChild(otherGrid);
+
+  container.appendChild(advancedBox);
 }
 
 function openTheory(classId) {
