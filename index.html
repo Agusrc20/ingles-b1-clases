@@ -198,6 +198,7 @@ button:disabled { opacity: .5; cursor: default; }
     <h1>Inglés B1 · Mis clases</h1>
     <p class="subtitle">Práctica para el examen de ingreso a bilingües e intensificadas</p>
     <p class="greeting hidden" id="greeting"></p>
+    <button class="link-btn hidden" id="logout-btn" onclick="logout()">Cambiar de usuario</button>
   </header>
 
   <div id="view-onboard" class="hidden">
@@ -80294,6 +80295,18 @@ function saveAttempt(classId, score, total, details) {
 
 function getName() { return getCurrentName(); }
 
+function logout() {
+  localStorage.removeItem('b1_current_name');
+  localStorage.removeItem('b1_current_password');
+  document.getElementById('greeting').classList.add('hidden');
+  document.getElementById('logout-btn').classList.add('hidden');
+  const input = document.getElementById('name-input');
+  const passInput = document.getElementById('password-input');
+  if (input) input.value = '';
+  if (passInput) passInput.value = '';
+  showView('view-onboard');
+}
+
 async function saveName() {
   const input = document.getElementById('name-input');
   const passInput = document.getElementById('password-input');
@@ -80368,6 +80381,7 @@ function renderCategories() {
   const greetEl = document.getElementById('greeting');
   greetEl.classList.remove('hidden');
   greetEl.innerHTML = '¡Hola, ' + name + '!';
+  document.getElementById('logout-btn').classList.remove('hidden');
 
   const container = document.getElementById('category-container');
   container.innerHTML = '';
