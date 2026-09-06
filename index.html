@@ -33,6 +33,17 @@ h1 { font-size: 26px; font-weight: 700; margin: 0 0 4px; color: #5b3fd6; }
 }
 .section-header { font-size: 14px; font-weight: 700; color: #5b3fd6; margin: 22px 0 10px; text-transform: uppercase; letter-spacing: .04em; }
 .section-header:first-child { margin-top: 4px; }
+.section-note { margin: -4px 0 12px; }
+.exercises-panel { margin-bottom: 8px; }
+.theory-panel {
+  background: #faf8ff; border: 2px dashed #d9d1f5; border-radius: 18px;
+  padding: 4px 16px 16px; margin: 4px 0 26px;
+}
+.theory-panel .theory-section-header { color: #8b7fe8; }
+.theory-card { border-style: dashed; }
+.theory-card .class-badge { font-size: 13px; }
+.theory-card-easy { border-color: #ffcc80; }
+.theory-card-easy .class-title { color: #b8600a; }
 .advanced-box { margin-top: 22px; }
 .advanced-box summary {
   cursor: pointer; list-style: none; font-size: 13px; font-weight: 700;
@@ -80152,6 +80163,108 @@ const CLASSES = [
     "topic": "Formatos de Writing del examen",
     "activity": "Writing",
     "tanda": 4
+  },
+  {
+    "id": "posesivos_teoria_facil",
+    "title": "Adjetivos y pronombres posesivos · Teoría fácil",
+    "topic": "Adjetivos y pronombres posesivos",
+    "color": "#ff8f00",
+    "bg": "#fff3e0",
+    "explanation": {
+      "intro": "Los posesivos dicen de quién es algo. Hay dos grupos: uno va SIEMPRE pegado a una palabra, y el otro va SOLO, sin nada después.",
+      "points": [
+        "🔹 <b>Adjetivos posesivos</b> (van con un sustantivo al lado, como \"mi ___\"): <b>my, your, his, her, its, our, their</b>. <span class=\"example\">This is my dog. / That's her backpack.</span>",
+        "🔹 <b>Pronombres posesivos</b> (van solos, sin nada después, como \"es mío\"): <b>mine, yours, his, hers, its, ours, theirs</b>. <span class=\"example\">This dog is mine. / That backpack is hers.</span>",
+        "💡 <b>Truco:</b> si después va una palabra como \"dog\" o \"backpack\", usás el adjetivo (my dog). Si no hay nada después, usás el pronombre (it's mine).",
+        "⚠️ <b>its</b> (sin apóstrofo) = de eso/de él/ella, para cosas y animales: <span class=\"example\">The cat licked its paw.</span> <b>it's</b> (con apóstrofo) = \"it is\": <span class=\"example\">It's raining.</span>",
+        "⚠️ Lo mismo pasa con <b>whose</b> (¿de quién?) y <b>who's</b> (\"who is\"): <span class=\"example\">Whose phone is this? / Who's at the door?</span>"
+      ]
+    }
+  },
+  {
+    "id": "presentperfect_teoria_facil",
+    "title": "Present perfect vs. pasado simple · Teoría fácil",
+    "topic": "Present perfect vs. pasado simple",
+    "color": "#12b299",
+    "bg": "#e6faf6",
+    "explanation": {
+      "intro": "El pasado simple cuenta algo que ya terminó, en un momento puntual. El present perfect cuenta algo sin decir exactamente cuándo pasó, porque lo importante es que ya pasó.",
+      "points": [
+        "🔹 <b>Pasado simple</b>: hay una fecha o momento cerrado (yesterday, last week, in 2020, two days ago). <span class=\"example\">I watched a movie last night.</span>",
+        "🔹 <b>Present perfect</b> (have/has + participio): no dice cuándo pasó exactamente, o usa already, yet, ever, never. <span class=\"example\">I have already watched that movie.</span>",
+        "💡 <b>Truco:</b> ¿la oración tiene una fecha cerrada (yesterday, last..., in 2020, ago)? → pasado simple. ¿Tiene already/yet/ever/never o no dice cuándo? → present perfect.",
+        "🔹 Con <b>since</b> (desde qué momento) y <b>for</b> (durante cuánto tiempo) también se usa present perfect, para algo que empezó antes y sigue ahora. <span class=\"example\">She has lived here since 2019. / She has lived here for 7 years.</span>"
+      ]
+    }
+  },
+  {
+    "id": "conjtiempo_teoria_facil",
+    "title": "Conjunciones de tiempo · Teoría fácil",
+    "topic": "Conjunciones de tiempo",
+    "color": "#5e35b1",
+    "bg": "#ede7f6",
+    "explanation": {
+      "intro": "Estas palabras conectan dos momentos y explican el orden entre dos acciones: cuál pasa antes, cuál después, o si pasan juntas.",
+      "points": [
+        "🔹 <b>when</b> → justo en el momento en que pasa algo. <span class=\"example\">I was sleeping when you called.</span>",
+        "🔹 <b>while</b> → dos cosas pasando al mismo tiempo. <span class=\"example\">She was texting while she was walking.</span>",
+        "🔹 <b>before / after</b> → una cosa pasa antes o después que la otra. <span class=\"example\">Brush your teeth before you sleep.</span>",
+        "🔹 <b>until</b> → algo sigue pasando hasta un momento. <span class=\"example\">We waited until the bus came.</span>",
+        "🔹 <b>since</b> → desde un momento (se usa con present perfect). <span class=\"example\">I've known him since 2015.</span>",
+        "🔹 <b>as soon as</b> / <b>once</b> → apenas pasa una cosa, pasa la otra enseguida. <span class=\"example\">Call me as soon as you land. / Once you finish, you can play.</span>",
+        "💡 <b>Truco:</b> pensá \"¿la segunda acción es antes (before), después (after), al mismo tiempo (while/when), hasta (until) o apenas (as soon as/once)?\""
+      ]
+    }
+  },
+  {
+    "id": "preposiciones_teoria_facil",
+    "title": "Preposiciones comunes · Teoría fácil",
+    "topic": "Preposiciones comunes",
+    "color": "#4a90e2",
+    "bg": "#eaf3fd",
+    "explanation": {
+      "intro": "in, on y at se usan para hablar de tiempo y lugar. Pensalas como \"tamaños\": de lo más grande a lo más puntual.",
+      "points": [
+        "🔹 <b>in</b> → lo más \"grande\": meses, años, estaciones, lugares cerrados grandes. <span class=\"example\">in July / in 2024 / in the classroom</span>",
+        "🔹 <b>on</b> → días, fechas, y superficies (arriba de algo). <span class=\"example\">on Monday / on my birthday / on the table</span>",
+        "🔹 <b>at</b> → lo más puntual: horas exactas y lugares puntuales. <span class=\"example\">at 6pm / at the park entrance</span>",
+        "💡 <b>Truco de tamaño:</b> \"in\" = adentro de algo grande, \"on\" = arriba de una superficie o un día del calendario, \"at\" = un puntito exacto (una hora, un lugar chico).",
+        "🔹 <b>to / into / from</b> → movimiento: ir hacia un lugar (to/into) o venir desde un lugar (from). <span class=\"example\">She ran into the room. / We came from school.</span>"
+      ]
+    }
+  },
+  {
+    "id": "toing_teoria_facil",
+    "title": "To + verbo vs. -ing · Teoría fácil",
+    "topic": "To + verbo vs. -ing",
+    "color": "#43a047",
+    "bg": "#e9f7ec",
+    "explanation": {
+      "intro": "Algunos verbos van seguidos de \"to + verbo\" y otros van seguidos de \"verbo-ing\". No hay una regla mágica: hay que aprenderse los más comunes de cada grupo, como si fueran \"amigos\" de to o de -ing.",
+      "points": [
+        "🔹 Van con <b>to + verbo</b>: <b>want, decide, hope, promise, need, plan, agree, offer, expect, learn, manage, wish</b>. <span class=\"example\">I want to travel.</span>",
+        "🔹 Van con <b>verbo-ing</b>: <b>enjoy, avoid, finish, suggest, keep, miss, practice, mind, imagine, consider, quit</b>. <span class=\"example\">I enjoy playing videogames.</span>",
+        "🔹 Los verbos de gustos como <b>love, hate, like</b> casi siempre van con -ing cuando hablás de algo en general. <span class=\"example\">He hates waking up early.</span>",
+        "💡 <b>Truco:</b> no te compliques buscando una regla — practicá mucho con estos verbos hasta que se te haga automático saber cuál pide cada uno."
+      ]
+    }
+  },
+  {
+    "id": "comparativos_teoria_facil",
+    "title": "Comparativos y superlativos · Teoría fácil",
+    "topic": "Comparativos y superlativos",
+    "color": "#f5a623",
+    "bg": "#fff6e5",
+    "explanation": {
+      "intro": "Los comparativos sirven para comparar DOS cosas. Los superlativos sirven para señalar cuál es la MÁS (o menos) de todo un grupo.",
+      "points": [
+        "🔹 Adjetivos cortos (1 sílaba, o 2 terminados en \"-y\"): se agrega <b>-er / the -est</b>. <span class=\"example\">tall → taller → the tallest. happy → happier → the happiest.</span>",
+        "🔹 Adjetivos largos (3 o más sílabas): se usa <b>more / the most</b>. <span class=\"example\">interesting → more interesting → the most interesting.</span>",
+        "💡 <b>Truco:</b> contá las sílabas del adjetivo. ¿Corto (1-2)? → -er/-est. ¿Largo (3+)? → more/most.",
+        "🔹 <b>as...as</b> → cuando dos cosas son iguales. <span class=\"example\">My sister is as tall as me.</span>",
+        "⚠️ <b>Irregulares</b> para memorizar aparte: <span class=\"example\">good → better → the best. bad → worse → the worst.</span>"
+      ]
+    }
   }
 ];
 
@@ -80363,7 +80476,20 @@ const EXAM_TOPICS = [
   "Verbos Irregulares",
   "Formatos de Writing del examen"
 ];
-const EXAM_THEORY_IDS = ["vregular_g1", "virregular_g1"];
+const TOPIC_THEORY = {
+  "Adjetivos y pronombres posesivos": { id: "posesivos_teoria_facil", easy: true },
+  "Present perfect vs. pasado simple": { id: "presentperfect_teoria_facil", easy: true },
+  "Conjunciones de tiempo": { id: "conjtiempo_teoria_facil", easy: true },
+  "Preposiciones comunes": { id: "preposiciones_teoria_facil", easy: true },
+  "To + verbo vs. -ing": { id: "toing_teoria_facil", easy: true },
+  "Comparativos y superlativos": { id: "comparativos_teoria_facil", easy: true },
+  "Verbos Regulares": { id: "vregular_g1", easy: false },
+  "Verbos Irregulares": { id: "virregular_g1", easy: false },
+  "Voz Pasiva": { id: "pasiva_g1", easy: false },
+  "Discurso Indirecto": { id: "reportado_g1", easy: false },
+  "Condicionales": { id: "condicional_g1", easy: false },
+  "Cuantificadores": { id: "cuantif_g1", easy: false }
+};
 
 function getTopics() {
   const topics = [];
@@ -80403,66 +80529,99 @@ function renderCategories() {
     return card;
   }
 
-  function makeTheoryCard(t) {
-    const ref = CLASSES.find(c => c.id === t.id);
+  function makeTheoryCard(topicName, badge, theory) {
+    const ref = CLASSES.find(c => c.id === theory.id);
     const card = document.createElement('button');
-    card.className = 'class-card';
+    card.className = 'class-card theory-card' + (theory.easy ? ' theory-card-easy' : '');
     card.style.setProperty('--accent', ref.color);
     card.style.setProperty('--accent-bg', ref.bg);
-    card.onclick = () => openTheory(t.id);
+    card.onclick = () => openTheory(theory.id);
     card.innerHTML =
-      '<span class="class-badge">📋</span>' +
+      '<span class="class-badge">' + badge + '</span>' +
       '<span>' +
-      '<p class="class-title">' + t.label + '</p>' +
-      '<p class="class-meta">Lista de verbos y reglas para memorizar</p>' +
+      '<p class="class-title">Tema ' + badge + ' · ' + (theory.easy ? 'Teoría fácil 💡' : 'Teoría') + '</p>' +
+      '<p class="class-meta">' + topicName + '</p>' +
       '</span>';
     return card;
+  }
+
+  function appendTheoryPanel(parent, topicNames) {
+    const theoryEntries = topicNames
+      .map((topicName, i) => ({ topicName: topicName, badge: i + 1, theory: TOPIC_THEORY[topicName] }))
+      .filter(e => e.theory);
+    if (!theoryEntries.length) return;
+
+    const panel = document.createElement('div');
+    panel.className = 'theory-panel';
+
+    const tHeader = document.createElement('p');
+    tHeader.className = 'section-header theory-section-header';
+    tHeader.textContent = '📋 Teoría para repasar';
+    panel.appendChild(tHeader);
+
+    const tNote = document.createElement('p');
+    tNote.className = 'class-meta section-note';
+    tNote.textContent = 'Fichas con la explicación de cada tema. Tienen el mismo número que su tema de arriba, pero van acá aparte para repasar.';
+    panel.appendChild(tNote);
+
+    const tGrid = document.createElement('div');
+    tGrid.className = 'class-grid theory-grid';
+    theoryEntries.forEach(e => tGrid.appendChild(makeTheoryCard(e.topicName, e.badge, e.theory)));
+    panel.appendChild(tGrid);
+
+    parent.appendChild(panel);
+  }
+
+  function renderSection(icon, title, note, topicNames) {
+    const panel = document.createElement('div');
+    panel.className = 'exercises-panel';
+
+    const header = document.createElement('p');
+    header.className = 'section-header';
+    header.textContent = icon + ' ' + title;
+    panel.appendChild(header);
+
+    if (note) {
+      const noteEl = document.createElement('p');
+      noteEl.className = 'class-meta section-note';
+      noteEl.textContent = note;
+      panel.appendChild(noteEl);
+    }
+
+    const grid = document.createElement('div');
+    grid.className = 'class-grid';
+    topicNames.forEach((topicName, i) => grid.appendChild(makeTopicCard(topicName, i + 1)));
+    panel.appendChild(grid);
+
+    container.appendChild(panel);
+    appendTheoryPanel(container, topicNames);
   }
 
   const allTopics = getTopics();
   const examTopicNames = allTopics.filter(t => EXAM_TOPICS.includes(t));
   const otherTopicNames = allTopics.filter(t => !EXAM_TOPICS.includes(t));
 
-  const theoryCards = [
-    { id: 'vregular_g1', label: 'Verbos Regulares · Teoría' },
-    { id: 'virregular_g1', label: 'Verbos Irregulares · Teoría' },
-    { id: 'pasiva_g1', label: 'Voz Pasiva · Teoría' },
-    { id: 'reportado_g1', label: 'Discurso Indirecto · Teoría' },
-    { id: 'condicional_g1', label: 'Condicionales · Teoría' },
-    { id: 'cuantif_g1', label: 'Cuantificadores · Teoría' }
-  ];
-  const examTheoryCards = theoryCards.filter(t => EXAM_THEORY_IDS.includes(t.id));
-  const otherTheoryCards = theoryCards.filter(t => !EXAM_THEORY_IDS.includes(t.id));
-
-  const examHeader = document.createElement('p');
-  examHeader.className = 'section-header';
-  examHeader.textContent = '📝 Temas del examen de ingreso';
-  container.appendChild(examHeader);
-
-  const examNote = document.createElement('p');
-  examNote.className = 'class-meta';
-  examNote.style.margin = '-4px 0 12px';
-  examNote.textContent = 'Son los únicos temas que toman en el simulacro. Conviene estudiar solo estos.';
-  container.appendChild(examNote);
-
-  const examGrid = document.createElement('div');
-  examGrid.className = 'class-grid';
-  examTopicNames.forEach((topicName, i) => examGrid.appendChild(makeTopicCard(topicName, i + 1)));
-  examTheoryCards.forEach(t => examGrid.appendChild(makeTheoryCard(t)));
-  container.appendChild(examGrid);
+  renderSection(
+    '📝',
+    'Temas del examen de ingreso',
+    'Son los únicos temas que toman en el simulacro. Conviene estudiar solo estos.',
+    examTopicNames
+  );
 
   const advancedBox = document.createElement('details');
   advancedBox.className = 'advanced-box';
   const advancedSummary = document.createElement('summary');
-  const advancedCount = otherTopicNames.length + otherTheoryCards.length;
+  const advancedTheoryCount = otherTopicNames.filter(t => TOPIC_THEORY[t]).length;
+  const advancedCount = otherTopicNames.length + advancedTheoryCount;
   advancedSummary.textContent = 'Temas avanzados (' + advancedCount + ' — no entran en este examen)';
   advancedBox.appendChild(advancedSummary);
 
-  const otherGrid = document.createElement('div');
-  otherGrid.className = 'class-grid';
-  otherTopicNames.forEach((topicName, i) => otherGrid.appendChild(makeTopicCard(topicName, i + 1)));
-  otherTheoryCards.forEach(t => otherGrid.appendChild(makeTheoryCard(t)));
-  advancedBox.appendChild(otherGrid);
+  const advancedGrid = document.createElement('div');
+  advancedGrid.className = 'class-grid';
+  otherTopicNames.forEach((topicName, i) => advancedGrid.appendChild(makeTopicCard(topicName, i + 1)));
+  advancedBox.appendChild(advancedGrid);
+
+  appendTheoryPanel(advancedBox, otherTopicNames);
 
   container.appendChild(advancedBox);
 }
