@@ -80265,6 +80265,69 @@ const CLASSES = [
         "⚠️ <b>Irregulares</b> para memorizar aparte: <span class=\"example\">good → better → the best. bad → worse → the worst.</span>"
       ]
     }
+  },
+  {
+    "id": "examen_audio_digital_habits",
+    "type": "listening",
+    "title": "Digital Habits · Audio de examen · Part 1",
+    "color": "#00897b",
+    "bg": "#e0f2f1",
+    "explanation": {
+      "intro": "Esta es una simulación del audio real de examen (Part 1: Digital Habits), con las mismas preguntas y respuestas que aparecen en el cuadernillo. Escuchá el audio (podés reproducirlo las veces que quieras) y elegí la opción correcta para cada pregunta.",
+      "points": [
+        "En el examen real el audio se escucha dos veces: leé las 7 preguntas antes de escuchar para saber qué información buscar en cada segmento.",
+        "Alex es quien conduce el podcast y entrevista a los cinco chicos: Felix, Sophie, Arthur, Grace y Dylan.",
+        "Cada chico habla de un hábito digital distinto; prestá atención a los detalles que descartan las otras dos opciones, no solo a la palabra clave."
+      ]
+    },
+    "script": "ALEX: Hi everyone, and welcome to Teen Talk, the podcast where we chat with five teenagers about their digital habits. Today I'm talking to Felix, Sophie, Arthur, Grace and Dylan. Let's start with you, Felix, what's going on with your computer lately?\n\nFELIX: Hi Alex! Well, my keyboard and my monitor are actually fine, but my mouse keeps freezing in the middle of games, so that's the only thing I'd like to buy right now, a new mouse.\n\nALEX: That sounds annoying! By the way, doesn't your brother have his own computer too?\n\nFELIX: Yeah, he does, but it's not even a better computer than mine, and he still has homework some evenings too. He's lucky though, because his classes finish earlier than mine, so he simply gets more hours to play every day than I do.\n\nALEX: Ha, I guess that is pretty lucky! Okay, Sophie, tell us about your plans for the weekend.\n\nSOPHIE: There's a concert by my favourite band this weekend, and even though I could just watch it streamed live online, I'd much rather go in person. There's nothing like being there with everyone singing along, so I'm definitely going to the venue instead of staying home.\n\nALEX: Nice, enjoy it! Arthur, I heard you downloaded a new app.\n\nARTHUR: Yes! It's not really about doing exercises for fun, and I'm not chatting with native speakers through it either. I just really want to improve my French before a trip next year, and this app is perfect for learning new vocabulary and grammar rules every day.\n\nALEX: That's a great reason. Does it work well at home?\n\nARTHUR: Mostly, yes, but there's one problem: my internet connection gets really poor whenever my sister is watching movies on her tablet in the other room. It has nothing to do with video calls or the app itself, it's always her streaming that slows everything down.\n\nALEX: That's so relatable! Grace, I saw you were looking at lamps online yesterday.\n\nGRACE: Oh yes, I found a really nice yellow lamp for my desk. The colour was gorgeous and the price was actually cheaper than I expected, but in the end I didn't buy it because it was way too big for my desk, the size just wasn't right.\n\nALEX: Fair enough! And finally, Dylan, did you go to that photography event last week?\n\nDYLAN: I almost didn't! At first I wasn't interested, and it had nothing to do with wanting to use an app on my tablet or being the only photographer there. I only ended up going because my mum kept insisting that I should go, and I'm really glad she did, because I had a great time.\n\nALEX: That's a great note to end on. Thanks so much, everyone, for sharing your digital habits with us today!",
+    "questions": [
+      {
+        "text": "Felix would like to buy...",
+        "options": ["a keyboard.", "a monitor.", "a mouse."],
+        "correct": 2,
+        "explanation": "Felix dice que el teclado y el monitor están bien, pero el mouse se le tilda, así que es lo único que quiere comprar."
+      },
+      {
+        "text": "Alex thinks Felix's brother is lucky because...",
+        "options": ["he can play for longer.", "he has a better computer.", "he does not have to study."],
+        "correct": 0,
+        "explanation": "Felix aclara que la compu del hermano no es mejor y que también tiene tarea, pero como termina las clases antes, tiene más horas para jugar."
+      },
+      {
+        "text": "Sophie...",
+        "options": ["is interested in going to the concert in person.", "prefers watching concerts online to live shows.", "plans to watch the concert on YouTube later."],
+        "correct": 0,
+        "explanation": "Sophie dice que prefiere ir en persona antes que verlo transmitido online."
+      },
+      {
+        "text": "Arthur got the app because...",
+        "options": ["he enjoys doing exercises online.", "he likes talking to native speakers.", "he wants to improve his French."],
+        "correct": 2,
+        "explanation": "Arthur descarta los ejercicios por diversión y hablar con nativos, y dice que la bajó para mejorar su francés antes de un viaje."
+      },
+      {
+        "text": "Arthur's internet connection gets poor when...",
+        "options": ["he is on video chat.", "his sister watches movies.", "he uses his app."],
+        "correct": 1,
+        "explanation": "Arthur dice que la conexión empeora cuando su hermana mira películas en la tablet, y aclara que no tiene que ver con videollamadas ni con su app."
+      },
+      {
+        "text": "Grace didn't buy the yellow lamp because of its...",
+        "options": ["size.", "colour.", "price."],
+        "correct": 0,
+        "explanation": "Grace dice que el color le encantó y el precio era bueno, pero no la compró porque era demasiado grande para su escritorio."
+      },
+      {
+        "text": "Dylan finally went to the event because...",
+        "options": ["he wanted to use the app on his tablet.", "his mother insisted that he should go.", "he would be the only photographer there."],
+        "correct": 1,
+        "explanation": "Dylan descarta el uso de la app y ser el único fotógrafo, y dice que fue porque su mamá insistió."
+      }
+    ],
+    "topic": "Audios de examen",
+    "activity": "Listening",
+    "tanda": 1
   }
 ];
 
@@ -80476,6 +80539,9 @@ const EXAM_TOPICS = [
   "Verbos Irregulares",
   "Formatos de Writing del examen"
 ];
+const AUDIO_EXAM_TOPICS = [
+  "Audios de examen"
+];
 const TOPIC_THEORY = {
   "Adjetivos y pronombres posesivos": { id: "posesivos_teoria_facil", easy: true },
   "Present perfect vs. pasado simple": { id: "presentperfect_teoria_facil", easy: true },
@@ -80598,8 +80664,16 @@ function renderCategories() {
   }
 
   const allTopics = getTopics();
-  const examTopicNames = allTopics.filter(t => EXAM_TOPICS.includes(t));
-  const otherTopicNames = allTopics.filter(t => !EXAM_TOPICS.includes(t));
+  const audioExamTopicNames = allTopics.filter(t => AUDIO_EXAM_TOPICS.includes(t));
+  const examTopicNames = allTopics.filter(t => EXAM_TOPICS.includes(t) && !AUDIO_EXAM_TOPICS.includes(t));
+  const otherTopicNames = allTopics.filter(t => !EXAM_TOPICS.includes(t) && !AUDIO_EXAM_TOPICS.includes(t));
+
+  renderSection(
+    '🎧',
+    'Audios de examen',
+    'Simulacros del audio real del examen, con las mismas preguntas y respuestas del cuadernillo.',
+    audioExamTopicNames
+  );
 
   renderSection(
     '📝',
