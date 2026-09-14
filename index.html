@@ -241,6 +241,23 @@ body.exam-mode .progress-bar-fill { background: #1a1a1a; }
 body.exam-mode .checklist-item { font-family: Georgia, 'Times New Roman', Times, serif; }
 body.exam-mode .write-timer-box { background: #fff; border: 1.5px dashed #444; }
 body.exam-mode #write-timer-label { color: #1a1a1a; }
+
+/* Exam-mode "whole part on one page" list, styled like the printed booklet. */
+.exam-q-block { margin-bottom: 22px; padding-bottom: 18px; border-bottom: 1px solid #ddd; }
+.exam-q-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.exam-q-text { font-weight: 700; margin: 0 0 10px; font-family: Georgia, 'Times New Roman', Times, serif; color: #1a1a1a; }
+.exam-q-opts { display: flex; flex-direction: column; gap: 8px; }
+.exam-q-opts .opt-btn { cursor: pointer; }
+.exam-inline-q {
+  line-height: 2; margin: 0 0 18px; font-size: 15px;
+  font-family: Georgia, 'Times New Roman', Times, serif; color: #1a1a1a;
+}
+.exam-inline-opt { cursor: pointer; padding: 1px 3px; border-radius: 2px; }
+.exam-inline-opt:hover { background: #f0efe9; }
+.exam-inline-opt.selected { text-decoration: underline; font-weight: 700; }
+.exam-inline-opt.correct { text-decoration: underline; font-weight: 700; color: #1e9e5a; }
+.exam-inline-opt.incorrect { text-decoration: line-through; color: #c23f3f; }
+.exam-q-feedback { margin-top: 10px; }
 </style>
 </head>
 <body>
@@ -326,11 +343,10 @@ body.exam-mode #write-timer-label { color: #1a1a1a; }
       <span class="subtitle" id="ex-progress"></span>
     </div>
     <p id="ex-exam-header" class="exam-header hidden"></p>
-    <div class="progress-bar-bg"><div class="progress-bar-fill" id="ex-bar" style="width:0%"></div></div>
+    <div class="progress-bar-bg" id="ex-bar-wrap"><div class="progress-bar-fill" id="ex-bar" style="width:0%"></div></div>
     <div id="ex-context" class="hidden"></div>
-    <div class="card">
+    <div class="card" id="ex-single-card">
       <p class="review-q" id="ex-question" style="font-size:17px;"></p>
-      <p id="ex-instruction" class="exam-instruction hidden">Choose the correct option (A, B or C) and put a tick (✓) in the correct box.</p>
       <div id="ex-options"></div>
       <p class="error-text" id="ex-error">Elegí una opción antes de continuar.</p>
       <div id="ex-feedback" class="hidden"></div>
@@ -338,6 +354,14 @@ body.exam-mode #write-timer-label { color: #1a1a1a; }
       <div class="row">
         <button id="ex-prev-btn" onclick="prevQuestion()">Anterior</button>
         <button class="primary" id="ex-next-btn" onclick="nextQuestion()">Siguiente</button>
+      </div>
+    </div>
+    <div class="card hidden" id="ex-exam-card">
+      <p id="ex-exam-instruction" class="exam-instruction"></p>
+      <div id="ex-exam-list"></div>
+      <p class="error-text" id="ex-exam-error">Contestá todas las preguntas antes de corregir.</p>
+      <div class="row" style="margin-top:14px; justify-content:flex-end;">
+        <button class="primary" id="ex-exam-submit-btn" onclick="submitExamAnswers()">Corregir todo</button>
       </div>
     </div>
   </div>
@@ -81599,6 +81623,7 @@ const CLASSES = [
   {
     "id": "alt1_uoe_ecohero",
     "title": "Simulacro alternativo 1 · Use of English · Part 1",
+    "examPassage": "An eco-hero story\n\nA teenager (0) from / of / at Manchester is using technology (1) for help / to help / for helping reduce plastic waste. At just 14 years old, Priya Sharma created an app called \"GreenTrack\" (2) who / where / which helps people find recycling points near them.\n\nPriya said that today many people have smartphones and they should use (3) they / them / it for good. She wanted to create something useful for people who care about the environment, so she worked very hard on her app.\n\nPriya started coding (4) until / since / when she was in fourth grade. In secondary school, she spoke to shop owners in her town and discovered that many of them did not know where to send their recyclable materials. Because of this, she decided to make an app with information about recycling centres and collection points around the city.\n\nThe app shows places where people (5) can / must / shall drop off plastic, glass and paper safely. It also helps users find charity shops close to them. Priya said she feels very proud because the app (6) is helping / has helped / helped many families for the last three years.\n\nIn the future, she wants to add the app to different cities so more people can use it.\n\nPriya believes communities should support (7) each other / them / themselves more. She says recycling alone is useful, (8) because / but / so working together is even more important for the planet.",
     "color": "#1565c0",
     "bg": "#e3f2fd",
     "explanation": {
@@ -81673,6 +81698,7 @@ const CLASSES = [
   {
     "id": "alt1_uoe_musictherapy",
     "title": "Simulacro alternativo 1 · Use of English · Part 2",
+    "examPassage": "The Magic of Music Therapy\n\nMusic is an important tool for many people to use in their daily life. Many people believe that music is just entertainment, but it is actually quite powerful for our wellbeing. Today, new research with music therapy shows us (1) how / what / that to improve our mood and communication. This technique teaches us to relax better because it can calm us down and it never causes stress.\n\nFor example, when we listen to a song, we often think (2) about / for / in our own memories and feelings instead of focusing only on the melody. We often want to sing along or remember a similar moment from our own lives. Because of this, we often connect deeply with songs when we hear them.\n\nNow therapists (3) can / must / need help us understand how to use music to relax and feel better. It doesn't have (4) its / it's / their own rules to follow strictly, so it lets each person feel the music in their own way.\n\nThis technique is so powerful that it often helps people relax better (5) than / that / then other activities. It can create small changes in the way we feel. It can find gentle ways to calm our mind that people sometimes miss. Music (6) does / is / has not solve every problem, but it gives us a simple way to relax our thoughts. It shows us what we (7) need / must / should to practise more often to feel calmer every day. Using this technique is a great way to improve our lives, understand our emotions better, and build a healthier routine in the future.",
     "color": "#1565c0",
     "bg": "#e3f2fd",
     "explanation": {
@@ -82062,6 +82088,7 @@ const CLASSES = [
   {
     "id": "alt2_uoe_volunteer",
     "title": "Simulacro alternativo 2 · Use of English · Part 1",
+    "examPassage": "A Young Volunteer\n\nFourteen-year-old Mateo Díaz started volunteering last year, (1) when / where / which he saw an advert asking for help walking dogs. Mateo says the dogs (2) who / which / where live at the shelter are usually very friendly.\n\nHe explained that some animals arrived at the shelter because their owners (3) didn't / not / doesn't want them anymore. Every weekend, Mateo (4) can / must / should choose which dogs to walk, because the shelter staff trust him completely.\n\nHe (5) would / will / is love to work with animals professionally when he grows up. Mateo believes that people (6) each other / themselves / them should help animals more.\n\nA little kindness (7) but / so / can make a big difference in their lives.",
     "color": "#00838f",
     "bg": "#e0f7fa",
     "explanation": {
@@ -82129,6 +82156,7 @@ const CLASSES = [
   {
     "id": "alt2_uoe_recipes",
     "title": "Simulacro alternativo 2 · Use of English · Part 2",
+    "examPassage": "Family Recipes\n\nGrandmothers often know recipes that (1) have / has / had been passed down for generations. My grandmother's chicken soup is (2) our / its / her favourite dish in our family. Everyone asks her (3) how / what / why she makes it taste so special.\n\nShe never rushes (4) her / the / its cooking, and always tastes the soup several times before serving it. Her kitchen always smells (5) of / in / at fresh herbs and warm bread.\n\nWe (6) could / can / would not believe how many steps were involved! Now we understand why it (7) takes / take / took so much time to make it properly.",
     "color": "#00838f",
     "bg": "#e0f7fa",
     "explanation": {
@@ -82518,6 +82546,7 @@ const CLASSES = [
   {
     "id": "alt3_uoe_market",
     "title": "Simulacro alternativo 3 · Use of English · Part 1",
+    "examPassage": "A Weekend Market\n\nCarla loves visiting the stalls (1) who / which / where sell homemade food and handmade jewellery. Last weekend, Carla (2) didn't / not / doesn't buy anything at first, because she wanted to look around before deciding.\n\nShe finally found a bracelet (3) who / which / where matched her favourite dress perfectly. The woman selling the jewellery told Carla that she (4) can / must / should come back next month, because she makes new designs every few weeks.\n\nCarla (5) would / will / is love to learn how to make jewellery herself someday. Carla believes shoppers should support (6) each other / them / themselves by buying local products.\n\nThe market closes early on rainy days, (7) because / but / so it's a good idea to check the weather first. Carla's mum says the market (8) is / are / be the best place in town to find fresh vegetables.",
     "color": "#6a1b9a",
     "bg": "#f3e5f5",
     "explanation": {
@@ -82592,6 +82621,7 @@ const CLASSES = [
   {
     "id": "alt3_uoe_journal",
     "title": "Simulacro alternativo 3 · Use of English · Part 2",
+    "examPassage": "Keeping a Journal\n\nWriting in a journal every day can help people understand (1) their / its / them own thoughts better. Many people say it (2) helps / help / helped them feel calmer after a stressful day.\n\nWriting about your feelings can reduce stress more (3) than / that / then simply thinking about them. It (4) does / is / has not need to be a long entry — even a few sentences can help.\n\nExperts recommend writing (5) at / in / on the same time every day, so it becomes a habit. Some people prefer writing (6) in / at / on the morning, to plan their day.\n\nIf you have never tried journaling before, it (7) is / has / does worth giving it a try for just one week.",
     "color": "#6a1b9a",
     "bg": "#f3e5f5",
     "explanation": {
@@ -82981,6 +83011,7 @@ const CLASSES = [
   {
     "id": "alt4_uoe_classpet",
     "title": "Simulacro alternativo 4 · Use of English · Part 1",
+    "examPassage": "A Class Pet Project\n\nThe students (1) who / which / where take care of Luna each week write her name on a schedule on the wall. At first, Luna (2) didn't / not / doesn't eat much, because she was nervous in her new home.\n\nThe students learned that rabbits (3) can / must / should have fresh vegetables every day to stay healthy. Luna's favourite corner of the classroom is the one (4) who / which / where the window lets in warm sunlight.\n\nMs. Ortiz says the students (5) would / will / is love to bring Luna home during the holidays, so she isn't alone. Everyone in the class agreed to help (6) each other / them / themselves remember Luna's feeding schedule.\n\nEveryone agreed to help each other remember Luna's schedule, (7) because / but / so nobody forgets their turn. Now the classroom feels (8) a lot / much / very more lively with Luna around.",
     "color": "#2e7d32",
     "bg": "#e8f5e9",
     "explanation": {
@@ -83055,6 +83086,7 @@ const CLASSES = [
   {
     "id": "alt4_uoe_language",
     "title": "Simulacro alternativo 4 · Use of English · Part 2",
+    "examPassage": "Learning a New Language\n\nLearning a new language takes patience, and (1) it / this / that doesn't happen overnight. Practising a little every day is better (2) than / that / then studying for hours only once a week.\n\nWatching shows in the language you (3) are / is / were learning helps you get used to how the words sound. It (4) does / is / has not matter if you don't understand everything at first.\n\nMany learners find (5) it / this / them helpful to write down new words in a notebook. Making mistakes is normal, so students (6) should / does / would not be afraid to speak.\n\nWith enough practice, most people notice real progress within (7) a / the / an few months.",
     "color": "#2e7d32",
     "bg": "#e8f5e9",
     "explanation": {
@@ -84016,7 +84048,101 @@ function startExercises() {
   document.getElementById('ex-bar').style.setProperty('--accent', activeClass.color);
   renderExamHeader('ex-exam-header');
   buildContext();
-  renderQuestion();
+
+  const examMode = isExamClass(activeClass);
+  document.getElementById('ex-progress').classList.toggle('hidden', examMode);
+  document.getElementById('ex-bar-wrap').classList.toggle('hidden', examMode);
+  document.getElementById('ex-single-card').classList.toggle('hidden', examMode);
+  document.getElementById('ex-exam-card').classList.toggle('hidden', !examMode);
+  if (examMode) {
+    document.getElementById('ex-exam-instruction').textContent = activeClass.activity === 'Gramática'
+      ? 'For each question, choose the correct option to complete the text.'
+      : 'Choose the correct option (A, B or C) and put a tick (✓) in the correct box.';
+    document.getElementById('ex-exam-error').style.display = 'none';
+    renderExamList();
+  } else {
+    renderQuestion();
+  }
+}
+
+const EXAM_LETTERS = ['A', 'B', 'C', 'D', 'E'];
+
+function renderExamList() {
+  const listEl = document.getElementById('ex-exam-list');
+  listEl.innerHTML = '';
+  const isGramatica = activeClass.activity === 'Gramática';
+
+  activeClass.questions.forEach((q, qi) => {
+    const order = questionOptionOrder[qi] || q.options.map((_, i) => i);
+    const wrapper = document.createElement('div');
+    wrapper.className = 'exam-q-block';
+    const checked = !!userChecked[qi];
+
+    if (isGramatica && !activeClass.examPassage && q.text.indexOf('___') !== -1) {
+      // Fallback for a Gramática exam item authored without a shared passage above: show the option choice inline in its own sentence.
+      const parts = q.text.split('___');
+      let html = '<p class="exam-inline-q">' + (qi + 1) + ') ' + escapeHtml(parts[0]) + '<span class="exam-inline-opts">';
+      order.forEach((origIdx, i) => {
+        const isSel = userAnswers[qi] === origIdx;
+        let cls = 'exam-inline-opt';
+        if (checked) { if (origIdx === q.correct) cls += ' correct'; else if (isSel) cls += ' incorrect'; }
+        else if (isSel) cls += ' selected';
+        html += '<span class="' + cls + '" data-qi="' + qi + '" data-idx="' + origIdx + '">' + escapeHtml(q.options[origIdx]) + '</span>';
+        if (i < order.length - 1) html += ' / ';
+      });
+      html += '</span>' + escapeHtml(parts[1] || '') + '</p>';
+      wrapper.innerHTML = html;
+    } else {
+      // The full sentence already lives in the passage above for Gramática items with examPassage, so just show the number here.
+      const label = isGramatica && activeClass.examPassage ? ('<p class="exam-q-text">' + (qi + 1) + ')</p>') : ('<p class="exam-q-text">' + (qi + 1) + ') ' + escapeHtml(q.text) + '</p>');
+      let html = label + '<div class="exam-q-opts">';
+      order.forEach((origIdx, i) => {
+        const isSel = userAnswers[qi] === origIdx;
+        let cls = 'opt-btn';
+        if (checked) { if (origIdx === q.correct) cls += ' correct'; else if (isSel) cls += ' incorrect'; }
+        else if (isSel) cls += ' selected';
+        const box = isSel || (checked && origIdx === q.correct) ? '☑' : '☐';
+        html += '<button class="' + cls + '" data-qi="' + qi + '" data-idx="' + origIdx + '"' + (checked ? ' disabled' : '') + '>' +
+          '<span class="opt-box">' + box + ' ' + (EXAM_LETTERS[i] || '') + '.</span><span>' + escapeHtml(q.options[origIdx]) + '</span></button>';
+      });
+      html += '</div>';
+      wrapper.innerHTML = html;
+    }
+
+    if (checked) {
+      const isCorrect = userAnswers[qi] === q.correct;
+      const fb = document.createElement('div');
+      fb.className = 'exam-q-feedback';
+      fb.innerHTML = '<p class="review-q" style="margin:8px 0 6px;"><span class="review-icon ' + (isCorrect ? 'ok-bg' : 'bad-bg') + '">' +
+        (isCorrect ? '&#10003;' : '&#10007;') + '</span>' + (isCorrect ? '¡Correcto!' : 'Incorrecto') + '</p>' +
+        buildAnswerFeedbackHtml(q, userAnswers[qi]);
+      wrapper.appendChild(fb);
+    }
+
+    listEl.appendChild(wrapper);
+  });
+
+  document.getElementById('ex-exam-submit-btn').classList.toggle('hidden', userChecked.every(Boolean));
+
+  listEl.onclick = (e) => {
+    const target = e.target.closest('[data-qi]');
+    if (!target) return;
+    const qi = parseInt(target.dataset.qi, 10);
+    if (userChecked[qi]) return;
+    userAnswers[qi] = parseInt(target.dataset.idx, 10);
+    renderExamList();
+  };
+}
+
+function submitExamAnswers() {
+  if (userAnswers.some(a => a === null)) {
+    document.getElementById('ex-exam-error').style.display = 'block';
+    return;
+  }
+  document.getElementById('ex-exam-error').style.display = 'none';
+  userChecked = userChecked.map(() => true);
+  renderExamList();
+  showResult();
 }
 
 let audioState = { playing: false, timer: null, duration: 0, elapsed: 0 };
@@ -84027,6 +84153,15 @@ function buildContext() {
   if (activeClass.type === 'reading') {
     ctx.classList.remove('hidden');
     const paras = activeClass.passage.split('\n\n').map(p => '<p>' + p + '</p>').join('');
+    ctx.innerHTML = '<div class="passage-box">' + paras + '</div>';
+  } else if (activeClass.activity === 'Gramática' && activeClass.examPassage) {
+    ctx.classList.remove('hidden');
+    const paras = activeClass.examPassage.split('\n\n').map((p, i) => {
+      const withBoldNums = escapeHtml(p).replace(/\((\d+)\)/g, '<b>($1)</b>');
+      return i === 0 && p.indexOf('(') === -1
+        ? '<p style="text-align:center; font-weight:700; margin-bottom:10px;">' + withBoldNums + '</p>'
+        : '<p>' + withBoldNums + '</p>';
+    }).join('');
     ctx.innerHTML = '<div class="passage-box">' + paras + '</div>';
   } else if (activeClass.type === 'listening') {
     ctx.classList.remove('hidden');
@@ -84186,13 +84321,10 @@ function renderQuestion() {
   document.getElementById('ex-error').style.display = 'none';
 
   const checked = !!userChecked[curQ];
-  const examMode = isExamClass(activeClass);
-  const LETTERS = ['A', 'B', 'C', 'D', 'E'];
-  document.getElementById('ex-instruction').classList.toggle('hidden', !examMode);
   const optsEl = document.getElementById('ex-options');
   optsEl.innerHTML = '';
   const order = questionOptionOrder[curQ] || q.options.map((_, i) => i);
-  order.forEach((origIdx, i) => {
+  order.forEach((origIdx) => {
     const btn = document.createElement('button');
     let cls = 'opt-btn';
     const isSelected = userAnswers[curQ] === origIdx;
@@ -84205,12 +84337,7 @@ function renderQuestion() {
     btn.className = cls;
     btn.style.setProperty('--accent', activeClass.color);
     btn.style.setProperty('--accent-bg', activeClass.bg);
-    if (examMode) {
-      const box = isSelected || (checked && origIdx === q.correct) ? '☑' : '☐';
-      btn.innerHTML = '<span class="opt-box">' + box + ' ' + (LETTERS[i] || '') + '.</span><span>' + escapeHtml(q.options[origIdx]) + '</span>';
-    } else {
-      btn.textContent = q.options[origIdx];
-    }
+    btn.textContent = q.options[origIdx];
     btn.disabled = checked;
     btn.onclick = () => { if (userChecked[curQ]) return; userAnswers[curQ] = origIdx; renderQuestion(); };
     optsEl.appendChild(btn);
