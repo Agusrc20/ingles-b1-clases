@@ -84017,8 +84017,17 @@ function showHistoryAttempt(index) {
     div.innerHTML = html;
     reviewEl.appendChild(div);
   } else {
+    let score = attempt.score;
+    if (attempt.details && attempt.details.length && activeClass.questions) {
+      // Recompute in case a question's answer key was fixed after this attempt was saved.
+      score = attempt.details.reduce((total, d) => {
+        const liveQ = activeClass.questions.find(q => q.text === d.question);
+        const isCorrect = liveQ ? d.chosenText === liveQ.options[liveQ.correct] : d.isCorrect;
+        return total + (isCorrect ? 1 : 0);
+      }, 0);
+    }
     document.getElementById('history-summary').innerHTML =
-      attempt.score + '/' + attempt.total + ' <span class="stars">' + starsForScore(attempt.score, attempt.total) + '</span>';
+      score + '/' + attempt.total + ' <span class="stars">' + starsForScore(score, attempt.total) + '</span>';
     if (!attempt.details || !attempt.details.length) {
       const div = document.createElement('div');
       div.className = 'review-item';
@@ -84027,11 +84036,21 @@ function showHistoryAttempt(index) {
       return;
     }
     attempt.details.forEach((d, i) => {
+      // Re-check against the current answer key (not just the snapshot saved at attempt time),
+      // so a later fix to a question's correct answer shows up in old saved attempts too.
+      const liveQ = activeClass.questions && activeClass.questions.find(q => q.text === d.question);
+      let correctText = d.correctText;
+      let isCorrect = d.isCorrect;
+      if (liveQ) {
+        correctText = liveQ.options[liveQ.correct];
+        isCorrect = d.chosenText === correctText;
+      }
+
       const div = document.createElement('div');
-      div.className = 'review-item ' + (d.isCorrect ? 'correct' : 'incorrect');
-      let html = '<p class="review-q"><span class="review-icon ' + (d.isCorrect ? 'ok-bg' : 'bad-bg') + '">' + (d.isCorrect ? '&#10003;' : '&#10007;') + '</span>' + (i + 1) + '. ' + d.question + '</p>' +
-        '<p class="review-a">Respondió: <span class="' + (d.isCorrect ? 'ok' : 'bad') + '">' + (d.chosenText || '(sin responder)') + '</span>' +
-        (d.isCorrect ? '' : ' · Correcta: <span class="ok">' + d.correctText + '</span>') + '</p>';
+      div.className = 'review-item ' + (isCorrect ? 'correct' : 'incorrect');
+      let html = '<p class="review-q"><span class="review-icon ' + (isCorrect ? 'ok-bg' : 'bad-bg') + '">' + (isCorrect ? '&#10003;' : '&#10007;') + '</span>' + (i + 1) + '. ' + d.question + '</p>' +
+        '<p class="review-a">Respondió: <span class="' + (isCorrect ? 'ok' : 'bad') + '">' + (d.chosenText || '(sin responder)') + '</span>' +
+        (isCorrect ? '' : ' · Correcta: <span class="ok">' + correctText + '</span>') + '</p>';
       if (d.translation) html += '<div class="answer-detail-box"><p>Traducción de Alma: "' + d.translation + '"</p></div>';
       div.innerHTML = html;
       reviewEl.appendChild(div);
