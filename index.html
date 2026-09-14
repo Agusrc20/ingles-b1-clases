@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Inglés B1 · Mis clases</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 88 88'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%238b7fe8'/%3E%3Cstop offset='100%25' stop-color='%23ef5da8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='44' cy='44' r='42' fill='url(%23g)'/%3E%3Cpath d='M44 30 C38 25 28 24 22 27 V54 C28 51 38 52 44 57 C50 52 60 51 66 54 V27 C60 24 50 25 44 30 Z' fill='%23fff'/%3E%3Cpath d='M66 16 L68 21 L73.5 21.5 L69.5 25 L70.5 30.5 L66 27.5 L61.5 30.5 L62.5 25 L58.5 21.5 L64 21 Z' fill='%23f5a623'/%3E%3Ccircle cx='44' cy='70' r='11' fill='%2312b299' stroke='%23fff' stroke-width='2'/%3E%3Ctext x='44' y='74' font-family='Arial' font-size='11' font-weight='800' fill='%23fff' text-anchor='middle'%3EB1%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <style>
 :root { color-scheme: light; }
 * { box-sizing: border-box; }
@@ -200,7 +203,7 @@ button:disabled { opacity: .5; cursor: default; }
 
 /* Exam-paper look, used only for the "Simulacro alternativo" and "Audios de examen" sections. */
 .exam-header {
-  font-family: Georgia, 'Times New Roman', Times, serif; font-weight: 700; font-size: 15px;
+  font-family: 'Lora', Georgia, 'Times New Roman', Times, serif; font-weight: 700; font-size: 15px;
   letter-spacing: .03em; text-transform: uppercase; color: #1a1a1a;
   border-bottom: 2px solid #1a1a1a; padding-bottom: 6px; margin: 2px 0 14px;
 }
@@ -210,10 +213,10 @@ button:disabled { opacity: .5; cursor: default; }
 }
 .exam-instruction { font-style: italic; color: #55535f; font-size: 13px; margin: -4px 0 14px; }
 body.exam-mode { background: #f4f2ea; }
-body.exam-mode .wrap { font-family: Georgia, 'Times New Roman', Times, serif; }
+body.exam-mode .wrap { font-family: 'Lora', Georgia, 'Times New Roman', Times, serif; }
 body.exam-mode h1, body.exam-mode .class-title, body.exam-mode .review-q,
 body.exam-mode #ex-question, body.exam-mode #write-title, body.exam-mode #explain-title {
-  font-family: Georgia, 'Times New Roman', Times, serif; color: #1a1a1a;
+  font-family: 'Lora', Georgia, 'Times New Roman', Times, serif; color: #1a1a1a;
 }
 body.exam-mode .card, body.exam-mode .result-score, body.exam-mode .review-item,
 body.exam-mode .explain-box {
@@ -221,7 +224,7 @@ body.exam-mode .explain-box {
 }
 body.exam-mode .opt-btn {
   display: flex; align-items: flex-start; gap: 10px;
-  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-family: 'Lora', Georgia, 'Times New Roman', Times, serif;
   border: 1.3px solid #444; border-radius: 3px; background: #fff;
 }
 body.exam-mode .opt-btn .opt-box { flex-shrink: 0; font-size: 15px; font-weight: 700; }
@@ -230,27 +233,27 @@ body.exam-mode .opt-btn.correct { border-color: #1e9e5a; background: #eefaf1; }
 body.exam-mode .opt-btn.incorrect { border-color: #c23f3f; background: #fdecec; }
 body.exam-mode .passage-box, body.exam-mode .audio-box {
   background: #fff; border: 1.5px solid #222; border-radius: 4px;
-  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-family: 'Lora', Georgia, 'Times New Roman', Times, serif;
 }
 body.exam-mode .write-textarea {
-  font-family: Georgia, 'Times New Roman', Times, serif; border: 1.5px solid #222; border-radius: 4px;
+  font-family: 'Lora', Georgia, 'Times New Roman', Times, serif; border: 1.5px solid #222; border-radius: 4px;
 }
 body.exam-mode button.primary { background: #1a1a1a; }
 body.exam-mode button.primary:hover { background: #000; }
 body.exam-mode .progress-bar-fill { background: #1a1a1a; }
-body.exam-mode .checklist-item { font-family: Georgia, 'Times New Roman', Times, serif; }
+body.exam-mode .checklist-item { font-family: 'Lora', Georgia, 'Times New Roman', Times, serif; }
 body.exam-mode .write-timer-box { background: #fff; border: 1.5px dashed #444; }
 body.exam-mode #write-timer-label { color: #1a1a1a; }
 
 /* Exam-mode "whole part on one page" list, styled like the printed booklet. */
 .exam-q-block { margin-bottom: 22px; padding-bottom: 18px; border-bottom: 1px solid #ddd; }
 .exam-q-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-.exam-q-text { font-weight: 700; margin: 0 0 10px; font-family: Georgia, 'Times New Roman', Times, serif; color: #1a1a1a; }
+.exam-q-text { font-weight: 700; margin: 0 0 10px; font-family: 'Lora', Georgia, 'Times New Roman', Times, serif; color: #1a1a1a; }
 .exam-q-opts { display: flex; flex-direction: column; gap: 8px; }
 .exam-q-opts .opt-btn { cursor: pointer; }
 .exam-inline-q {
   line-height: 2; margin: 0 0 18px; font-size: 15px;
-  font-family: Georgia, 'Times New Roman', Times, serif; color: #1a1a1a;
+  font-family: 'Lora', Georgia, 'Times New Roman', Times, serif; color: #1a1a1a;
 }
 .exam-inline-opt { cursor: pointer; padding: 1px 3px; border-radius: 2px; }
 .exam-inline-opt:hover { background: #f0efe9; }
