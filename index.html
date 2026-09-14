@@ -190,6 +190,57 @@ button:disabled { opacity: .5; cursor: default; }
 .translate-feedback.warn { background: #fff6e5; color: #a06a00; }
 .translate-feedback.mid { background: #fff0e0; color: #b25900; }
 .translate-feedback b { display: block; margin-bottom: 3px; }
+
+.write-timer-box {
+  background: #fdf1f6; border: 1.5px dashed #f4c4dc; border-radius: 12px;
+  padding: 10px 14px; margin: 12px 0; display: flex; align-items: center;
+  justify-content: space-between; gap: 10px;
+}
+#write-timer-label { font-size: 13px; font-weight: 700; color: #c2185b; }
+
+/* Exam-paper look, used only for the "Simulacro alternativo" and "Audios de examen" sections. */
+.exam-header {
+  font-family: Georgia, 'Times New Roman', Times, serif; font-weight: 700; font-size: 15px;
+  letter-spacing: .03em; text-transform: uppercase; color: #1a1a1a;
+  border-bottom: 2px solid #1a1a1a; padding-bottom: 6px; margin: 2px 0 14px;
+}
+.exam-header .exam-subtitle {
+  display: block; font-weight: 500; text-transform: none; font-size: 12px;
+  color: #6f6c7d; letter-spacing: normal; margin-top: 3px;
+}
+.exam-instruction { font-style: italic; color: #55535f; font-size: 13px; margin: -4px 0 14px; }
+body.exam-mode { background: #f4f2ea; }
+body.exam-mode .wrap { font-family: Georgia, 'Times New Roman', Times, serif; }
+body.exam-mode h1, body.exam-mode .class-title, body.exam-mode .review-q,
+body.exam-mode #ex-question, body.exam-mode #write-title, body.exam-mode #explain-title {
+  font-family: Georgia, 'Times New Roman', Times, serif; color: #1a1a1a;
+}
+body.exam-mode .card, body.exam-mode .result-score, body.exam-mode .review-item,
+body.exam-mode .explain-box {
+  background: #fff; border: 1.5px solid #222; border-radius: 4px; box-shadow: none;
+}
+body.exam-mode .opt-btn {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  border: 1.3px solid #444; border-radius: 3px; background: #fff;
+}
+body.exam-mode .opt-btn .opt-box { flex-shrink: 0; font-size: 15px; font-weight: 700; }
+body.exam-mode .opt-btn.selected { border-color: #1a1a1a; background: #f0efe9; }
+body.exam-mode .opt-btn.correct { border-color: #1e9e5a; background: #eefaf1; }
+body.exam-mode .opt-btn.incorrect { border-color: #c23f3f; background: #fdecec; }
+body.exam-mode .passage-box, body.exam-mode .audio-box {
+  background: #fff; border: 1.5px solid #222; border-radius: 4px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+body.exam-mode .write-textarea {
+  font-family: Georgia, 'Times New Roman', Times, serif; border: 1.5px solid #222; border-radius: 4px;
+}
+body.exam-mode button.primary { background: #1a1a1a; }
+body.exam-mode button.primary:hover { background: #000; }
+body.exam-mode .progress-bar-fill { background: #1a1a1a; }
+body.exam-mode .checklist-item { font-family: Georgia, 'Times New Roman', Times, serif; }
+body.exam-mode .write-timer-box { background: #fff; border: 1.5px dashed #444; }
+body.exam-mode #write-timer-label { color: #1a1a1a; }
 </style>
 </head>
 <body>
@@ -253,6 +304,7 @@ button:disabled { opacity: .5; cursor: default; }
 
   <div id="view-explain" class="hidden">
     <div class="top-actions"><button class="link-btn" onclick="goToTandaList()">&larr; Volver a las tandas</button></div>
+    <p id="explain-exam-header" class="exam-header hidden"></p>
     <div class="card">
       <p class="class-title" id="explain-title" style="font-size:19px;"></p>
       <div class="explain-box" id="explain-body"></div>
@@ -273,10 +325,12 @@ button:disabled { opacity: .5; cursor: default; }
       <button class="link-btn" onclick="goToTandaList()">&larr; Salir</button>
       <span class="subtitle" id="ex-progress"></span>
     </div>
+    <p id="ex-exam-header" class="exam-header hidden"></p>
     <div class="progress-bar-bg"><div class="progress-bar-fill" id="ex-bar" style="width:0%"></div></div>
     <div id="ex-context" class="hidden"></div>
     <div class="card">
       <p class="review-q" id="ex-question" style="font-size:17px;"></p>
+      <p id="ex-instruction" class="exam-instruction hidden">Choose the correct option (A, B or C) and put a tick (✓) in the correct box.</p>
       <div id="ex-options"></div>
       <p class="error-text" id="ex-error">Elegí una opción antes de continuar.</p>
       <div id="ex-feedback" class="hidden"></div>
@@ -290,6 +344,7 @@ button:disabled { opacity: .5; cursor: default; }
 
   <div id="view-result" class="hidden">
     <div class="top-actions"><button class="link-btn" onclick="goToTandaList()">&larr; Volver a las tandas</button></div>
+    <p id="result-exam-header" class="exam-header hidden"></p>
     <div class="result-score">
       <p class="label">Resultado — <span id="result-classname"></span></p>
       <p class="big" id="result-score"></p>
@@ -303,11 +358,12 @@ button:disabled { opacity: .5; cursor: default; }
 
   <div id="view-writing" class="hidden">
     <div class="top-actions"><button class="link-btn" onclick="goToTandaList()">&larr; Volver a las tandas</button></div>
+    <p id="write-exam-header" class="exam-header hidden"></p>
     <div class="card">
       <p class="class-title" id="write-title" style="font-size:19px;"></p>
       <p style="font-size:14px; color:#55535f;" id="write-prompt"></p>
-      <div id="write-timer-box" class="hidden" style="background:#fdf1f6; border:1.5px dashed #f4c4dc; border-radius:12px; padding:10px 14px; margin:12px 0; display:flex; align-items:center; justify-content:space-between; gap:10px;">
-        <span id="write-timer-label" style="font-size:13px; font-weight:700; color:#c2185b;"></span>
+      <div id="write-timer-box" class="write-timer-box hidden">
+        <span id="write-timer-label"></span>
         <button id="write-timer-btn" onclick="toggleWriteTimer()" style="flex-shrink:0;"></button>
       </div>
       <p style="font-size:13px; font-weight:700; margin:14px 0 6px;" id="write-checklist-label">Incluí estas ideas:</p>
@@ -83435,6 +83491,37 @@ function showView(id) {
   ['view-categories', 'view-onboard', 'view-home', 'view-tandas', 'view-explain', 'view-theory', 'view-exercise', 'view-result', 'view-writing', 'view-history'].forEach(v => {
     document.getElementById(v).classList.toggle('hidden', v !== id);
   });
+  const examViews = ['view-explain', 'view-exercise', 'view-result', 'view-writing', 'view-history'];
+  document.body.classList.toggle('exam-mode', examViews.indexOf(id) !== -1 && isExamClass(activeClass));
+}
+
+function isExamClass(c) {
+  return !!c && !!c.topic && (c.topic.indexOf('Simulacro alternativo') === 0 || c.topic === 'Audios de examen');
+}
+
+const EXAM_SECTION_LABEL = { "Gramática": "Use of English", "Reading": "Reading Comprehension", "Listening": "Listening Comprehension", "Writing": "Writing" };
+
+function examHeaderHtml(c) {
+  const label = EXAM_SECTION_LABEL[c.activity] || c.activity;
+  const partMatch = c.title.match(/Part\s+\d+/i);
+  const part = partMatch ? partMatch[0] : ('Part ' + (c.tanda || 1));
+  return label + ' · ' + part + '<span class="exam-subtitle">' + c.topic + '</span>';
+}
+
+function renderExamHeader(elId) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  if (isExamClass(activeClass)) {
+    el.innerHTML = examHeaderHtml(activeClass);
+    el.classList.remove('hidden');
+  } else {
+    el.classList.add('hidden');
+    el.innerHTML = '';
+  }
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
 const ACTIVITY_ICONS = { "Gramática": "📘", "Reading": "📖", "Listening": "🎧", "Writing": "✍️" };
@@ -83892,12 +83979,13 @@ function showHistoryAttempt(index) {
 function openClass(classId) {
   activeClass = CLASSES.find(c => c.id === classId);
   document.getElementById('explain-title').textContent = activeClass.title;
-  document.getElementById('explain-title').style.color = activeClass.color;
+  document.getElementById('explain-title').style.color = isExamClass(activeClass) ? '#1a1a1a' : activeClass.color;
   const box = document.getElementById('explain-body');
   box.style.setProperty('--accent-bg', activeClass.bg);
   box.innerHTML = '<p style="margin:0 0 6px;">' + activeClass.explanation.intro + '</p><ul>' +
     activeClass.explanation.points.map(p => '<li>' + p + '</li>').join('') + '</ul>';
   document.getElementById('explain-start-btn').textContent = activeClass.type === 'writing' ? 'Empezar a escribir' : 'Empezar ejercicios';
+  renderExamHeader('explain-exam-header');
   showView('view-explain');
 }
 
@@ -83926,6 +84014,7 @@ function startExercises() {
   questionOptionOrder = activeClass.questions.map(q => shuffleArray(q.options.map((_, i) => i)));
   showView('view-exercise');
   document.getElementById('ex-bar').style.setProperty('--accent', activeClass.color);
+  renderExamHeader('ex-exam-header');
   buildContext();
   renderQuestion();
 }
@@ -84097,22 +84186,31 @@ function renderQuestion() {
   document.getElementById('ex-error').style.display = 'none';
 
   const checked = !!userChecked[curQ];
+  const examMode = isExamClass(activeClass);
+  const LETTERS = ['A', 'B', 'C', 'D', 'E'];
+  document.getElementById('ex-instruction').classList.toggle('hidden', !examMode);
   const optsEl = document.getElementById('ex-options');
   optsEl.innerHTML = '';
   const order = questionOptionOrder[curQ] || q.options.map((_, i) => i);
-  order.forEach((origIdx) => {
+  order.forEach((origIdx, i) => {
     const btn = document.createElement('button');
     let cls = 'opt-btn';
+    const isSelected = userAnswers[curQ] === origIdx;
     if (checked) {
       if (origIdx === q.correct) cls += ' correct';
-      else if (origIdx === userAnswers[curQ]) cls += ' incorrect';
-    } else if (userAnswers[curQ] === origIdx) {
+      else if (isSelected) cls += ' incorrect';
+    } else if (isSelected) {
       cls += ' selected';
     }
     btn.className = cls;
     btn.style.setProperty('--accent', activeClass.color);
     btn.style.setProperty('--accent-bg', activeClass.bg);
-    btn.textContent = q.options[origIdx];
+    if (examMode) {
+      const box = isSelected || (checked && origIdx === q.correct) ? '☑' : '☐';
+      btn.innerHTML = '<span class="opt-box">' + box + ' ' + (LETTERS[i] || '') + '.</span><span>' + escapeHtml(q.options[origIdx]) + '</span>';
+    } else {
+      btn.textContent = q.options[origIdx];
+    }
     btn.disabled = checked;
     btn.onclick = () => { if (userChecked[curQ]) return; userAnswers[curQ] = origIdx; renderQuestion(); };
     optsEl.appendChild(btn);
@@ -84232,6 +84330,7 @@ function showResult() {
     reviewEl.appendChild(div);
   });
 
+  renderExamHeader('result-exam-header');
   showView('view-result');
 }
 
@@ -84244,8 +84343,9 @@ let writeTimer = { interval: null, remaining: 0, running: false };
 
 function startWriting() {
   showView('view-writing');
+  renderExamHeader('write-exam-header');
   document.getElementById('write-title').textContent = activeClass.title;
-  document.getElementById('write-title').style.color = activeClass.color;
+  document.getElementById('write-title').style.color = isExamClass(activeClass) ? '#1a1a1a' : activeClass.color;
   document.getElementById('write-prompt').textContent = activeClass.prompt;
 
   const list = document.getElementById('write-checklist');
