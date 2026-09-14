@@ -35,6 +35,11 @@ h1 { font-size: 26px; font-weight: 700; margin: 0 0 4px; color: #5b3fd6; }
 .section-header:first-child { margin-top: 4px; }
 .section-note { margin: -4px 0 12px; }
 .exercises-panel { margin-bottom: 8px; }
+.diagnostic-panel {
+  background: #fdf1f6; border: 2px solid #f4c4dc; border-radius: 18px;
+  padding: 16px 18px 4px; margin-bottom: 22px;
+}
+.diagnostic-panel .section-header { margin-top: 4px; }
 .theory-panel {
   background: #faf8ff; border: 2px dashed #d9d1f5; border-radius: 18px;
   padding: 4px 16px 16px; margin: 4px 0 26px;
@@ -301,10 +306,15 @@ button:disabled { opacity: .5; cursor: default; }
     <div class="card">
       <p class="class-title" id="write-title" style="font-size:19px;"></p>
       <p style="font-size:14px; color:#55535f;" id="write-prompt"></p>
+      <div id="write-timer-box" class="hidden" style="background:#fdf1f6; border:1.5px dashed #f4c4dc; border-radius:12px; padding:10px 14px; margin:12px 0; display:flex; align-items:center; justify-content:space-between; gap:10px;">
+        <span id="write-timer-label" style="font-size:13px; font-weight:700; color:#c2185b;"></span>
+        <button id="write-timer-btn" onclick="toggleWriteTimer()" style="flex-shrink:0;"></button>
+      </div>
       <p style="font-size:13px; font-weight:700; margin:14px 0 6px;" id="write-checklist-label">Incluí estas ideas:</p>
       <div id="write-checklist"></div>
       <textarea class="write-textarea" id="write-textarea" placeholder="Escribí tu email acá..." oninput="updateWordCount()"></textarea>
       <p class="word-count" id="word-count-label">0 palabras</p>
+      <p class="class-meta" style="margin:-6px 0 12px;">✔️ Antes de guardar, revisá mayúsculas: "I" siempre en mayúscula, y cada oración empieza con mayúscula.</p>
       <p class="error-text" id="write-error">Escribí tu email antes de guardar.</p>
       <div class="row">
         <span></span>
@@ -80529,7 +80539,478 @@ const CLASSES = [
     "topic": "Audios de examen",
     "activity": "Listening",
     "tanda": 4
+  },
+  {
+    "id": "alma_didnt_t1",
+    "title": "Alma · Didn't + verbo base · Tanda 1",
+    "color": "#c2185b",
+    "bg": "#fce4ec",
+    "explanation": {
+      "intro": "Para negar el pasado simple usamos didn't (o did not) + el verbo en su forma base, sin conjugar. El verbo NUNCA va en pasado después de didn't.",
+      "points": [
+        "<b>didn't + verbo base</b>: <span class=\"example\">We didn't win the match.</span> (no: didn't won)",
+        "El auxiliar 'did' ya está en pasado, así que el verbo principal se queda en infinitivo sin 'to': <span class=\"example\">She didn't go, not didn't went.</span>",
+        "No alcanza con poner 'not' solo: hace falta el auxiliar 'did' para negar en pasado.",
+        "Este error aparece mucho con verbos irregulares (win/won, go/went, see/saw), así que prestá atención especial ahí."
+      ]
+    },
+    "questions": [
+      {
+        "text": "We ___ the match, even though we tried our best.",
+        "options": ["didn't win", "didn't won", "not win"],
+        "correct": 0,
+        "explanation": "Después de 'didn't' el verbo va en base, sin conjugar: 'didn't win', nunca 'didn't won'. 'not win' está incompleto porque le falta el auxiliar 'did'.",
+        "translation": "No ganamos el partido, a pesar de que nos esforzamos al máximo."
+      },
+      {
+        "text": "He ___ to school on Monday because he was sick.",
+        "options": ["didn't go", "didn't went", "not go"],
+        "correct": 0,
+        "explanation": "'go' es un verbo irregular, pero después de 'didn't' siempre va en base: 'didn't go', no 'didn't went'.",
+        "translation": "Él no fue a la escuela el lunes porque estaba enfermo."
+      },
+      {
+        "text": "I ___ my keys anywhere this morning.",
+        "options": ["didn't see", "didn't saw", "not see"],
+        "correct": 0,
+        "explanation": "El auxiliar 'did' ya marca el pasado, así que el verbo se queda en base: 'didn't see', no 'didn't saw'.",
+        "translation": "No vi mis llaves en ningún lado esta mañana."
+      },
+      {
+        "text": "The children ___ their vegetables at dinner.",
+        "options": ["didn't eat", "didn't ate", "not eat"],
+        "correct": 0,
+        "explanation": "Con 'didn't' el verbo va sin conjugar: 'didn't eat', no 'didn't ate'.",
+        "translation": "Los chicos no comieron sus verduras en la cena."
+      },
+      {
+        "text": "We ___ any souvenirs because they were too expensive.",
+        "options": ["didn't buy", "didn't bought", "not buy"],
+        "correct": 0,
+        "explanation": "'buy' se queda en su forma base después de 'didn't': 'didn't buy', no 'didn't bought'.",
+        "translation": "No compramos ningún recuerdo porque eran muy caros."
+      },
+      {
+        "text": "She ___ her chores before going out.",
+        "options": ["didn't do", "didn't did", "not do"],
+        "correct": 0,
+        "explanation": "Ojo con 'do': después de 'didn't' se usa 'do' (base), nunca 'did' de nuevo.",
+        "translation": "Ella no hizo sus tareas antes de salir."
+      },
+      {
+        "text": "They ___ enough time to finish the test.",
+        "options": ["didn't have", "didn't had", "not have"],
+        "correct": 0,
+        "explanation": "'have' se queda en base después de 'didn't': 'didn't have', no 'didn't had'.",
+        "translation": "No tuvieron suficiente tiempo para terminar el examen."
+      },
+      {
+        "text": "He ___ his umbrella, so he got wet.",
+        "options": ["didn't take", "didn't took", "not take"],
+        "correct": 0,
+        "explanation": "'take' va en base después de 'didn't': 'didn't take', no 'didn't took'.",
+        "translation": "No llevó el paraguas, así que se mojó."
+      },
+      {
+        "text": "I ___ back to her because I lost her address.",
+        "options": ["didn't write", "didn't wrote", "not write"],
+        "correct": 0,
+        "explanation": "'write' se mantiene en base después de 'didn't': 'didn't write', no 'didn't wrote'.",
+        "translation": "No le escribí de vuelta porque perdí su dirección."
+      },
+      {
+        "text": "My cousins ___ to the barbecue last weekend.",
+        "options": ["didn't come", "didn't came", "not come"],
+        "correct": 0,
+        "explanation": "'come' se queda en base después de 'didn't': 'didn't come', no 'didn't came'.",
+        "translation": "Mis primos no vinieron al asado el fin de semana pasado."
+      }
+    ],
+    "topic": "Alma · Didn't + verbo base",
+    "activity": "Gramática",
+    "tanda": 1
+  },
+  {
+    "id": "alma_would_t1",
+    "title": "Alma · Would: deseos y condicionales · Tanda 1",
+    "color": "#c2185b",
+    "bg": "#fce4ec",
+    "explanation": {
+      "intro": "Would se usa para hablar de deseos, cosas hipotéticas y cortesía. Va antes del verbo en base, sin 'to' después.",
+      "points": [
+        "<b>would like to + verbo</b>: para expresar un deseo, algo que querrías hacer: <span class=\"example\">I would like to visit Japan.</span>",
+        "En condicionales hipotéticos (if + pasado), la otra parte lleva 'would' + verbo base: <span class=\"example\">If I had time, I would practice more.</span>",
+        "Después de 'would' el verbo va sin 'to': <span class=\"example\">would help, not would to help.</span>",
+        "Si te olvidás el 'would', la oración de deseo queda incompleta: 'I like to do it again' no dice lo mismo que 'I would like to do it again'."
+      ]
+    },
+    "questions": [
+      {
+        "text": "I really ___ to visit Japan someday.",
+        "options": ["would like", "like", "will liked"],
+        "correct": 0,
+        "explanation": "Para expresar un deseo puntual usamos 'would like to'. 'like' solo suena a una preferencia habitual, y 'will liked' no es una forma correcta en inglés.",
+        "translation": "Realmente me gustaría visitar Japón algún día."
+      },
+      {
+        "text": "If I had more time, I ___ practice English every day.",
+        "options": ["would", "will", "would to"],
+        "correct": 0,
+        "explanation": "Con 'if + pasado' (had), la otra parte lleva 'would' + verbo base. 'will' es para condicionales reales, y después de 'would' nunca va 'to'.",
+        "translation": "Si tuviera más tiempo, practicaría inglés todos los días."
+      },
+      {
+        "text": "She ___ love to meet her favorite singer.",
+        "options": ["would", "is", "does"],
+        "correct": 0,
+        "explanation": "'would love to' expresa un deseo fuerte. 'is' y 'does' no funcionan como auxiliares acá.",
+        "translation": "A ella le encantaría conocer a su cantante favorito."
+      },
+      {
+        "text": "We ___ like to do this activity again next year.",
+        "options": ["would", "like", "will like"],
+        "correct": 0,
+        "explanation": "Para pedir o expresar un deseo se usa 'would like to'. Sin 'would', 'like to do' queda incompleto como deseo, y 'will like' no es natural en inglés.",
+        "translation": "Nos gustaría hacer esta actividad de nuevo el año que viene."
+      },
+      {
+        "text": "If I won the lottery, I ___ travel around the world.",
+        "options": ["would", "will", "would to"],
+        "correct": 0,
+        "explanation": "'If I won' está en pasado (hipotético), así que la otra parte necesita 'would' + verbo base.",
+        "translation": "Si ganara la lotería, viajaría por todo el mundo."
+      },
+      {
+        "text": "He said he ___ help us if we needed it.",
+        "options": ["would", "will", "would to"],
+        "correct": 0,
+        "explanation": "Cuando reportamos lo que alguien dijo sobre el futuro, 'will' se convierte en 'would'. Después de 'would' el verbo va sin 'to'.",
+        "translation": "Dijo que nos ayudaría si lo necesitábamos."
+      },
+      {
+        "text": "They ___ prefer to stay home instead of going out.",
+        "options": ["would", "like", "will preferred"],
+        "correct": 0,
+        "explanation": "'would prefer to' expresa una preferencia hipotética. 'will preferred' mezcla mal los tiempos verbales.",
+        "translation": "Ellos preferirían quedarse en casa en vez de salir."
+      },
+      {
+        "text": "If it rained, we ___ stay inside.",
+        "options": ["would", "will", "would to"],
+        "correct": 0,
+        "explanation": "De nuevo, 'if + pasado' pide 'would' + verbo base en la otra parte de la oración.",
+        "translation": "Si lloviera, nos quedaríamos adentro."
+      },
+      {
+        "text": "I ___ really like one more chance to try again.",
+        "options": ["would", "like", "will"],
+        "correct": 0,
+        "explanation": "Para decir que te gustaría algo, hace falta 'would' antes de 'like'. Sin él, la oración queda incompleta, como pasó en tu writing.",
+        "translation": "Realmente me gustaría tener una oportunidad más para volver a intentarlo."
+      },
+      {
+        "text": "My sister ___ love to learn how to play the guitar.",
+        "options": ["would", "likes", "will"],
+        "correct": 0,
+        "explanation": "'would love to' + verbo expresa un deseo. 'likes' es presente simple y no transmite lo mismo, y 'will' no se usa así.",
+        "translation": "A mi hermana le encantaría aprender a tocar la guitarra."
+      }
+    ],
+    "topic": "Alma · Would: deseos y condicionales",
+    "activity": "Gramática",
+    "tanda": 1
+  },
+  {
+    "id": "alma_agree_t1",
+    "title": "Alma · Concordancia sujeto-verbo · Tanda 1",
+    "color": "#c2185b",
+    "bg": "#fce4ec",
+    "explanation": {
+      "intro": "En presente simple negativo, el auxiliar cambia según el sujeto: I/you/we/they usan don't, y he/she/it usan doesn't.",
+      "points": [
+        "<b>I / you / we / they + don't</b>: <span class=\"example\">I don't learn fast.</span> (no: I doesn't learn)",
+        "<b>he / she / it + doesn't</b>: <span class=\"example\">She doesn't learn fast.</span>",
+        "'I' siempre lleva 'don't', nunca 'doesn't' — es un error muy común mezclar los dos.",
+        "Después de doesn't/don't, el verbo principal va en base, sin -s: <span class=\"example\">She doesn't learn, not doesn't learns.</span>"
+      ]
+    },
+    "questions": [
+      {
+        "text": "I ___ like doing homework on weekends.",
+        "options": ["don't", "doesn't", "not"],
+        "correct": 0,
+        "explanation": "Con 'I' siempre usamos 'don't', nunca 'doesn't'. 'doesn't' es solo para he/she/it.",
+        "translation": "No me gusta hacer la tarea los fines de semana."
+      },
+      {
+        "text": "She ___ like getting up early.",
+        "options": ["doesn't", "don't", "not"],
+        "correct": 0,
+        "explanation": "'She' es tercera persona singular, así que el auxiliar negativo es 'doesn't', no 'don't'.",
+        "translation": "A ella no le gusta levantarse temprano."
+      },
+      {
+        "text": "It ___ matter what color you choose.",
+        "options": ["doesn't", "don't", "not"],
+        "correct": 0,
+        "explanation": "'It' lleva 'doesn't' en presente simple negativo, igual que he/she.",
+        "translation": "No importa qué color elijas."
+      },
+      {
+        "text": "My brother ___ eat meat.",
+        "options": ["doesn't", "don't", "not"],
+        "correct": 0,
+        "explanation": "'My brother' equivale a 'he', así que usamos 'doesn't'.",
+        "translation": "Mi hermano no come carne."
+      },
+      {
+        "text": "I ___ understand this exercise.",
+        "options": ["don't", "doesn't", "not"],
+        "correct": 0,
+        "explanation": "Con 'I' siempre va 'don't', el mismo error que aparecía en tu writing con 'I doesn't learn'.",
+        "translation": "No entiendo este ejercicio."
+      },
+      {
+        "text": "He ___ speak French very well.",
+        "options": ["doesn't", "don't", "not"],
+        "correct": 0,
+        "explanation": "'He' necesita 'doesn't' en presente simple negativo.",
+        "translation": "Él no habla francés muy bien."
+      },
+      {
+        "text": "We ___ have any homework today.",
+        "options": ["don't", "doesn't", "not"],
+        "correct": 0,
+        "explanation": "'We' es plural, así que usamos 'don't'.",
+        "translation": "No tenemos tarea hoy."
+      },
+      {
+        "text": "The dog ___ like loud noises.",
+        "options": ["doesn't", "don't", "not"],
+        "correct": 0,
+        "explanation": "'The dog' equivale a 'it', así que corresponde 'doesn't'.",
+        "translation": "Al perro no le gustan los ruidos fuertes."
+      },
+      {
+        "text": "You ___ need to bring anything.",
+        "options": ["don't", "doesn't", "not"],
+        "correct": 0,
+        "explanation": "'You' siempre lleva 'don't', nunca 'doesn't'.",
+        "translation": "No necesitás traer nada."
+      },
+      {
+        "text": "She ___ know the answer.",
+        "options": ["doesn't", "don't", "not"],
+        "correct": 0,
+        "explanation": "'She' es tercera persona singular, así que necesita 'doesn't'.",
+        "translation": "Ella no sabe la respuesta."
+      }
+    ],
+    "topic": "Alma · Concordancia sujeto-verbo",
+    "activity": "Gramática",
+    "tanda": 1
+  },
+  {
+    "id": "alma_cloze_t1",
+    "title": "Alma · Cloze: posesivos y auxiliares · Tanda 1",
+    "color": "#c2185b",
+    "bg": "#fce4ec",
+    "explanation": {
+      "intro": "Este ejercicio mezcla dos confusiones típicas de open cloze: its/our (posesivos) y does/should (auxiliares de presente).",
+      "points": [
+        "<b>its</b> (sin apóstrofe) = posesivo de 'it': <span class=\"example\">The cat licked its paws.</span>",
+        "<b>it's</b> (con apóstrofe) = 'it is' o 'it has', no es un posesivo.",
+        "<b>our</b> = posesivo de 'we' (nuestro/a): <span class=\"example\">This is our house.</span>",
+        "<b>does</b> = auxiliar de presente simple con he/she/it, para preguntas y negaciones.",
+        "<b>should</b> = modal para dar consejos o sugerencias, no es un auxiliar de presente."
+      ]
+    },
+    "questions": [
+      {
+        "text": "The cat is licking ___ paws.",
+        "options": ["its", "our", "it's"],
+        "correct": 0,
+        "explanation": "'its' (sin apóstrofe) es el posesivo de 'it'. 'it's' con apóstrofe significa 'it is', y 'our' es 'nuestro', que no corresponde acá.",
+        "translation": "El gato se está lamiendo las patas."
+      },
+      {
+        "text": "This is ___ house — my family and I live here.",
+        "options": ["our", "its", "ours"],
+        "correct": 0,
+        "explanation": "'our' + sustantivo ('our house') indica posesión de 'nosotros'. 'its' es de 'it', y 'ours' se usa solo sin sustantivo después (This house is ours).",
+        "translation": "Esta es nuestra casa — mi familia y yo vivimos acá."
+      },
+      {
+        "text": "___ she like pizza?",
+        "options": ["Does", "Should", "Is"],
+        "correct": 0,
+        "explanation": "Para preguntar en presente simple con 'she' usamos 'Does'. 'Should' es para consejos y 'Is' no funciona con el verbo 'like'.",
+        "translation": "¿A ella le gusta la pizza?"
+      },
+      {
+        "text": "You ___ study more if you want to pass.",
+        "options": ["should", "does", "would"],
+        "correct": 0,
+        "explanation": "'should' se usa para dar consejos. 'does' es un auxiliar de presente, no un modal de consejo, y acá no corresponde.",
+        "translation": "Deberías estudiar más si querés aprobar."
+      },
+      {
+        "text": "The company changed ___ logo last year.",
+        "options": ["its", "our", "it's"],
+        "correct": 0,
+        "explanation": "'its' es el posesivo de 'it' (la empresa). 'it's' significa 'it is/has', y 'our' sería 'nuestro'.",
+        "translation": "La empresa cambió su logo el año pasado."
+      },
+      {
+        "text": "___ we bring anything to the party?",
+        "options": ["Should", "Does", "Is"],
+        "correct": 0,
+        "explanation": "Cuando pedís consejo o sugerís algo, usás 'Should'. 'Does' es para presente simple, no para consejos.",
+        "translation": "¿Deberíamos llevar algo a la fiesta?"
+      },
+      {
+        "text": "___ your brother play football?",
+        "options": ["Does", "Should", "Is"],
+        "correct": 0,
+        "explanation": "Para preguntar en presente simple con 'your brother' (he), usamos 'Does'.",
+        "translation": "¿Tu hermano juega al fútbol?"
+      },
+      {
+        "text": "We take care of ___ garden every weekend.",
+        "options": ["our", "its", "we"],
+        "correct": 0,
+        "explanation": "'our' + sustantivo muestra que el jardín es de 'nosotros'. 'its' sería de 'it', y 'we' no puede ir antes de un sustantivo.",
+        "translation": "Cuidamos nuestro jardín todos los fines de semana."
+      },
+      {
+        "text": "The school changed ___ rules this year.",
+        "options": ["its", "our", "their"],
+        "correct": 0,
+        "explanation": "'The school' es singular (como 'it'), así que el posesivo correcto es 'its'. 'their' sería para un sujeto plural.",
+        "translation": "La escuela cambió sus reglas este año."
+      },
+      {
+        "text": "___ he need help with the project?",
+        "options": ["Does", "Should", "Is"],
+        "correct": 0,
+        "explanation": "'he' + presente simple en pregunta pide 'Does'.",
+        "translation": "¿Él necesita ayuda con el proyecto?"
+      }
+    ],
+    "topic": "Alma · Cloze: posesivos y auxiliares",
+    "activity": "Gramática",
+    "tanda": 1
+  },
+  {
+    "id": "alma_reading_t1",
+    "type": "reading",
+    "title": "Alma · Reading: cuidado con lo categórico · Tanda 1",
+    "color": "#c2185b",
+    "bg": "#fce4ec",
+    "explanation": {
+      "intro": "Trampa típica de reading: una opción usa palabras absolutas (always, never, everyone, all) y suena convincente, pero el texto casi nunca es tan categórico.",
+      "points": [
+        "💡 Si una opción dice 'always', 'never', 'everyone' o 'all', sospechá: buscá si el texto la contradice o la matiza en algún lado.",
+        "La opción correcta suele ser la más matizada, la que dice 'depende', 'a veces' o 'para algunos'.",
+        "Antes de elegir, volvé al texto y confirmá con una frase concreta — no te dejes llevar solo porque la opción 'suena bien'."
+      ]
+    },
+    "passage": "Many people believe that having a pet automatically makes life better. However, a recent study looked at pet owners and people without pets to find out if this is really true. The results were more complicated than expected.\n\nSome pet owners reported feeling less lonely, especially older people who lived alone. Having an animal to care for gave them a daily routine and a sense of company. But the study also found that pets don't make everyone happier. For some owners, taking care of an animal added stress, extra costs, and less free time.\n\nThe researchers concluded that the effect of having a pet depends on each person's situation — their health, their free time, and how much support they have. So, while pets can bring comfort to many people, it would be wrong to say that pets always make their owners happier.",
+    "questions": [
+      {
+        "text": "According to the text, having a pet...",
+        "options": ["always makes owners happier.", "affects different owners in different ways.", "is more stressful than helpful for everyone."],
+        "correct": 1,
+        "explanation": "Ojo con la trampa: la primera opción usa 'always', una palabra categórica. El texto dice explícitamente que 'it would be wrong to say that pets always make their owners happier', así que esa opción queda descartada."
+      },
+      {
+        "text": "Who reported feeling less lonely because of a pet?",
+        "options": ["All pet owners.", "Older people who lived alone.", "People with young children."],
+        "correct": 1,
+        "explanation": "El texto dice 'especially older people who lived alone', no 'all pet owners' — de nuevo, cuidado con la opción absoluta."
+      },
+      {
+        "text": "What is one downside of having a pet mentioned in the text?",
+        "options": ["Extra costs and less free time.", "Pets are usually dangerous.", "Pets rarely provide comfort."],
+        "correct": 0,
+        "explanation": "El segundo párrafo menciona 'stress, extra costs, and less free time' como desventajas para algunos dueños."
+      },
+      {
+        "text": "The researchers concluded that the effect of having a pet...",
+        "options": ["is always positive.", "depends on each person's situation.", "is mostly negative."],
+        "correct": 1,
+        "explanation": "El texto dice literalmente 'depends on each person's situation' — esa es la idea matizada, no la categórica ('always positive')."
+      },
+      {
+        "text": "What is the main idea of the text?",
+        "options": ["Pets always improve people's lives.", "The effect of owning a pet varies from person to person.", "Nobody should have pets."],
+        "correct": 1,
+        "explanation": "La idea general del texto es que el efecto de tener una mascota varía según la persona — ni siempre es positivo, ni siempre es negativo."
+      }
+    ],
+    "topic": "Alma · Reading: cuidado con lo categórico",
+    "activity": "Reading",
+    "tanda": 1
+  },
+  {
+    "id": "alma_email_t1",
+    "type": "writing",
+    "title": "Alma · Email en 3 partes · Tanda 1",
+    "color": "#c2185b",
+    "bg": "#fce4ec",
+    "timedMinutes": 15,
+    "explanation": {
+      "intro": "Todo email tiene 3 partes: greeting (saludo), body (cuerpo) y closing (despedida). Si te falta el cierre, la consigna no está completa, aunque el contenido esté bien.",
+      "points": [
+        "<b>Greeting</b>: 'Dear [nombre],' — siempre al principio.",
+        "<b>Body</b>: 2-4 oraciones cortas, una idea por oración, desarrollando lo que pide la consigna.",
+        "<b>Closing</b>: una frase de despedida + tu nombre, por ejemplo: 'Best wishes, Alma' o 'See you soon, Alma'.",
+        "Si querés invitar a alguien a hacer algo o contar un deseo, usá 'would like to': <span class=\"example\">I would like to do it again.</span>",
+        "Practicá con el tiempo puesto: activá el cronómetro antes de empezar a escribir."
+      ]
+    },
+    "prompt": "Write an email (about 100 words) to a friend telling them about your last weekend and inviting them to do something together next week.",
+    "bulletIdeas": [
+      "Greeting: empezá con 'Dear [nombre],'",
+      "Contá qué hiciste el fin de semana pasado (2-3 oraciones)",
+      "Usá 'would like to' para invitar a tu amigo/a a hacer algo",
+      "Explicá por qué te gustaría hacer ese plan juntos",
+      "Closing: terminá con una despedida (Best wishes, / See you soon, / Love,) + tu nombre"
+    ],
+    "topic": "Alma · Email en 3 partes",
+    "activity": "Writing",
+    "tanda": 1
+  },
+  {
+    "id": "alma_email_t2",
+    "type": "writing",
+    "title": "Alma · Email en 3 partes · Tanda 2",
+    "color": "#c2185b",
+    "bg": "#fce4ec",
+    "timedMinutes": 15,
+    "explanation": {
+      "intro": "Todo email tiene 3 partes: greeting (saludo), body (cuerpo) y closing (despedida). Si te falta el cierre, la consigna no está completa, aunque el contenido esté bien.",
+      "points": [
+        "<b>Greeting</b>: 'Dear [nombre],' — siempre al principio.",
+        "<b>Body</b>: 2-4 oraciones cortas, una idea por oración, desarrollando lo que pide la consigna.",
+        "<b>Closing</b>: una frase de despedida + tu nombre, por ejemplo: 'Best wishes, Alma' o 'See you soon, Alma'.",
+        "Si querés contar un deseo, usá 'would like to': <span class=\"example\">I would like to visit you.</span>",
+        "Practicá con el tiempo puesto: activá el cronómetro antes de empezar a escribir."
+      ]
+    },
+    "prompt": "Write an email (about 100 words) to a cousin, describing a person who is important to you and inviting them to visit you.",
+    "bulletIdeas": [
+      "Greeting: empezá con 'Dear [nombre],'",
+      "Describí quién es esa persona importante para vos y por qué",
+      "Usá 'would like to' para invitar a tu primo/a a visitarte",
+      "Contá qué podrían hacer juntos durante la visita",
+      "Closing: terminá con una despedida (Best wishes, / See you soon, / Love,) + tu nombre"
+    ],
+    "topic": "Alma · Email en 3 partes",
+    "activity": "Writing",
+    "tanda": 2
   }
+
 ];
 
 
@@ -80709,6 +81190,7 @@ function showView(id) {
   if (typeof audioGen !== 'undefined') audioGen++;
   if ('speechSynthesis' in window) window.speechSynthesis.cancel();
   if (typeof audioState !== 'undefined') { clearInterval(audioState.timer); audioState.playing = false; }
+  if (typeof writeTimer !== 'undefined' && writeTimer.interval) { clearInterval(writeTimer.interval); writeTimer.running = false; }
   ['view-categories', 'view-onboard', 'view-home', 'view-tandas', 'view-explain', 'view-theory', 'view-exercise', 'view-result', 'view-writing', 'view-history'].forEach(v => {
     document.getElementById(v).classList.toggle('hidden', v !== id);
   });
@@ -80742,6 +81224,17 @@ const EXAM_TOPICS = [
 ];
 const AUDIO_EXAM_TOPICS = [
   "Audios de examen"
+];
+
+// Plan de repaso de Alma para el examen del 18/9, armado a partir del diagnóstico.
+// El orden acá marca el orden sugerido: lunes primero, jueves (repaso) al final.
+const DIAGNOSTIC_TOPICS = [
+  "Alma · Didn't + verbo base",
+  "Alma · Would: deseos y condicionales",
+  "Alma · Concordancia sujeto-verbo",
+  "Alma · Cloze: posesivos y auxiliares",
+  "Alma · Reading: cuidado con lo categórico",
+  "Alma · Email en 3 partes"
 ];
 const TOPIC_THEORY = {
   "Adjetivos y pronombres posesivos": { id: "posesivos_teoria_facil", easy: true },
@@ -80865,9 +81358,36 @@ function renderCategories() {
   }
 
   const allTopics = getTopics();
+  const diagnosticTopicNames = DIAGNOSTIC_TOPICS.filter(t => allTopics.includes(t));
   const audioExamTopicNames = allTopics.filter(t => AUDIO_EXAM_TOPICS.includes(t));
   const examTopicNames = allTopics.filter(t => EXAM_TOPICS.includes(t) && !AUDIO_EXAM_TOPICS.includes(t));
-  const otherTopicNames = allTopics.filter(t => !EXAM_TOPICS.includes(t) && !AUDIO_EXAM_TOPICS.includes(t));
+  const otherTopicNames = allTopics.filter(t => !EXAM_TOPICS.includes(t) && !AUDIO_EXAM_TOPICS.includes(t) && !DIAGNOSTIC_TOPICS.includes(t));
+
+  if (diagnosticTopicNames.length) {
+    const planPanel = document.createElement('div');
+    planPanel.className = 'exercises-panel diagnostic-panel';
+
+    const planHeader = document.createElement('p');
+    planHeader.className = 'section-header';
+    planHeader.textContent = '🎯 Plan de Alma para el examen (18/9)';
+    planPanel.appendChild(planHeader);
+
+    const planNote = document.createElement('p');
+    planNote.className = 'class-meta section-note';
+    planNote.innerHTML = 'Armado con los errores del simulacro corregido. Sugerencia de orden — una sesión corta por día:<br>' +
+      '<b>Lunes:</b> Didn\'t + verbo base, Would · ' +
+      '<b>Martes:</b> Concordancia sujeto-verbo, Cloze posesivos/auxiliares · ' +
+      '<b>Miércoles:</b> Email en 3 partes (cronometrado), Reading · ' +
+      '<b>Jueves:</b> repaso general cronometrado, sin contenido nuevo.';
+    planPanel.appendChild(planNote);
+
+    const planGrid = document.createElement('div');
+    planGrid.className = 'class-grid';
+    diagnosticTopicNames.forEach((topicName, i) => planGrid.appendChild(makeTopicCard(topicName, i + 1)));
+    planPanel.appendChild(planGrid);
+
+    container.appendChild(planPanel);
+  }
 
   renderSection(
     '🎧',
@@ -81462,6 +81982,8 @@ function retryClass() {
   startExercises();
 }
 
+let writeTimer = { interval: null, remaining: 0, running: false };
+
 function startWriting() {
   showView('view-writing');
   document.getElementById('write-title').textContent = activeClass.title;
@@ -81482,6 +82004,51 @@ function startWriting() {
   document.getElementById('write-save-msg').style.display = 'none';
   document.getElementById('write-auto-feedback').innerHTML = '';
   updateWordCount();
+
+  clearInterval(writeTimer.interval);
+  const timerBox = document.getElementById('write-timer-box');
+  if (activeClass.timedMinutes) {
+    timerBox.classList.remove('hidden');
+    writeTimer = { interval: null, remaining: activeClass.timedMinutes * 60, running: false };
+    renderWriteTimer();
+  } else {
+    timerBox.classList.add('hidden');
+    writeTimer = { interval: null, remaining: 0, running: false };
+  }
+}
+
+function renderWriteTimer() {
+  const label = document.getElementById('write-timer-label');
+  const btn = document.getElementById('write-timer-btn');
+  if (writeTimer.remaining <= 0) {
+    label.textContent = '⏱ ¡Se acabó el tiempo! Revisá el cierre del email antes de guardar.';
+    btn.textContent = 'Reiniciar';
+    btn.onclick = () => { writeTimer.remaining = activeClass.timedMinutes * 60; writeTimer.running = false; clearInterval(writeTimer.interval); renderWriteTimer(); };
+    return;
+  }
+  label.textContent = '⏱ Tiempo: ' + formatTime(writeTimer.remaining) + (writeTimer.running ? '' : ' (en pausa)');
+  btn.textContent = writeTimer.running ? 'Pausar' : (writeTimer.remaining === activeClass.timedMinutes * 60 ? 'Empezar' : 'Continuar');
+  btn.onclick = toggleWriteTimer;
+}
+
+function toggleWriteTimer() {
+  if (writeTimer.running) {
+    writeTimer.running = false;
+    clearInterval(writeTimer.interval);
+    renderWriteTimer();
+    return;
+  }
+  writeTimer.running = true;
+  writeTimer.interval = setInterval(() => {
+    writeTimer.remaining--;
+    if (writeTimer.remaining <= 0) {
+      writeTimer.remaining = 0;
+      writeTimer.running = false;
+      clearInterval(writeTimer.interval);
+    }
+    renderWriteTimer();
+  }, 1000);
+  renderWriteTimer();
 }
 
 function updateWordCount() {
