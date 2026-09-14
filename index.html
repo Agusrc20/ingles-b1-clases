@@ -83911,6 +83911,18 @@ function starsForScore(score, total) {
   return '★'.repeat(starCount) + '☆'.repeat(3 - starCount);
 }
 
+// Re-checks a saved attempt's answers against the CURRENT answer key (matching questions by
+// text), instead of trusting the score/isCorrect snapshot frozen at attempt time. This makes a
+// later fix to a question's correct answer show up retroactively in already-saved attempts.
+function liveScoreForAttempt(c, attempt) {
+  if (!attempt.details || !attempt.details.length || !c.questions) return attempt.score;
+  return attempt.details.reduce((total, d) => {
+    const liveQ = c.questions.find(q => q.text === d.question);
+    const isCorrect = liveQ ? d.chosenText === liveQ.options[liveQ.correct] : d.isCorrect;
+    return total + (isCorrect ? 1 : 0);
+  }, 0);
+}
+
 function renderTandaList() {
   const container = document.getElementById('tanda-container');
   container.innerHTML = '';
@@ -83942,8 +83954,9 @@ function renderTandaList() {
       if (isWriting) {
         statsHtml = '<span class="tanda-stats">' + last.wordCount + ' palabras · ' + last.checked + '/' + last.total + ' ideas</span>';
       } else {
-        const stars = starsForScore(last.score, last.total);
-        statsHtml = '<span class="stars">' + stars + '</span><br><span class="tanda-stats">' + last.score + '/' + last.total + '</span>';
+        const score = liveScoreForAttempt(c, last);
+        const stars = starsForScore(score, last.total);
+        statsHtml = '<span class="stars">' + stars + '</span><br><span class="tanda-stats">' + score + '/' + last.total + '</span>';
       }
     }
 
@@ -84017,15 +84030,7 @@ function showHistoryAttempt(index) {
     div.innerHTML = html;
     reviewEl.appendChild(div);
   } else {
-    let score = attempt.score;
-    if (attempt.details && attempt.details.length && activeClass.questions) {
-      // Recompute in case a question's answer key was fixed after this attempt was saved.
-      score = attempt.details.reduce((total, d) => {
-        const liveQ = activeClass.questions.find(q => q.text === d.question);
-        const isCorrect = liveQ ? d.chosenText === liveQ.options[liveQ.correct] : d.isCorrect;
-        return total + (isCorrect ? 1 : 0);
-      }, 0);
-    }
+    const score = liveScoreForAttempt(activeClass, attempt);
     document.getElementById('history-summary').innerHTML =
       score + '/' + attempt.total + ' <span class="stars">' + starsForScore(score, attempt.total) + '</span>';
     if (!attempt.details || !attempt.details.length) {
